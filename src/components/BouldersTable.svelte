@@ -50,21 +50,21 @@
 </script>
 
 {#if $boulders.length > 0}
-	<div id="table-container">
-		<table id="dataTable" class="dataTable">
-			<thead>
-				<tr>
-					<th>ID</th>
-					<th>Name</th>
-					<th>Difficulty</th>
+	<div id="table-container" class="overflow-x-auto">
+		<table id="dataTable" class="w-full text-left text-sm">
+			<thead class="bg-slate-50 text-xs uppercase text-slate-500">
+				<tr class="border-b bg-white">
+					<th class="px-3 py-3 lg:px-6 lg:py-3">ID</th>
+					<th class="px-3 py-3 lg:px-6 lg:py-3">Name</th>
+					<th class="px-3 py-3 lg:px-6 lg:py-3">Difficulty</th>
 				</tr>
 			</thead>
 			<tbody>
 				{#each $boulders as boulder (boulder.i)}
 					<tr>
-						<td>{boulder.i}</td>
-						<td>{boulder.n}</td>
-						<td>{boulder.d}</td>
+						<td class="px-3 py-1.5 lg:px-6 lg:py-3">{boulder.i}</td>
+						<td class="px-3 py-1.5 lg:px-6 lg:py-3">{boulder.n}</td>
+						<td class="px-3 py-1.5 lg:px-6 lg:py-3">{boulder.d}</td>
 					</tr>
 				{/each}
 			</tbody>
@@ -75,48 +75,4 @@
 {/if}
 
 <style lang="postcss">
-	table {
-		@apply w-full text-left text-sm;
-	}
-	thead {
-		@apply bg-slate-50 text-xs uppercase text-slate-500;
-	}
-	tbody tr {
-		@apply border-b bg-white;
-	}
-
-	th {
-		@apply px-3 py-3 lg:px-6 lg:py-3;
-	}
-	td {
-		@apply px-3 py-1.5 lg:px-6 lg:py-3;
-	}
-
-	#table-container {
-		flex: 1;
-		overflow-y: auto;
-	}
-
-	table {
-		width: 100%;
-		border-collapse: collapse;
-	}
-
-	.dataTable :global(tr.selected) {
-		background-color: #9e9d9d;
-	}
-
-	.dataTable :global(td) {
-		padding: 12px;
-		text-align: left;
-	}
-
-	.dataTable :global(th) {
-		padding: 12px;
-		text-align: left;
-	}
-
-	.dataTable :global(tr:hover) {
-		cursor: pointer;
-	}
 </style>
