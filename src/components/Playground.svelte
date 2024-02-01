@@ -280,7 +280,7 @@
 </div>
 
 <style>
-	.backdrop {
+	/* .backdrop {
 		width: 100%;
 		height: 100%;
 		position: fixed;
@@ -333,5 +333,5 @@
 		border-width: 1px;
 		border-radius: 10%;
 		cursor: pointer;
-	}
+	} */
 </style>
