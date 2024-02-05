@@ -5,6 +5,7 @@ module.exports = {
 	parserOptions: {
 		sourceType: 'module',
 		ecmaVersion: 2020,
+
 		extraFileExtensions: ['.svelte']
 	},
 	env: {
@@ -12,4 +13,5 @@ module.exports = {
 		es2017: true,
 		node: true
 	}
+
 };

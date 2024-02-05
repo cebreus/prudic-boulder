@@ -7,6 +7,7 @@
 		selectedTop
 	} from '../clickedCells.js';
 
+
 	let rows = 18;
 	let cols = 10;
 	const baseClass = 'w-7 h-7 text-center rounded-sm tabular-nums slashed-zero sm:w-8 sm:h-8';
@@ -102,6 +103,9 @@
 		'R8'
 	]);
 
+
+	// const clickedCells = writable(new Set());
+
 	const isSkippedCell = (cellId) => {
 		return cellsToSkip.has(cellId);
 	};
@@ -114,8 +118,8 @@
 				state = { ...state, selectedStartCell: cellId };
 				selectedStart(cellId);
 			} else if (state.selectingMode === 'Top') {
-				state.selectedTopCell = cellId;
-				state = { ...state, selectedTopCell: cellId };
+				state = {...state, selectedTopCell: cellId};
+				selectedTop(cellId)
 			} else {
 				if (newClickedCells.has(cellId)) {
 					newClickedCells.delete(cellId);
@@ -161,14 +165,16 @@
 	$: console.log('boulder:', $boulders);
 </script>
 
+
 <pre class="my-5">
-Buttons:
+Buttons: 
+>>>>>>> c6d6efe (chore: init for Saibel)
 - Top" sets the end of the path
 - Start" sets start of path
 - Show" sends data to server, server lights up wall
 - Clear" clears set data Boulder
 - Save" send data to server
-		</pre>
+</pre>
 
 <table class="wall table-fixed border-separate mb-6 text-xs sm:text-base">
 	<thead>
