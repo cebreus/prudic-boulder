@@ -1,53 +1,10 @@
 <script>
-	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
 
 	const boulders = writable([]);
-
-	onMount(async () => {
-		try {
-			const response = await fetch('/GetBouldersList');
-			const data = await response.json();
-			boulders.set(data);
-		} catch (error) {
-			console.error('Error fetching data:', error);
-		}
-
-		var e = document.getElementById('dataTable'),
-			t = e.getElementsByTagName('tbody')[0];
-
-		t.addEventListener('click', function (t) {
-			var n = t.target.closest('tr');
-			if (n) {
-				var s = e.getElementsByClassName('selected');
-				0 < s.length && s[0].classList.remove('selected'), n.classList.add('selected');
-
-				var s = n.cells[0].textContent,
-					l = n.cells[1].textContent,
-					d = n.cells[2].textContent;
-				console.log('Selected ID:', s);
-
-				fetch('/ShowBolder', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({
-						selectedId: s,
-						selectedName: l,
-						selectedDifficulty: d
-					})
-				})
-					.then((e) => {
-						console.log('Server Response:', e);
-					})
-					.catch((e) => {
-						console.error('Error:', e);
-					});
-			}
-		});
-	});
 </script>
+
+List of all generated boulders.
 
 {#if $boulders.length > 0}
 	<div id="table-container" class="overflow-x-auto">
@@ -73,6 +30,3 @@
 {:else}
 	<div class="alert">No boulders loaded. Please refresh the page.</div>
 {/if}
-
-<style lang="postcss">
-</style>

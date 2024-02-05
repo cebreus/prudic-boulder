@@ -1,5 +1,4 @@
 <script>
-	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
 
 	let rows = 18;
@@ -8,7 +7,6 @@
 	const baseClasses = `${baseClass} cursor-pointer bg-sky-50 border border-sky-300 hover:bg-sky-100 hover:border-sky-400 hover:text-sky-600`;
 	const skippedClass = `skipped ${baseClass}`;
 	const clickedClass = `holds ${baseClass} bg-green-400 border-green-400 text-green-900 hover:bg-green-200`;
-	const topClass = `holds ${baseClass} bg-red-400 border-red-400 text-red-900 hover:bg-red-200`;
 
 	const cellsToSkip = new Set([
 		'B0',
@@ -102,36 +100,18 @@
 		return cellsToSkip.has(cellId);
 	};
 
-	const handleCellClick = (row, col) => {
-		const cellId = `${row}${col}`;
-		console.log('Clicked cell:', cellId);
-		clickedCells.update((cells) => {
-			if (cells.has(cellId)) {
-				cells.delete(cellId);
-				console.log('Cell removed:', cellId);
-			} else {
-				cells.add(cellId);
-				console.log('Cell added:', cellId);
-			}
-			updateLocalStorage(Array.from(cells));
-			return cells;
-		});
-	};
-
-	const updateLocalStorage = (clickedCells) => {
-		console.log('Before updateLocalStorage():', localStorage.getItem('clickedCells'));
-		localStorage.setItem('clickedCells', JSON.stringify(clickedCells));
-		console.log('After updateLocalStorage(): ', localStorage.getItem('clickedCells'));
-	};
-
-	onMount(() => {
-		const storedCells = JSON.parse(localStorage.getItem('clickedCells') || '[]');
-		clickedCells.set(new Set(storedCells));
-	});
-
 	$: tableRows = Array.from({ length: rows }, (_, i) => String.fromCharCode(65 + i));
 	$: tableCols = Array.from({ length: cols }, (_, i) => i);
 </script>
+
+<pre class="my-5">
+Buttons: 
+- Top" sets the end of the path
+- Start" sets start of path
+- Show" sends data to server, server lights up wall
+- Clear" clears set data Boulder
+- Save" send data to server
+		</pre>
 
 <table class="wall table-fixed border-separate mb-6 text-xs sm:text-base">
 	<thead>
@@ -161,7 +141,6 @@
 							: $clickedCells.has(cellId)
 								? clickedClass
 								: baseClasses}
-						on:click={() => !isSkippedCell(cellId) && handleCellClick(row, col)}
 					>
 						{isSkippedCell(cellId) ? '' : cellId}
 					</td>
