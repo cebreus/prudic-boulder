@@ -1,5 +1,11 @@
 <script>
-	import { writable } from 'svelte/store';
+	import {
+		addBoulder,
+		boulders,
+		clickedCells,
+		selectedStart,
+		selectedTop
+	} from '../clickedCells.js';
 
 	let rows = 18;
 	let cols = 10;
@@ -7,6 +13,8 @@
 	const baseClasses = `${baseClass} cursor-pointer bg-sky-50 border border-sky-300 hover:bg-sky-100 hover:border-sky-400 hover:text-sky-600`;
 	const skippedClass = `skipped ${baseClass}`;
 	const clickedClass = `holds ${baseClass} bg-green-400 border-green-400 text-green-900 hover:bg-green-200`;
+	const startClass = `cursor-pointer bg-sky-50 border border-sky-300 hover:bg-sky-100 hover:border-sky-400 hover:text-sky-600 bg-yellow-400 border-green-400 text-green-900`;
+	const topClass = ` cursor-pointer bg-sky-50 border border-sky-300 hover:bg-sky-100 hover:border-sky-400 hover:text-sky-600 bg-red-400 border-red-400 text-red-900`;
 
 	const cellsToSkip = new Set([
 		'B0',
@@ -94,18 +102,67 @@
 		'R8'
 	]);
 
-	const clickedCells = writable(new Set());
-
 	const isSkippedCell = (cellId) => {
 		return cellsToSkip.has(cellId);
 	};
 
+	const toggleCell = (cellId) => {
+		if (!isSkippedCell(cellId)) {
+			const newClickedCells = new Set($clickedCells);
+
+			if (state.selectingMode === 'Start') {
+				state = { ...state, selectedStartCell: cellId };
+				selectedStart(cellId);
+			} else if (state.selectingMode === 'Top') {
+				state.selectedTopCell = cellId;
+				state = { ...state, selectedTopCell: cellId };
+			} else {
+				if (newClickedCells.has(cellId)) {
+					newClickedCells.delete(cellId);
+				} else {
+					newClickedCells.add(cellId);
+				}
+			}
+
+			clickedCells.set(newClickedCells);
+			state = { ...state, selectingMode: null };
+		}
+	};
+
+	let state = {
+		selectingMode: null,
+		selectedStartCell: null,
+		selectedTopCell: null
+	};
+
+	const setMode = (mode) => {
+		state = { ...state, selectingMode: mode };
+		console.log(`Selecting ${mode}`);
+	};
+
+	//dopsat
+	const showOnServer = () => {
+		console.log('Show on Server');
+	};
+
+	const clearBoulder = () => {
+		state = { ...state, selectedStartCell: null, selectedTopCell: null };
+		clickedCells.set(new Set());
+	};
+
+	const saveBoulder = () => {
+		addBoulder($clickedCells);
+	};
+
 	$: tableRows = Array.from({ length: rows }, (_, i) => String.fromCharCode(65 + i));
 	$: tableCols = Array.from({ length: cols }, (_, i) => i);
+
+	$: console.log('Clicked Cells:', $clickedCells);
+	$: console.log('boulder:', $boulders);
 </script>
 
 <pre class="my-5">
-Buttons: 
+Buttons:
 - Top" sets the end of the path
 - Start" sets start of path
 - Show" sends data to server, server lights up wall
@@ -136,11 +193,20 @@ Buttons:
 				{#each tableCols as col}
 					{@const cellId = row + col}
 					<td
-						class={isSkippedCell(cellId)
-							? skippedClass
-							: $clickedCells.has(cellId)
-								? clickedClass
-								: baseClasses}
+						class={(state.selectingMode === 'Start' && state.selectedStartCell === cellId) ||
+						state.selectedStartCell === cellId
+							? startClass
+							: (state.selectingMode === 'Top' && state.selectedTopCell === cellId) ||
+								  state.selectedTopCell === cellId
+								? topClass
+								: $clickedCells.has(cellId)
+									? clickedClass
+									: isSkippedCell(cellId)
+										? skippedClass
+										: baseClasses}
+						on:click={() => {
+							toggleCell(cellId);
+						}}
 					>
 						{isSkippedCell(cellId) ? '' : cellId}
 					</td>
@@ -149,3 +215,8 @@ Buttons:
 		{/each}
 	</tbody>
 </table>
+
+<button on:click={() => setMode('Start')}>Start</button>
+<button on:click={() => setMode('Top')}>Top</button>
+<button on:click={() => saveBoulder()}>Save</button>
+<button on:click={() => clearBoulder()}>Clear</button>
