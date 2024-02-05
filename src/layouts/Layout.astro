@@ -1,0 +1,21 @@
+---
+import Header from '../components/Header.svelte';
+const { title } = Astro.props;
+const currentPath = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<title>{title}</title>
+		<meta name="description" content="Astro description" />
+		<meta name="generator" content={Astro.generator} />
+		<script src="https://cdn.tailwindcss.com" defer></script>
+	</head>
+	<body>
+		<Header currentPath={currentPath} />
+		<slot />
+	</body>
+</html>
