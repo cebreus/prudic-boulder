@@ -7,14 +7,17 @@
 		selectedTop
 	} from '../clickedCells.js';
 
+
 	let rows = 18;
 	let cols = 10;
 	const baseClass = 'w-7 h-7 text-center rounded-sm tabular-nums slashed-zero sm:w-8 sm:h-8';
 	const baseClasses = `${baseClass} cursor-pointer bg-sky-50 border border-sky-300 hover:bg-sky-100 hover:border-sky-400 hover:text-sky-600`;
 	const skippedClass = `skipped ${baseClass}`;
 	const clickedClass = `holds ${baseClass} bg-green-400 border-green-400 text-green-900 hover:bg-green-200`;
-	const startClass = `cursor-pointer bg-sky-50 border border-sky-300 hover:bg-sky-100 hover:border-sky-400 hover:text-sky-600 bg-yellow-400 border-green-400 text-green-900`;
+
+  const startClass = `cursor-pointer bg-sky-50 border border-sky-300 hover:bg-sky-100 hover:border-sky-400 hover:text-sky-600 bg-yellow-400 border-green-400 text-green-900`;
 	const topClass = ` cursor-pointer bg-sky-50 border border-sky-300 hover:bg-sky-100 hover:border-sky-400 hover:text-sky-600 bg-red-400 border-red-400 text-red-900`;
+
 
 	const cellsToSkip = new Set([
 		'B0',
@@ -102,6 +105,7 @@
 		'R8'
 	]);
 
+
 	// const clickedCells = writable(new Set());
 
 	const isSkippedCell = (cellId) => {
@@ -161,11 +165,12 @@
 
 	$: console.log('Clicked Cells:', $clickedCells);
 	$: console.log('boulder:', $boulders);
+
 </script>
 
 <pre class="my-5">
 Buttons: 
->>>>>>> c6d6efe (chore: init for Saibel)
+
 - Top" sets the end of the path
 - Start" sets start of path
 - Show" sends data to server, server lights up wall
@@ -223,3 +228,4 @@ Buttons:
 <button on:click={() => setMode('Top')}>Top</button>
 <button on:click={() => saveBoulder()}>Save</button>
 <button on:click={() => clearBoulder()}>Clear</button>
+
