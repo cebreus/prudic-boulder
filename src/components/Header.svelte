@@ -34,11 +34,11 @@
 	];
 </script>
 
-<nav class="relative z-10 bg-slate-100 border-b border-slate-200">
+<nav class="relative z-10 border-b border-slate-200 bg-slate-100">
 	<div class="container mx-auto">
 		<div class="relative flex h-14 items-center justify-between px-4">
 			<a href="/" class="flex items-center"
-				><Logo class="block h-6 w-auto mr-4 text-sky-900 hover:text-sky-600 mb-0.5" /></a
+				><Logo class="mb-0.5 mr-4 block h-6 w-auto text-sky-900 hover:text-sky-600" /></a
 			>
 			<div class="absolute inset-y-0 right-3 flex items-center sm:hidden">
 				<!-- Mobile menu button-->

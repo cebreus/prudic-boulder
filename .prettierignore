@@ -1,15 +1,24 @@
-!.env.example
+_site/
 .DS_Store
-.env
-.env.*
-/.svelte-kit
+.netlify
+.pnpm-store
+.turbo/
+.vercel
+*.log
+*.tsbuildinfo
 /.vscode
-/build
-/dist
-/package
-node_modules
+benchmark/
+dist/
+examples/
+node_modules/
+packages/
+scripts/memory/
+scripts/smoke/
 
-# Ignore files for PNPM, NPM and YARN
-pnpm-lock.yaml
+# do not commit .env files or any files that end with `.env`
+*.env
+
+# ignore files for PNPM, NPM and YARN
 package-lock.json
+pnpm-lock.yaml
 yarn.lock

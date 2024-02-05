@@ -7,7 +7,6 @@
 		selectedTop
 	} from '../clickedCells.js';
 
-
 	let rows = 18;
 	let cols = 10;
 	const baseClass = 'w-7 h-7 text-center rounded-sm tabular-nums slashed-zero sm:w-8 sm:h-8';
@@ -103,7 +102,6 @@
 		'R8'
 	]);
 
-
 	// const clickedCells = writable(new Set());
 
 	const isSkippedCell = (cellId) => {
@@ -118,8 +116,8 @@
 				state = { ...state, selectedStartCell: cellId };
 				selectedStart(cellId);
 			} else if (state.selectingMode === 'Top') {
-				state = {...state, selectedTopCell: cellId};
-				selectedTop(cellId)
+				state = { ...state, selectedTopCell: cellId };
+				selectedTop(cellId);
 			} else {
 				if (newClickedCells.has(cellId)) {
 					newClickedCells.delete(cellId);
@@ -165,7 +163,6 @@
 	$: console.log('boulder:', $boulders);
 </script>
 
-
 <pre class="my-5">
 Buttons: 
 >>>>>>> c6d6efe (chore: init for Saibel)
@@ -176,13 +173,13 @@ Buttons:
 - Save" send data to server
 </pre>
 
-<table class="wall table-fixed border-separate mb-6 text-xs sm:text-base">
+<table class="wall mb-6 table-fixed border-separate text-xs sm:text-base">
 	<thead>
 		<tr>
 			<th></th>
 			{#each Array(cols) as _, col (col)}
 				<th
-					class="w-7 h-7 text-center rounded-sm tabular-nums slashed-zero sm:w-8 sm:h-8 text-slate-400"
+					class="h-7 w-7 rounded-sm text-center slashed-zero tabular-nums text-slate-400 sm:h-8 sm:w-8"
 					>{col}</th
 				>
 			{/each}
@@ -192,7 +189,7 @@ Buttons:
 		{#each tableRows as row, rowIndex}
 			<tr>
 				<th
-					class="w-7 h-7 text-center rounded-sm tabular-nums slashed-zero sm:w-8 sm:h-8 text-slate-400"
+					class="h-7 w-7 rounded-sm text-center slashed-zero tabular-nums text-slate-400 sm:h-8 sm:w-8"
 				>
 					{String.fromCharCode(65 + rowIndex)}
 				</th>
