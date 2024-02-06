@@ -1,6 +1,12 @@
 <script>
-	import {isSkippedCell, toggleCell,setMode, saveBoulder, clearBoulder } from './utils/Functions.svelte'
-	import {boulders, clickedCells} from './Store.svelte';
+	import {
+		isSkippedCell,
+		toggleCell,
+		setMode,
+		saveBoulder,
+		clearBoulder
+	} from './utils/Functions.svelte';
+	import { boulders, clickedCells } from './Store.svelte';
 	import { selector } from './Store.svelte';
 	import Button from '../Button/Button.svelte';
 
@@ -11,22 +17,19 @@
 	const skippedClass = `skipped ${baseClass}`;
 	const clickedClass = `holds ${baseClass} bg-green-400 border-green-400 text-green-900 hover:bg-green-200`;
 
-  const startClass = `cursor-pointer bg-sky-50 border border-sky-300 hover:bg-sky-100 hover:border-sky-400 hover:text-sky-600 bg-yellow-400 border-green-400 text-green-900`;
+	const startClass = `cursor-pointer bg-sky-50 border border-sky-300 hover:bg-sky-100 hover:border-sky-400 hover:text-sky-600 bg-yellow-400 border-green-400 text-green-900`;
 	const topClass = ` cursor-pointer bg-sky-50 border border-sky-300 hover:bg-sky-100 hover:border-sky-400 hover:text-sky-600 bg-red-400 border-red-400 text-red-900`;
-
 
 	let selectingMode, selectedStartCell, selectedTopCell;
 	selector.subscribe(($selector) => {
 		({ selectingMode, selectedStartCell, selectedTopCell } = $selector);
 	});
 
-
 	$: tableRows = Array.from({ length: rows }, (_, i) => String.fromCharCode(65 + i));
 	$: tableCols = Array.from({ length: cols }, (_, i) => i);
 
 	$: console.log('Clicked Cells:', $clickedCells);
 	$: console.log('boulder:', $boulders);
-
 </script>
 
 <pre class="my-5">

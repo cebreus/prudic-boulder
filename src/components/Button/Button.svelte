@@ -6,24 +6,24 @@
 
 <button class={`button-${size}`} on:click={onClick}>
 	<span role="img" aria-label="emoji">{emoji}</span>
-	<slot></slot>
+	<slot />
 </button>
 
 <style>
-    .button-m {
-        font-size: 16px;
-        padding: 8px;
-    }
+	.button-m {
+		font-size: 16px;
+		padding: 8px;
+	}
 
-    .button-l {
-        font-size: 20px;
-        padding: 12px;
-    }
+	.button-l {
+		font-size: 20px;
+		padding: 12px;
+	}
 
-    .button-xl {
-        font-size: 24px;
-        padding: 16px;
-    }
+	.button-xl {
+		font-size: 24px;
+		padding: 16px;
+	}
 
-    /* Add more styles as needed */
+	/* Add more styles as needed */
 </style>

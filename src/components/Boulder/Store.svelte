@@ -5,12 +5,13 @@
 
 	export const boulders = writable([]);
 
-	export const clickedCellsArray = derived(clickedCells, ($clickedCellsSet) => Array.from($clickedCellsSet));
+	export const clickedCellsArray = derived(clickedCells, ($clickedCellsSet) =>
+		Array.from($clickedCellsSet)
+	);
 
 	export const selector = writable({
 		selectingMode: null,
 		selectedStartCell: null,
 		selectedTopCell: null
 	});
-
 </script>

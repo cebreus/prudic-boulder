@@ -1,7 +1,7 @@
 <script>
-	import {generateBoulderId, cellsToSkip} from './utils.ejs';
+	import { generateBoulderId, cellsToSkip } from './utils.ejs';
 
-	import {clickedCells, boulders, selector, clickedCellsArray} from '../Store.svelte';
+	import { clickedCells, boulders, selector, clickedCellsArray } from '../Store.svelte';
 
 	export const isSkippedCell = (cellId) => {
 		return cellsToSkip.has(cellId);
@@ -23,31 +23,30 @@
 		});
 	};
 
-export const setMode = (mode) => {
-	selector.update((prevSelector) => {
-		return {
-			...prevSelector,
-			selectingMode: mode
-		}
-	})
-};
+	export const setMode = (mode) => {
+		selector.update((prevSelector) => {
+			return {
+				...prevSelector,
+				selectingMode: mode
+			};
+		});
+	};
 
-export const clearBoulder = () => {
-	clickedCells.update((prevClickedCells) => {
-		prevClickedCells = new Set()
-		return prevClickedCells;
-	})
-	selector.update((prevSelector) => {
-		return {
-			...prevSelector,
-			selectedStartCell: null,
-			selectedTopCell: null
-		}
-	})
-};
+	export const clearBoulder = () => {
+		clickedCells.update((prevClickedCells) => {
+			prevClickedCells = new Set();
+			return prevClickedCells;
+		});
+		selector.update((prevSelector) => {
+			return {
+				...prevSelector,
+				selectedStartCell: null,
+				selectedTopCell: null
+			};
+		});
+	};
 
-
-export const saveBoulder = () => {
+	export const saveBoulder = () => {
 		boulders.update((prevBoulders) => {
 			const newBoulders = [
 				...prevBoulders,
@@ -61,7 +60,7 @@ export const saveBoulder = () => {
 
 			localStorage.setItem('boulders', JSON.stringify(newBoulders));
 
-			clearBoulder()
+			clearBoulder();
 
 			return newBoulders;
 		});
@@ -112,5 +111,4 @@ export const saveBoulder = () => {
 			});
 		}
 	};
-
 </script>

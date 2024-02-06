@@ -1,6 +1,4 @@
 <script>
-
-
 	// import { writable } from 'svelte/store';
 	//
 	// const boulders = writable([]);
