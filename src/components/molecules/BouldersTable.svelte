@@ -2,7 +2,8 @@
 	import { boulders } from '../molecules/BoulderStore.svelte';
 </script>
 
-List of all generated boulders.
+<!-- TODO: @artem Click on the ID should open modal with visualisation on a boulder -->
+<!-- TODO: @artem add button for delete the boulder -->
 
 {#if $boulders?.length > 0}
 	<div id="table-container" class="overflow-x-auto">

@@ -31,15 +31,16 @@
 	$: console.log('boulder:', $boulders);
 </script>
 
-<pre class="my-5">
+
+<!-- 
 Buttons: 
 
-- Top" sets the end of the path
-- Start" sets start of path
-- Show" sends data to server, server lights up wall
-- Clear" clears set data Boulder
-- Save" send data to server
-</pre>
+- Top: sets the end of the path
+- Start: sets start of path
+- Show: sends data to server, server lights up wall
+- Clear: clears set data Boulder
+- Save: send data to server
+-->
 
 <table class="wall mb-6 table-fixed border-separate text-xs sm:text-base">
 	<thead>
