@@ -1,9 +1,16 @@
 <script>
 	import { boulders } from '../molecules/BoulderStore.svelte';
+
+	const removeBoulder = (boulderId) => {
+		boulders.update((prevBoulders) => {
+			const newBoulders = prevBoulders.filter((boulder) => boulder.id !== boulderId);
+			localStorage.setItem('boulders', JSON.stringify(newBoulders));
+			return newBoulders;
+		});
+	};
 </script>
 
 <!-- TODO: @artem Click on the ID should open modal with visualisation on a boulder -->
-<!-- TODO: @artem add button for delete the boulder -->
 
 {#if $boulders?.length > 0}
 	<div id="table-container" class="overflow-x-auto">
@@ -19,6 +26,7 @@
 					<tr>
 						<td class="px-3 py-1.5 lg:px-6 lg:py-3">{boulder.id}</td>
 						<td class="px-3 py-1.5 lg:px-6 lg:py-3">{boulder.clickedCells}</td>
+						<button on:click={() => removeBoulder(boulder.id)}>Delete</button>
 					</tr>{/each}
 			</tbody>
 		</table>
