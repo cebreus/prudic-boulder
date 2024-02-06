@@ -27,7 +27,7 @@
 	$: tableRows = Array.from({ length: rows }, (_, i) => String.fromCharCode(65 + i));
 	$: tableCols = Array.from({ length: cols }, (_, i) => i);
 
-	$: console.log('Clicked Cells:', $clickedCells);
+	// $: console.log('Clicked Cells:', $clickedCells);
 	$: console.log('boulder:', $boulders);
 </script>
 
@@ -89,5 +89,5 @@ Buttons:
 
 <Button emoji="⏯️" size="m" onClick={() => setMode('Start')}>Start</Button>
 <Button emoji="🔝" size="l" onClick={() => setMode('Top')}>Top</Button>
-<Button emoji="💾" size="xl" onClick={() => saveBoulder()}>Save</Button>
+<Button emoji="💾" size="xl" onClick={() => saveBoulder($clickedCells)}>Save</Button>
 <Button emoji="🗑️" size="m" onClick={() => clearBoulder()}>Clear</Button>

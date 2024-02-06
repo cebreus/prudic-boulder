@@ -4,7 +4,6 @@ import {
 	clickedCells,
 	boulders,
 	selector,
-	clickedCellsArray
 } from '../molecules/BoulderStore.svelte';
 
 export const isSkippedCell = (cellId) => {
@@ -50,13 +49,16 @@ export const clearBoulder = () => {
 	});
 };
 
-export const saveBoulder = () => {
+export const saveBoulder = (clickedCells) => {
+	console.log('array:', Array.from(clickedCells),)// nic neni
+
+
 	boulders.update((prevBoulders) => {
 		const newBoulders = [
 			...prevBoulders,
 			{
 				id: generateBoulderId(),
-				clickedCells: $clickedCellsArray,
+				clickedCells: Array.from(clickedCells),
 				pathStart: null,
 				pathEnd: null
 			}
@@ -79,39 +81,29 @@ export const removeBoulder = (boulderId) => {
 };
 
 export const toggleCell = (cellId) => {
-	console.log('im here');
-	if (!isSkippedCell(cellId)) {
-		selector.update((prevSelector) => {
-			if (prevSelector.selectingMode === 'Start') {
-				selectedStart(cellId);
-				return {
-					...prevSelector,
-					selectedStartCell: cellId,
-					selectingMode: null
-				};
-			} else if (prevSelector.selectingMode === 'Top') {
-				selectedTop(cellId);
-				return {
-					...prevSelector,
-					selectedTopCell: cellId,
-					selectingMode: null
-				};
-			} else {
-				clickedCells.update((prevClickedCells) => {
-					const newClickedCells = new Set(prevClickedCells);
-					if (newClickedCells.has(cellId)) {
-						newClickedCells.delete(cellId);
-					} else {
-						newClickedCells.add(cellId);
-					}
-					console.log('new clicked cells:', newClickedCells);
-					return newClickedCells;
-				});
-				return {
-					...prevSelector,
-					selectingMode: null
-				};
-			}
-		});
+	if (isSkippedCell(cellId)) {
+		return; // Do nothing if the cell is skipped
 	}
+
+	selector.update((prevSelector) => {
+		let updatedSelector = { ...prevSelector, selectingMode: null };
+
+		if (prevSelector.selectingMode === 'Start') {
+			selectedStart(cellId);
+			updatedSelector.selectedStartCell = cellId;
+		} else if (prevSelector.selectingMode === 'Top') {
+			selectedTop(cellId);
+			updatedSelector.selectedTopCell = cellId;
+		} else {
+			clickedCells.update((prevClickedCells) => {
+				const newClickedCells = new Set(prevClickedCells);
+				newClickedCells.has(cellId) ? newClickedCells.delete(cellId) : newClickedCells.add(cellId);
+				console.log('new clicked cells:', newClickedCells);
+				return newClickedCells;
+			});
+		}
+
+		return updatedSelector;
+	});
 };
+

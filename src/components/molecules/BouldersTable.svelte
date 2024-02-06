@@ -1,10 +1,6 @@
 <script>
-	// import { writable } from 'svelte/store';
-	//
-	// const boulders = writable([]);
 	import { boulders } from '../molecules/BoulderStore.svelte';
-	$: console.log('boulder:', $boulders.clickedCells);
-	// $: console.log('cells:', $clickedCells);
+
 </script>
 
 List of all generated boulders.
