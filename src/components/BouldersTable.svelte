@@ -1,22 +1,17 @@
 <script>
-	import { onDestroy } from 'svelte';
 
-	onDestroy(() => {
-		console.log('List of Boulders Component is being destroyed');
-		// Optionally, you can perform cleanup or additional logic here
-	});
 
 	// import { writable } from 'svelte/store';
 	//
 	// const boulders = writable([]);
-	import { boulders, clickedCells } from '../clickedCells.js';
+	import { boulders } from './Boulder/Store.svelte';
 	$: console.log('boulder:', $boulders.clickedCells);
-	$: console.log('cells:', $clickedCells);
+	// $: console.log('cells:', $clickedCells);
 </script>
 
 List of all generated boulders.
 
-{#if $boulders.length > 0}
+{#if $boulders?.length > 0}
 	<div id="table-container" class="overflow-x-auto">
 		<table id="dataTable" class="w-full text-left text-sm">
 			<thead class="bg-slate-50 text-xs uppercase text-slate-500">

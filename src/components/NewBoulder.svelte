@@ -1,5 +1,5 @@
 <script>
-	import Boulder from './Boulder.svelte';
+	import Boulder from './Boulder/Boulder.svelte';
 </script>
 
 <div id="NewBouderContent" class="flex justify-center">
