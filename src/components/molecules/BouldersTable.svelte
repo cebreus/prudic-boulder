@@ -1,17 +1,9 @@
 <script>
 	import { boulders } from '../molecules/BoulderStore.svelte';
-
-	const removeBoulder = (boulderId) => {
-		boulders.update((prevBoulders) => {
-			const newBoulders = prevBoulders.filter((boulder) => boulder.id !== boulderId);
-			localStorage.setItem('boulders', JSON.stringify(newBoulders));
-			return newBoulders;
-		});
-	};
-
 </script>
 
-List of all generated boulders.
+<!-- TODO: @artem Click on the ID should open modal with visualisation on a boulder -->
+<!-- TODO: @artem add button for delete the boulder -->
 
 {#if $boulders?.length > 0}
 	<div id="table-container" class="overflow-x-auto">
@@ -27,11 +19,12 @@ List of all generated boulders.
 					<tr>
 						<td class="px-3 py-1.5 lg:px-6 lg:py-3">{boulder.id}</td>
 						<td class="px-3 py-1.5 lg:px-6 lg:py-3">{boulder.clickedCells}</td>
-						<button on:click={() => removeBoulder()}>Delete</button>
 					</tr>{/each}
 			</tbody>
 		</table>
 	</div>
 {:else}
+	<!-- TODO: @artem create new component `atoms/Alert.svelte` -->
+	<!-- TODO> @strem  message id OK? What if I haven't no boulders created? -->
 	<div class="alert">No boulders loaded. Please refresh the page.</div>
 {/if}

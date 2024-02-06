@@ -1,5 +1,6 @@
 ---
 import Header from '../components/organisms/Header.svelte';
+import { ViewTransitions } from 'astro:transitions';
 
 interface Props {
 	title: string;
@@ -15,9 +16,13 @@ const currentPath = Astro.url.pathname;
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<title>{title}</title>
-		<meta name="description" content="Astro description" />
+		<meta
+			name="description"
+			content="Vytvořte a rozsviťte si obrázky a lezecké cesty na boulderu."
+		/>
 		<meta name="generator" content={Astro.generator} />
 		<script src="https://cdn.tailwindcss.com" defer></script>
+		<ViewTransitions />
 	</head>
 	<body>
 		<Header currentPath={currentPath} />

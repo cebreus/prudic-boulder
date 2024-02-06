@@ -20,7 +20,6 @@
 	$: tableRows = Array.from({ length: rows }, (_, i) => String.fromCharCode(65 + i));
 	$: tableCols = Array.from({ length: cols }, (_, i) => i);
 
-
 	export const cellsToSkip = new Set([
 		'B0',
 		'B3',
@@ -154,9 +153,9 @@
 		});
 	};
 
-	const saveBoulder = (clickedCells) => {
-		console.log('array:', Array.from(clickedCells),)// nic neni
+	export const saveBoulder = (clickedCells) => {
 
+		const timestamp = new Date().toLocaleString();
 
 		boulders.update((prevBoulders) => {
 			const newBoulders = [
@@ -165,21 +164,19 @@
 					id: generateBoulderId(),
 					clickedCells: Array.from(clickedCells),
 					pathStart: null,
-					pathEnd: null
+					pathEnd: null,
+					timestamp: timestamp
 				}
 			];
 
 			localStorage.setItem('boulders', JSON.stringify(newBoulders));
 
-			clearBoulder();
-
 			return newBoulders;
 		});
 	};
-
 	const toggleCell = (cellId) => {
 		if (isSkippedCell(cellId)) {
-			return; // Do nothing if the cell is skipped
+			return;
 		}
 
 		selector.update((prevSelector) => {
@@ -204,20 +201,19 @@
 		});
 	};
 
-
-	// $: console.log('Clicked Cells:', $clickedCells);
 	$: console.log('boulder:', $boulders);
 </script>
 
-<pre class="my-5">
+
+<!-- 
 Buttons: 
 
-- Top" sets the end of the path
-- Start" sets start of path
-- Show" sends data to server, server lights up wall
-- Clear" clears set data Boulder
-- Save" send data to server
-</pre>
+- Top: sets the end of the path
+- Start: sets start of path
+- Show: sends data to server, server lights up wall
+- Clear: clears set data Boulder
+- Save: send data to server
+-->
 
 <table class="wall mb-6 table-fixed border-separate text-xs sm:text-base">
 	<thead>

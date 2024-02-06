@@ -8,7 +8,7 @@
 	export let fill = 'transparent';
 	export let ariaLabel = '';
 	export let ariaHidden = false;
-	export let title = 'menu-toggler';
+	export let title = 'Přepnout zobrazení menu';
 	export let desc = '';
 	export let id = '';
 
