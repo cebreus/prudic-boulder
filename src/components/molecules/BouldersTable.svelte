@@ -1,6 +1,14 @@
 <script>
 	import { boulders } from '../molecules/BoulderStore.svelte';
 
+	const removeBoulder = (boulderId) => {
+		boulders.update((prevBoulders) => {
+			const newBoulders = prevBoulders.filter((boulder) => boulder.id !== boulderId);
+			localStorage.setItem('boulders', JSON.stringify(newBoulders));
+			return newBoulders;
+		});
+	};
+
 </script>
 
 List of all generated boulders.
@@ -19,6 +27,7 @@ List of all generated boulders.
 					<tr>
 						<td class="px-3 py-1.5 lg:px-6 lg:py-3">{boulder.id}</td>
 						<td class="px-3 py-1.5 lg:px-6 lg:py-3">{boulder.clickedCells}</td>
+						<button on:click={() => removeBoulder()}>Delete</button>
 					</tr>{/each}
 			</tbody>
 		</table>

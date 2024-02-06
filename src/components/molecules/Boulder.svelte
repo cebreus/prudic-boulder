@@ -1,11 +1,4 @@
 <script>
-	import {
-		isSkippedCell,
-		toggleCell,
-		setMode,
-		saveBoulder,
-		clearBoulder
-	} from '../utils/functions.mjs';
 	import { boulders, clickedCells, selector } from '../molecules/BoulderStore.svelte';
 	import Button from '../atoms/Button.svelte';
 
@@ -26,6 +19,191 @@
 
 	$: tableRows = Array.from({ length: rows }, (_, i) => String.fromCharCode(65 + i));
 	$: tableCols = Array.from({ length: cols }, (_, i) => i);
+
+
+	export const cellsToSkip = new Set([
+		'B0',
+		'B3',
+		'B6',
+		'B9',
+		'C1',
+		'C2',
+		'C4',
+		'C5',
+		'C7',
+		'C8',
+		'D0',
+		'D3',
+		'D6',
+		'D9',
+		'E1',
+		'E2',
+		'E4',
+		'E5',
+		'E7',
+		'F0',
+		'F3',
+		'F6',
+		'F9',
+		'G1',
+		'G2',
+		'G4',
+		'G5',
+		'G7',
+		'G8',
+		'H0',
+		'H3',
+		'H6',
+		'H9',
+		'I1',
+		'I2',
+		'I4',
+		'I5',
+		'I7',
+		'I8',
+		'J0',
+		'J3',
+		'J6',
+		'J9',
+		'K1',
+		'K2',
+		'K4',
+		'K5',
+		'K7',
+		'K8',
+		'L0',
+		'L3',
+		'L6',
+		'L9',
+		'M1',
+		'M2',
+		'M4',
+		'M5',
+		'M7',
+		'M8',
+		'N0',
+		'N3',
+		'N6',
+		'N9',
+		'O1',
+		'O2',
+		'O4',
+		'O5',
+		'O7',
+		'O8',
+		'P0',
+		'P3',
+		'P6',
+		'P9',
+		'Q0',
+		'Q1',
+		'Q4',
+		'Q5',
+		'Q8',
+		'Q9',
+		'R1',
+		'R3',
+		'R6',
+		'R8'
+	]);
+
+	export const generateBoulderId = () => {
+		return '_' + Math.random().toString(36).substring(2, 9);
+	};
+
+	const isSkippedCell = (cellId) => {
+		return cellsToSkip.has(cellId);
+	};
+
+	const selectedStart = (cellId) => {
+		clickedCells.update((prevClickedCells) => {
+			prevClickedCells = new Set([cellId, ...prevClickedCells]);
+			return prevClickedCells;
+		});
+	};
+
+	const selectedTop = (cellId) => {
+		clickedCells.update((prevClickedCells) => {
+			const newClickedCells = new Set(prevClickedCells);
+			newClickedCells.delete(cellId);
+			newClickedCells.add(cellId);
+			return newClickedCells;
+		});
+	};
+
+	const setMode = (mode) => {
+		selector.update((prevSelector) => {
+			return {
+				...prevSelector,
+				selectingMode: mode
+			};
+		});
+	};
+
+	const clearBoulder = () => {
+		clickedCells.update((prevClickedCells) => {
+			prevClickedCells = new Set();
+			return prevClickedCells;
+		});
+		selector.update((prevSelector) => {
+			return {
+				...prevSelector,
+				selectedStartCell: null,
+				selectedTopCell: null
+			};
+		});
+	};
+
+	const saveBoulder = (clickedCells) => {
+		console.log('array:', Array.from(clickedCells),)// nic neni
+
+
+		boulders.update((prevBoulders) => {
+			const newBoulders = [
+				...prevBoulders,
+				{
+					id: generateBoulderId(),
+					clickedCells: Array.from(clickedCells),
+					pathStart: null,
+					pathEnd: null
+				}
+			];
+
+			localStorage.setItem('boulders', JSON.stringify(newBoulders));
+
+			clearBoulder();
+
+			return newBoulders;
+		});
+	};
+
+	const toggleCell = (cellId) => {
+		if (isSkippedCell(cellId)) {
+			return; // Do nothing if the cell is skipped
+		}
+
+		selector.update((prevSelector) => {
+			let updatedSelector = { ...prevSelector, selectingMode: null };
+
+			if (prevSelector.selectingMode === 'Start') {
+				selectedStart(cellId);
+				updatedSelector.selectedStartCell = cellId;
+			} else if (prevSelector.selectingMode === 'Top') {
+				selectedTop(cellId);
+				updatedSelector.selectedTopCell = cellId;
+			} else {
+				clickedCells.update((prevClickedCells) => {
+					const newClickedCells = new Set(prevClickedCells);
+					newClickedCells.has(cellId) ? newClickedCells.delete(cellId) : newClickedCells.add(cellId);
+					console.log('new clicked cells:', newClickedCells);
+					return newClickedCells;
+				});
+			}
+
+			return updatedSelector;
+		});
+	};
+
 
 	// $: console.log('Clicked Cells:', $clickedCells);
 	$: console.log('boulder:', $boulders);
