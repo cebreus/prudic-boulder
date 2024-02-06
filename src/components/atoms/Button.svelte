@@ -10,6 +10,7 @@
 </button>
 
 <style>
+	/* TODO: @artem rewrite in Taiwind CSS classes, hint: remove <style> */
 	.button-m {
 		font-size: 16px;
 		padding: 8px;

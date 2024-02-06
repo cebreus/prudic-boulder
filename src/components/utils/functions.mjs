@@ -1,10 +1,6 @@
 import { generateBoulderId, cellsToSkip } from './utils.mjs';
 
-import {
-	clickedCells,
-	boulders,
-	selector,
-} from '../molecules/BoulderStore.svelte';
+import { clickedCells, boulders, selector } from '../molecules/BoulderStore.svelte';
 
 export const isSkippedCell = (cellId) => {
 	return cellsToSkip.has(cellId);
@@ -50,8 +46,8 @@ export const clearBoulder = () => {
 };
 
 export const saveBoulder = (clickedCells) => {
-	console.log('array:', Array.from(clickedCells),)// nic neni
-
+	// TODO: @artem add timestamp `YYYY-MMM-DD HH:mm`
+	console.log('array:', Array.from(clickedCells)); // nic neni
 
 	boulders.update((prevBoulders) => {
 		const newBoulders = [
@@ -66,6 +62,7 @@ export const saveBoulder = (clickedCells) => {
 
 		localStorage.setItem('boulders', JSON.stringify(newBoulders));
 
+		// TODO: @artem remove, because user should be able to continue in cration and save as next iteration
 		clearBoulder();
 
 		return newBoulders;
@@ -106,4 +103,3 @@ export const toggleCell = (cellId) => {
 		return updatedSelector;
 	});
 };
-

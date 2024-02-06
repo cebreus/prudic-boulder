@@ -1,6 +1,5 @@
 <script>
 	import { boulders } from '../molecules/BoulderStore.svelte';
-
 </script>
 
 List of all generated boulders.
@@ -24,5 +23,7 @@ List of all generated boulders.
 		</table>
 	</div>
 {:else}
+	<!-- TODO: @artem create new component `atoms/Alert.svelte` -->
+	<!-- TODO> @strem  message id OK? What if I haven't no boulders created? -->
 	<div class="alert">No boulders loaded. Please refresh the page.</div>
 {/if}

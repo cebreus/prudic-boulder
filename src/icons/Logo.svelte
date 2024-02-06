@@ -7,7 +7,7 @@
 	export let fill = '';
 	export let ariaLabel = '';
 	export let ariaHidden = false;
-	export let title = 'Home Boulder Wall';
+	export let title = 'Boulder Wall';
 	export let desc = '';
 	export let id = '';
 
