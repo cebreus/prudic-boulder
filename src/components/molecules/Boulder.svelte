@@ -262,6 +262,6 @@ Buttons:
 </table>
 
 <Button emoji="⏯️" size="m" onClick={() => setMode('Start')}>Start</Button>
-<Button emoji="🔝" size="l" onClick={() => setMode('Top')}>Top</Button>
-<Button emoji="💾" size="xl" onClick={() => saveBoulder($clickedCells)}>Save</Button>
+<Button emoji="🔝" size="m" onClick={() => setMode('Top')}>Top</Button>
+<Button emoji="💾" size="m" onClick={() => saveBoulder($clickedCells)}>Save</Button>
 <Button emoji="🗑️" size="m" onClick={() => clearBoulder()}>Clear</Button>

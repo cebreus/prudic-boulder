@@ -26,7 +26,7 @@
 					<tr>
 						<td class="px-3 py-1.5 lg:px-6 lg:py-3">{boulder.id}</td>
 						<td class="px-3 py-1.5 lg:px-6 lg:py-3">{boulder.clickedCells}</td>
-						<button on:click={() => removeBoulder(boulder.id)}>Delete</button>
+						<button on:click={() => removeBoulder(boulder.id)}>❌</button>
 					</tr>{/each}
 			</tbody>
 		</table>
