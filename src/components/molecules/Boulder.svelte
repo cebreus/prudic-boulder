@@ -114,22 +114,6 @@
 		return cellsToSkip.has(cellId);
 	};
 
-	const selectedStart = (cellId) => {
-		clickedCells.update((prevClickedCells) => {
-			prevClickedCells = new Set([cellId, ...prevClickedCells]);
-			return prevClickedCells;
-		});
-	};
-
-	const selectedTop = (cellId) => {
-		clickedCells.update((prevClickedCells) => {
-			const newClickedCells = new Set(prevClickedCells);
-			newClickedCells.delete(cellId);
-			newClickedCells.add(cellId);
-			return newClickedCells;
-		});
-	};
-
 	const setMode = (mode) => {
 		selector.update((prevSelector) => {
 			return {
@@ -153,7 +137,7 @@
 		});
 	};
 
-	export const saveBoulder = (clickedCells) => {
+	export const saveBoulder = (clickedCells, selector) => {
 
 		const timestamp = new Date().toLocaleString();
 
@@ -163,8 +147,8 @@
 				{
 					id: generateBoulderId(),
 					clickedCells: Array.from(clickedCells),
-					pathStart: null,
-					pathEnd: null,
+					pathStart: selector?.selectedStartCell,
+					pathEnd: selector?.selectedTopCell,
 					timestamp: timestamp
 				}
 			];
@@ -183,25 +167,22 @@
 			let updatedSelector = { ...prevSelector, selectingMode: null };
 
 			if (prevSelector.selectingMode === 'Start') {
-				selectedStart(cellId);
 				updatedSelector.selectedStartCell = cellId;
 			} else if (prevSelector.selectingMode === 'Top') {
-				selectedTop(cellId);
 				updatedSelector.selectedTopCell = cellId;
-			} else {
+			}
 				clickedCells.update((prevClickedCells) => {
 					const newClickedCells = new Set(prevClickedCells);
 					newClickedCells.has(cellId) ? newClickedCells.delete(cellId) : newClickedCells.add(cellId);
 					console.log('new clicked cells:', newClickedCells);
 					return newClickedCells;
 				});
-			}
+
 
 			return updatedSelector;
 		});
 	};
 
-	$: console.log('boulder:', $boulders);
 </script>
 
 
@@ -263,5 +244,5 @@ Buttons:
 
 <Button emoji="⏯️" size="m" onClick={() => setMode('Start')}>Start</Button>
 <Button emoji="🔝" size="m" onClick={() => setMode('Top')}>Top</Button>
-<Button emoji="💾" size="m" onClick={() => saveBoulder($clickedCells)}>Save</Button>
+<Button emoji="💾" size="m" onClick={() => saveBoulder($clickedCells, $selector)}>Save</Button>
 <Button emoji="🗑️" size="m" onClick={() => clearBoulder()}>Clear</Button>
