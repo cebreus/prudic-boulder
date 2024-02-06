@@ -5,7 +5,7 @@
 		setMode,
 		saveBoulder,
 		clearBoulder
-	} from './utils/Functions.svelte';
+	} from './utils/Functions.mjs';
 	import { boulders, clickedCells } from './Store.svelte';
 	import { selector } from './Store.svelte';
 	import Button from '../Button/Button.svelte';

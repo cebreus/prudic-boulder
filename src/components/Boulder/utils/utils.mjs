@@ -85,5 +85,5 @@ export const cellsToSkip = new Set([
 ]);
 
 export const generateBoulderId = () => {
-	return '_' + Math.random().toString(36).substr(2, 9);
+	return '_' + Math.random().toString(36).substring(2, 9);
 };
