@@ -5,10 +5,9 @@
 		setMode,
 		saveBoulder,
 		clearBoulder
-	} from './utils/Functions.mjs';
-	import { boulders, clickedCells } from './Store.svelte';
-	import { selector } from './Store.svelte';
-	import Button from '../Button/Button.svelte';
+	} from '../utils/functions.mjs';
+	import { boulders, clickedCells, selector } from '../molecules/BoulderStore.svelte';
+	import Button from '../atoms/Button.svelte';
 
 	let rows = 18;
 	let cols = 10;

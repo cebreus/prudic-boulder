@@ -2,7 +2,7 @@
 	// import { writable } from 'svelte/store';
 	//
 	// const boulders = writable([]);
-	import { boulders } from './Boulder/Store.svelte';
+	import { boulders } from '../molecules/BoulderStore.svelte';
 	$: console.log('boulder:', $boulders.clickedCells);
 	// $: console.log('cells:', $clickedCells);
 </script>

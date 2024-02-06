@@ -1,6 +1,11 @@
 import { generateBoulderId, cellsToSkip } from './utils.mjs';
 
-import { clickedCells, boulders, selector, clickedCellsArray } from '../Store.svelte';
+import {
+	clickedCells,
+	boulders,
+	selector,
+	clickedCellsArray
+} from '../molecules/BoulderStore.svelte';
 
 export const isSkippedCell = (cellId) => {
 	return cellsToSkip.has(cellId);

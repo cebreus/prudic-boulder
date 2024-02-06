@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { tick } from 'svelte';
 	import { onMount } from 'svelte';
-	import MenuToggler from '../icons/MenuToggler.svelte';
-	import Logo from '../icons/Logo.svelte';
+	import MenuToggler from '../../icons/MenuToggler.svelte';
+	import Logo from '../../icons/Logo.svelte';
 
 	export let currentPath = '';
 
