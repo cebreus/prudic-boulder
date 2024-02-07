@@ -21,6 +21,8 @@
 
 </script>
 
+<!-- TODO: @artem Click on the ID should open modal with visualisation on a boulder -->
+
 {#if $boulders?.length > 0}
 	<div id="table-container" class="overflow-x-auto">
 		<table id="dataTable" class="w-full text-left text-sm">

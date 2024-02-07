@@ -1,9 +1,15 @@
 <script>
 	import { boulders, clickedCells, selector } from '../molecules/BoulderStore.svelte';
 	import Button from '../atoms/Button.svelte';
+	import Alert from '../atoms/Alert.svelte';
 
 	let rows = 18;
 	let cols = 10;
+	let showAlert = false
+
+	// const handleAlertClose = () => {
+	// 	showAlert = false;
+	// };
 	export const baseClass = 'w-7 h-7 text-center rounded-sm tabular-nums slashed-zero sm:w-8 sm:h-8';
 	export const baseClasses = `${baseClass} cursor-pointer bg-sky-50 border border-sky-300 hover:bg-sky-100 hover:border-sky-400 hover:text-sky-600`;
 	const skippedClass = `skipped ${baseClass}`;
@@ -138,6 +144,12 @@
 	};
 
 	export const saveBoulder = (clickedCells, selector) => {
+		if (clickedCells.size === 0) {
+			showAlert = true
+			return; // Don't save the boulder if clickedCells is empty
+		}
+
+		showAlert = false
 
 		const timestamp = new Date().toLocaleString();
 
@@ -195,6 +207,9 @@ Buttons:
 - Clear: clears set data Boulder
 - Save: send data to server
 -->
+{#if showAlert}
+	<Alert variation="error">Vyberte prosím alespoň jednu buňku!</Alert>
+{/if}
 
 <table class="wall mb-6 table-fixed border-separate text-xs sm:text-base">
 	<thead>
@@ -242,7 +257,9 @@ Buttons:
 	</tbody>
 </table>
 
+
 <Button emoji="⏯️" size="m" onClick={() => setMode('Start')}>Start</Button>
 <Button emoji="🔝" size="m" onClick={() => setMode('Top')}>Top</Button>
 <Button emoji="💾" size="m" onClick={() => saveBoulder($clickedCells, $selector)}>Save</Button>
 <Button emoji="🗑️" size="m" onClick={() => clearBoulder()}>Clear</Button>
+
