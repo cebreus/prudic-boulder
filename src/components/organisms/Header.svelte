@@ -59,8 +59,7 @@
 						{#each menuItems as { name, path } (path)}
 							<a
 								href={path}
-								class="block rounded-md px-3 py-1.5 text-sm font-medium text-sky-500 {currentPath ===
-								path
+								class="block rounded-md px-3 py-1.5 text-sm font-medium {currentPath === path
 									? ' text-sky-900 ring-1 ring-slate-200'
 									: ' text-sky-500 hover:bg-sky-100 hover:text-sky-600 hover:ring-1 hover:ring-sky-200'}"
 								aria-current={currentPath === path ? 'page' : undefined}
