@@ -37,6 +37,8 @@ paths:
           description: Bad request
         '500':
           description: Server error
+        default:
+          description: Unexpected error
 
   /display-route:
     post:
@@ -67,6 +69,8 @@ paths:
           description: Bad request
         '500':
           description: Server error
+        default:
+          description: Unexpected error
 
 components:
   schemas:
@@ -85,7 +89,7 @@ components:
           maxLength: 8
           pattern: '[0-9a-f]{8}'
           description: Unique identifier for the route
-          example:
+          example: '550e8400'
         start:
           type: string
           minLength: 2
