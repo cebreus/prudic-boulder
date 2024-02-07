@@ -254,7 +254,14 @@ Buttons:
 	</tbody>
 </table>
 
-<Button emoji="⏯️" size="m" onClick={() => setMode('Start')}>Start</Button>
-<Button emoji="🔝" size="m" onClick={() => setMode('Top')}>Top</Button>
-<Button emoji="💾" size="m" onClick={() => saveBoulder($clickedCells, $selector)}>Save</Button>
-<Button emoji="🗑️" size="m" onClick={() => clearBoulder()}>Clear</Button>
+<div class="grid grid-flow-col justify-stretch gap-4 pl-9 pr-1 pt-4">
+	<Button variant="outline" on:click={setMode('Start')}>Start</Button>
+	<Button variant="outline" on:click={setMode('Top')}>Top</Button>
+	<Button
+		emoji="💾"
+		variant="outlineGreen"
+		aria-label="Save"
+		on:click={saveBoulder($clickedCells, $selector)}
+	></Button>
+	<Button emoji="🗑️" variant="outlineYellow" aria-label="Clear" on:click={clearBoulder}></Button>
+</div>
