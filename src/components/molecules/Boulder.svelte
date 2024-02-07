@@ -4,13 +4,13 @@
 
 	let rows = 18;
 	let cols = 10;
-	const baseClass = 'w-7 h-7 text-center rounded-sm tabular-nums slashed-zero sm:w-8 sm:h-8';
-	const baseClasses = `${baseClass} cursor-pointer bg-sky-50 border border-sky-300 hover:bg-sky-100 hover:border-sky-400 hover:text-sky-600`;
+	export const baseClass = 'w-7 h-7 text-center rounded-sm tabular-nums slashed-zero sm:w-8 sm:h-8';
+	export const baseClasses = `${baseClass} cursor-pointer bg-sky-50 border border-sky-300 hover:bg-sky-100 hover:border-sky-400 hover:text-sky-600`;
 	const skippedClass = `skipped ${baseClass}`;
 	const clickedClass = `holds ${baseClass} bg-green-400 border-green-400 text-green-900 hover:bg-green-200`;
 
-	const startClass = `cursor-pointer bg-sky-50 border border-sky-300 hover:bg-sky-100 hover:border-sky-400 hover:text-sky-600 bg-yellow-400 border-green-400 text-green-900`;
-	const topClass = ` cursor-pointer bg-sky-50 border border-sky-300 hover:bg-sky-100 hover:border-sky-400 hover:text-sky-600 bg-red-400 border-red-400 text-red-900`;
+	const startClass = `${baseClass} cursor-pointer bg-sky-50 border border-sky-300 hover:bg-yellow-300 hover:border-sky-400 hover:text-sky-600 bg-yellow-400 border-green-400 text-green-900`;
+	const topClass = ` ${baseClass} cursor-pointer bg-sky-50 border border-sky-300 hover:bg-red-300 hover:border-sky-400 hover:text-sky-600 bg-red-400 border-red-400 text-red-900`;
 
 	let selectingMode, selectedStartCell, selectedTopCell;
 	selector.subscribe(($selector) => {

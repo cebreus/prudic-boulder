@@ -1,5 +1,15 @@
 <script>
 	import { boulders } from '../molecules/BoulderStore.svelte';
+	import Modal from './Modal.svelte';
+
+	let showModal = false;
+	let selectedBoulder = null;
+
+	const handleModalClose = () => {
+		showModal = false;
+		selectedBoulder = null;
+	};
+
 
 	const removeBoulder = (boulderId) => {
 		boulders.update((prevBoulders) => {
@@ -8,9 +18,8 @@
 			return newBoulders;
 		});
 	};
-</script>
 
-<!-- TODO: @artem Click on the ID should open modal with visualisation on a boulder -->
+</script>
 
 {#if $boulders?.length > 0}
 	<div id="table-container" class="overflow-x-auto">
@@ -24,15 +33,26 @@
 			<tbody>
 				{#each $boulders as boulder (boulder.id)}
 					<tr>
-						<td class="px-3 py-1.5 lg:px-6 lg:py-3">{boulder.id}</td>
+						<td class="px-3 py-1.5 lg:px-6 lg:py-3">
+							<button on:click={() => { showModal = true; selectedBoulder = boulder; }}>
+								{boulder.id}
+							</button>
+						</td>
 						<td class="px-3 py-1.5 lg:px-6 lg:py-3">{boulder.clickedCells}</td>
 						<button on:click={() => removeBoulder(boulder.id)}>❌</button>
-					</tr>{/each}
+					</tr>
+				{/each}
 			</tbody>
 		</table>
 	</div>
-{:else}
-	<!-- TODO: @artem create new component `atoms/Alert.svelte` -->
-	<!-- TODO> @strem  message id OK? What if I haven't no boulders created? -->
+{/if}
+<!--{:else}-->
+<!--	&lt;!&ndash; TODO: @artem create new component `atoms/Alert.svelte` &ndash;&gt;-->
+<!--	&lt;!&ndash; TODO> @strem  message id OK? What if I haven't no boulders created? &ndash;&gt;-->
+<!--	<div class="alert">No boulders loaded. Please refresh the page.</div>-->
+<!--{/if}-->
+	<Modal boulder={selectedBoulder} bind:showModal={showModal} on:close={handleModalClose} />
+
+{#if $boulders?.length === 0}
 	<div class="alert">No boulders loaded. Please refresh the page.</div>
 {/if}
