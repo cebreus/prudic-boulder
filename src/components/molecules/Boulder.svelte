@@ -7,7 +7,7 @@
 
 	let rows = 18;
 	let cols = 10;
-	let showAlert = false
+	let showAlert = false;
 
 	export const baseClass = 'w-7 h-7 text-center rounded-sm tabular-nums slashed-zero sm:w-8 sm:h-8';
 	export const baseClasses = `${baseClass} cursor-pointer bg-sky-50 border border-sky-300 hover:bg-sky-100 hover:border-sky-400 hover:text-sky-600`;
@@ -144,11 +144,11 @@
 
 	export const saveBoulder = (clickedCells, selector) => {
 		if (clickedCells.size === 0) {
-			showAlert = true
+			showAlert = true;
 			return; // Don't save the boulder if clickedCells is empty
 		}
 
-		showAlert = false
+		showAlert = false;
 
 		const timestamp = new Date().toLocaleString();
 
@@ -183,20 +183,17 @@
 			} else if (prevSelector.selectingMode === 'Top') {
 				updatedSelector.selectedTopCell = cellId;
 			}
-				clickedCells.update((prevClickedCells) => {
-					const newClickedCells = new Set(prevClickedCells);
-					newClickedCells.has(cellId) ? newClickedCells.delete(cellId) : newClickedCells.add(cellId);
-					console.log('new clicked cells:', newClickedCells);
-					return newClickedCells;
-				});
-
+			clickedCells.update((prevClickedCells) => {
+				const newClickedCells = new Set(prevClickedCells);
+				newClickedCells.has(cellId) ? newClickedCells.delete(cellId) : newClickedCells.add(cellId);
+				console.log('new clicked cells:', newClickedCells);
+				return newClickedCells;
+			});
 
 			return updatedSelector;
 		});
 	};
-
 </script>
-
 
 <!-- 
 Buttons: 
@@ -259,9 +256,14 @@ Buttons:
 	</tbody>
 </table>
 
-
-<Button emoji="⏯️" size="m" onClick={() => setMode('Start')}>Start</Button>
-<Button emoji="🔝" size="m" onClick={() => setMode('Top')}>Top</Button>
-<Button emoji="💾" size="m" onClick={() => saveBoulder($clickedCells, $selector)}>Save</Button>
-<Button emoji="🗑️" size="m" onClick={() => clearBoulder()}>Clear</Button>
-
+<div class="grid w-[20.8em] grid-flow-col justify-stretch gap-4 pl-9 pr-1 pt-4 sm:w-[23.5em]">
+	<Button variant="outline" on:click={setMode('Start')}>Start</Button>
+	<Button variant="outline" on:click={setMode('Top')}>Top</Button>
+	<Button
+		emoji="💾"
+		variant="outlineGreen"
+		aria-label="Save"
+		on:click={saveBoulder($clickedCells, $selector)}
+	></Button>
+	<Button emoji="🗑️" variant="outlineYellow" aria-label="Clear" on:click={clearBoulder}></Button>
+</div>

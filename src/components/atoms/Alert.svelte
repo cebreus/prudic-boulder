@@ -15,11 +15,9 @@
 	};
 </script>
 
-<div class="{getAlertClasses()} px-4 py-3 rounded relative" role="alert">
-	<strong class="font-bold flex items-center justify-center">
-		<slot></slot>
+<div class="{getAlertClasses()} relative rounded px-4 py-3" role="alert">
+	<strong class="flex items-center justify-center font-bold">
+		<slot />
 	</strong>
-	<span class="absolute top-0 bottom-0 right-0 px-4 py-3">
-  </span>
+	<span class="absolute bottom-0 right-0 top-0 px-4 py-3"> </span>
 </div>
-

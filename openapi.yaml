@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: Boulder Route LED Control API
   description: API for managing climbing routes and controlling LEDs on a climbing wall using modern RGB format.
-  version: "1.0.0"
+  version: '1.0.0'
 servers:
   - description: SwaggerHub API Auto Mocking
     url: https://virtserver.swaggerhub.com/CEBREUS69/Boulder-Route-LED-Control-API/1.0.0
@@ -37,6 +37,8 @@ paths:
           description: Bad request
         '500':
           description: Server error
+        default:
+          description: Unexpected error
 
   /display-route:
     post:
@@ -67,6 +69,8 @@ paths:
           description: Bad request
         '500':
           description: Server error
+        default:
+          description: Unexpected error
 
 components:
   schemas:
@@ -85,7 +89,7 @@ components:
           maxLength: 8
           pattern: '[0-9a-f]{8}'
           description: Unique identifier for the route
-          example: 
+          example: '550e8400'
         start:
           type: string
           minLength: 2
@@ -122,8 +126,8 @@ components:
           type: string
           description: Color and brightness of the cell in modern RGB format, e.g., "255 0 0 / 50%"
           pattern: '^([0-9]{1,3}\s{1,2}){3}(?:\/\s{1,2})?([0-9]{1,3})%?$'
-          example: "255 0 0 / 50%"
-  
+          example: '255 0 0 / 50%'
+
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
