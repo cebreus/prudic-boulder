@@ -1,9 +1,9 @@
 <script>
-	export let width = "1em"
+	export let width = '1em';
 </script>
 
 <svg
-	width={width}
+	{width}
 	style="text-align: center; display: inline-block;"
 	aria-hidden="true"
 	focusable="false"

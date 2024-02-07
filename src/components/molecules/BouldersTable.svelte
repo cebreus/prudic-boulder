@@ -4,7 +4,6 @@
 	import Toast from '../atoms/Toast.svelte';
 	import { addToast } from '../utils/TostService.mjs';
 
-
 	let showModal = false;
 	let selectedBoulder = null;
 

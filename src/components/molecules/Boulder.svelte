@@ -208,7 +208,7 @@ Buttons:
 	<Alert variation="error">Vyberte prosím alespoň jednu buňku!</Alert>
 {/if}
 
-<Toast/>
+<Toast />
 
 <table class="wall mb-6 table-fixed border-separate text-xs sm:text-base">
 	<thead>

@@ -22,26 +22,32 @@
 	onDestroy(unsubscribe);
 
 	const getTypeClass = (type) => {
-		return {
-			success: 'bg-green-500',
-			error: 'bg-red-500',
-			info: 'bg-blue-500',
-		}[type] || 'bg-gray-500';
+		return (
+			{
+				success: 'bg-green-500',
+				error: 'bg-red-500',
+				info: 'bg-blue-500'
+			}[type] || 'bg-gray-500'
+		);
 	};
-
 </script>
 
 {#if toastsArray.length > 0}
-	<section class="fixed top-5 right-5 w-80 z-50" transition:fade>
+	<section class="fixed right-5 top-5 z-50 w-80" transition:fade>
 		{#each toastsArray as toast (toast.id)}
-			<article class="{getTypeClass(toast.type)} rounded-lg p-3 flex justify-between mx-auto mb-2 space-x-2" role="alert">
+			<article
+				class="{getTypeClass(
+					toast.type
+				)} mx-auto mb-2 flex justify-between space-x-2 rounded-lg p-3"
+				role="alert"
+			>
 				<div>
 					{#if toast.type === 'success'}
-						<SuccessIcon class="w-5 h-5" />
+						<SuccessIcon class="h-5 w-5" />
 					{:else if toast.type === 'error'}
-						<ErrorIcon class="w-5 h-5" />
+						<ErrorIcon class="h-5 w-5" />
 					{:else}
-						<InfoIcon class="w-5 h-5" />
+						<InfoIcon class="h-5 w-5" />
 					{/if}
 				</div>
 
@@ -52,12 +58,11 @@
 
 					{#if toast.dismissible}
 						<button on:click={() => dismissToast(toast.id)}>
-							<CloseIcon class="w-4 h-4" />
+							<CloseIcon class="h-4 w-4" />
 						</button>
 					{/if}
 				</div>
 			</article>
-
 		{/each}
 	</section>
 {/if}
