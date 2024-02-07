@@ -254,7 +254,7 @@ Buttons:
 	</tbody>
 </table>
 
-<div class="grid grid-flow-col justify-stretch gap-4 pl-9 pr-1 pt-4">
+<div class="grid w-[20.8em] grid-flow-col justify-stretch gap-4 pl-9 pr-1 pt-4 sm:w-[23.5em]">
 	<Button variant="outline" on:click={setMode('Start')}>Start</Button>
 	<Button variant="outline" on:click={setMode('Top')}>Top</Button>
 	<Button
