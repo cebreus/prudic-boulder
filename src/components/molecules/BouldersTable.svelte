@@ -1,6 +1,9 @@
 <script>
-	import { boulders } from '../molecules/BoulderStore.svelte';
+	import { boulders } from './BoulderStore.svelte';
 	import Modal from './Modal.svelte';
+	import Toast from '../atoms/Toast.svelte';
+	import { addToast } from '../utils/TostService.mjs';
+
 
 	let showModal = false;
 	let selectedBoulder = null;
@@ -12,6 +15,7 @@
 
 
 	const removeBoulder = (boulderId) => {
+		addToast('success', 'Prudič byl odstraněn');
 		boulders.update((prevBoulders) => {
 			const newBoulders = prevBoulders.filter((boulder) => boulder.id !== boulderId);
 			localStorage.setItem('boulders', JSON.stringify(newBoulders));
@@ -21,7 +25,7 @@
 
 </script>
 
-<!-- TODO: @artem Click on the ID should open modal with visualisation on a boulder -->
+<Toast />
 
 {#if $boulders?.length > 0}
 	<div id="table-container" class="overflow-x-auto">

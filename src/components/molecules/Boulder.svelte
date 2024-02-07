@@ -2,14 +2,13 @@
 	import { boulders, clickedCells, selector } from '../molecules/BoulderStore.svelte';
 	import Button from '../atoms/Button.svelte';
 	import Alert from '../atoms/Alert.svelte';
+	import { addToast } from '../utils/TostService.mjs';
+	import Toast from '../atoms/Toast.svelte';
 
 	let rows = 18;
 	let cols = 10;
 	let showAlert = false
 
-	// const handleAlertClose = () => {
-	// 	showAlert = false;
-	// };
 	export const baseClass = 'w-7 h-7 text-center rounded-sm tabular-nums slashed-zero sm:w-8 sm:h-8';
 	export const baseClasses = `${baseClass} cursor-pointer bg-sky-50 border border-sky-300 hover:bg-sky-100 hover:border-sky-400 hover:text-sky-600`;
 	const skippedClass = `skipped ${baseClass}`;
@@ -166,6 +165,7 @@
 			];
 
 			localStorage.setItem('boulders', JSON.stringify(newBoulders));
+			addToast('success', 'Prudič byl vytvořen');
 
 			return newBoulders;
 		});
@@ -210,6 +210,8 @@ Buttons:
 {#if showAlert}
 	<Alert variation="error">Vyberte prosím alespoň jednu buňku!</Alert>
 {/if}
+
+<Toast/>
 
 <table class="wall mb-6 table-fixed border-separate text-xs sm:text-base">
 	<thead>
