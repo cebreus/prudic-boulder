@@ -5,7 +5,7 @@
 
 	let rows = 18;
 	let cols = 10;
-	let showAlert = false
+	let showAlert = false;
 
 	// const handleAlertClose = () => {
 	// 	showAlert = false;
@@ -145,11 +145,11 @@
 
 	export const saveBoulder = (clickedCells, selector) => {
 		if (clickedCells.size === 0) {
-			showAlert = true
+			showAlert = true;
 			return; // Don't save the boulder if clickedCells is empty
 		}
 
-		showAlert = false
+		showAlert = false;
 
 		const timestamp = new Date().toLocaleString();
 
@@ -183,20 +183,17 @@
 			} else if (prevSelector.selectingMode === 'Top') {
 				updatedSelector.selectedTopCell = cellId;
 			}
-				clickedCells.update((prevClickedCells) => {
-					const newClickedCells = new Set(prevClickedCells);
-					newClickedCells.has(cellId) ? newClickedCells.delete(cellId) : newClickedCells.add(cellId);
-					console.log('new clicked cells:', newClickedCells);
-					return newClickedCells;
-				});
-
+			clickedCells.update((prevClickedCells) => {
+				const newClickedCells = new Set(prevClickedCells);
+				newClickedCells.has(cellId) ? newClickedCells.delete(cellId) : newClickedCells.add(cellId);
+				console.log('new clicked cells:', newClickedCells);
+				return newClickedCells;
+			});
 
 			return updatedSelector;
 		});
 	};
-
 </script>
-
 
 <!-- 
 Buttons: 
@@ -257,9 +254,7 @@ Buttons:
 	</tbody>
 </table>
 
-
 <Button emoji="⏯️" size="m" onClick={() => setMode('Start')}>Start</Button>
 <Button emoji="🔝" size="m" onClick={() => setMode('Top')}>Top</Button>
 <Button emoji="💾" size="m" onClick={() => saveBoulder($clickedCells, $selector)}>Save</Button>
 <Button emoji="🗑️" size="m" onClick={() => clearBoulder()}>Clear</Button>
-

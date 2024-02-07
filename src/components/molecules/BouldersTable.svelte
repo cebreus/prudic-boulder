@@ -10,7 +10,6 @@
 		selectedBoulder = null;
 	};
 
-
 	const removeBoulder = (boulderId) => {
 		boulders.update((prevBoulders) => {
 			const newBoulders = prevBoulders.filter((boulder) => boulder.id !== boulderId);
@@ -18,7 +17,6 @@
 			return newBoulders;
 		});
 	};
-
 </script>
 
 <!-- TODO: @artem Click on the ID should open modal with visualisation on a boulder -->
@@ -36,7 +34,12 @@
 				{#each $boulders as boulder (boulder.id)}
 					<tr>
 						<td class="px-3 py-1.5 lg:px-6 lg:py-3">
-							<button on:click={() => { showModal = true; selectedBoulder = boulder; }}>
+							<button
+								on:click={() => {
+									showModal = true;
+									selectedBoulder = boulder;
+								}}
+							>
 								{boulder.id}
 							</button>
 						</td>
@@ -53,7 +56,7 @@
 <!--	&lt;!&ndash; TODO> @strem  message id OK? What if I haven't no boulders created? &ndash;&gt;-->
 <!--	<div class="alert">No boulders loaded. Please refresh the page.</div>-->
 <!--{/if}-->
-	<Modal boulder={selectedBoulder} bind:showModal={showModal} on:close={handleModalClose} />
+<Modal boulder={selectedBoulder} bind:showModal on:close={handleModalClose} />
 
 {#if $boulders?.length === 0}
 	<div class="alert">No boulders loaded. Please refresh the page.</div>
