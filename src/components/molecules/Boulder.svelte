@@ -1,13 +1,11 @@
 <script>
 	import { boulders, clickedCells, selector } from '../molecules/BoulderStore.svelte';
 	import Button from '../atoms/Button.svelte';
-	import Alert from '../atoms/Alert.svelte';
 	import { addToast } from '../utils/TostService.mjs';
 	import Toast from '../atoms/Toast.svelte';
 
 	let rows = 18;
 	let cols = 10;
-	let showAlert = false;
 
 	export const baseClass = 'w-7 h-7 text-center rounded-sm tabular-nums slashed-zero sm:w-8 sm:h-8';
 	export const baseClasses = `${baseClass} cursor-pointer bg-sky-50 border border-sky-300 hover:bg-sky-100 hover:border-sky-400 hover:text-sky-600`;
@@ -144,7 +142,7 @@
 
 	export const saveBoulder = (clickedCells, selector) => {
 		if (clickedCells.size === 0) {
-			showAlert = true;
+			addToast('warning', 'Vyberte alespoň jednu buňku!');
 			return; // Don't save the boulder if clickedCells is empty
 		}
 
@@ -204,9 +202,9 @@ Buttons:
 - Clear: clears set data Boulder
 - Save: send data to server
 -->
-{#if showAlert}
-	<Alert variation="error">Vyberte prosím alespoň jednu buňku!</Alert>
-{/if}
+<!--{#if showAlert}-->
+<!--	<Alert variation="warning">Vyberte prosím alespoň jednu buňku!</Alert>-->
+<!--{/if}-->
 
 <Toast/>
 
@@ -266,4 +264,5 @@ Buttons:
 		on:click={saveBoulder($clickedCells, $selector)}
 	></Button>
 	<Button emoji="🗑️" variant="outlineYellow" aria-label="Clear" on:click={clearBoulder}></Button>
+
 </div>
