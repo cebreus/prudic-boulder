@@ -6,11 +6,11 @@
 	export let color = 'currentColor';
 	export let strokeWidth = '1.5';
 	export let fill = 'transparent';
-	export let ariaLabel = '';
+	export let ariaLabel = 'ikona';
 	export let ariaHidden = false;
-	export let title = 'Přepnout zobrazení menu';
-	export let desc = '';
-	export let id = '';
+	export let title = null;
+	export let desc = null;
+	export let id = null;
 
 	let className = '';
 	export { className as class };

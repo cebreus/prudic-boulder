@@ -4,12 +4,12 @@
 	export let viewBox = `0 0 ${width} ${height}`;
 	export let color = 'currentColor';
 	export let strokeWidth = 0;
-	export let fill = '';
-	export let ariaLabel = '';
+	export let fill = null;
+	export let ariaLabel = null;
 	export let ariaHidden = false;
 	export let title = 'Boulder Wall';
-	export let desc = '';
-	export let id = '';
+	export let desc = null;
+	export let id = null;
 
 	let className = '';
 	export { className as class };
