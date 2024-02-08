@@ -1,9 +1,9 @@
 <script>
-	export let width = "1em";
+	export let width = '1em';
 </script>
 
 <svg
-	width={width}
+	{width}
 	xmlns="http://www.w3.org/2000/svg"
 	viewBox="0 0 64 64"
 	style="text-align: center; display: inline-block;"
