@@ -139,8 +139,8 @@
 
 	export const saveBoulder = (clickedCells, selector) => {
 		if (clickedCells.size === 0) {
-			addToast('warning', 'Vyberte alespoň jednu buňku!');
-			return; // Don't save the boulder if clickedCells is empty
+			addToast('warning', 'Vyberte alespoň jednu buňku!', '');
+			return;
 		}
 
 		const timestamp = new Date().toLocaleString();
@@ -158,7 +158,7 @@
 			];
 
 			localStorage.setItem('boulders', JSON.stringify(newBoulders));
-			addToast('success', 'Prudič byl vytvořen');
+			addToast('success', 'Prudič byl vytvořen', 'Přejděte na hlavní stránku pro zobrazení');
 
 			return newBoulders;
 		});
@@ -201,7 +201,7 @@ Buttons:
 <!--	<Alert variation="warning">Vyberte prosím alespoň jednu buňku!</Alert>-->
 <!--{/if}-->
 
-<Toast />
+<Toast/>
 
 <table class="wall">
 	<thead>
