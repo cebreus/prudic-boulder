@@ -80,12 +80,12 @@ Intuitivní a přívětivá aplikace postavená na Svelte a Tailwind CSS v prost
 
 ```json
 [
-	{
-		"id": "cesta1",
-		"start": "A1",
-		"top": "B2",
-		"cells": [{ "id": "A1", "color": "#ff0000", "brightness": 80 }]
-	}
+ {
+  "id": "550e8400",
+  "start": "A1",
+  "top": "B2",
+  "cells": [{ "id": "A1", "colorBrightness": "255 0 0 / 50%"}]
+ }
 ]
 ```
 
