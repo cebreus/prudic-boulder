@@ -118,8 +118,8 @@ components:
         id:
           type: string
           minLength: 2
-          maxLength: 3
-          pattern: '^[A-Z]{1}[0-9]{1,2}+$'
+          maxLength: 2
+          pattern: '^[A-Z]{1}[0-9]{1}+$'
           description: Unique identifier for the cell
           example: 'A12'
         colorBrightness:
