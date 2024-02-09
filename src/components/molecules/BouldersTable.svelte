@@ -27,47 +27,45 @@
 
 <Toast />
 
-<div class="min-h-screen bg-white text-gray-800">
-	{#if $boulders?.length > 0}
-		<div id="table-container" class="m-8 overflow-x-auto">
-			<table id="dataTable" class="w-full text-left">
-				<thead>
-					<tr class="text-sm font-medium text-gray-500">
-						<th class="px-4 py-2">ID</th>
-						<th class="px-4 py-2">Cells</th>
-						<th class="px-4 py-2">Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					{#each $boulders as boulder (boulder.id)}
-						<tr class="border-b border-gray-100">
-							<td class="px-4 py-2">
-								<button class="text-blue-500 hover:underline" on:click={() => openModal(boulder)}>
-									{boulder.id}
-								</button>
-							</td>
+{#if $boulders?.length > 0}
+	<div id="table-container" class="my-8 overflow-x-auto">
+		<table id="dataTable">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th colspan="2">Cells</th>
+				</tr>
+			</thead>
+			<tbody>
+				{#each $boulders as boulder (boulder.id)}
+					<tr>
+						<td>
+							<button on:click={() => openModal(boulder)}>
+								{boulder.id}
+							</button>
+						</td>
+						<td>{Array.from(boulder.clickedCells)}</td>
+						<td>
+							<button on:click={() => removeBoulder(boulder.id)}>
 								<Icon path={mdiDelete} class="h-5 w-5 text-red-500" />
-								</button>
-							</td>
-						</tr>
-					{/each}
-				</tbody>
-			</table>
+							</button>
+						</td>
+					</tr>
+				{/each}
+			</tbody>
+		</table>
+	</div>
+{:else}
+	<Alert>
+		<Icon path={mdiInformationSlabCircle} class="inline-block h-5 w-5 text-blue-400" />
+		<div>
+			Vytvořte si
+			<a href="/new-boulder" class="text-blue-600 underline hover:no-underline dark:text-blue-300"
+				>novou cestu</a
+			> na lezecké stěně.
 		</div>
-	{:else}
-		<div class="flex h-full items-center justify-center">
-			<div class="text-center text-sm text-gray-500">
-				No boulders loaded. Please refresh the page.
-			</div>
-		</div>
-	{/if}
-</div>
-<!--{:else}-->
-<!--	&lt;!&ndash; TODO: @artem create new component `atoms/Alert.svelte` &ndash;&gt;-->
-<!--	&lt;!&ndash; TODO> @strem  message id OK? What if I haven't no boulders created? &ndash;&gt;-->
-<!--	<div class="alert">No boulders loaded. Please refresh the page.</div>-->
-<!--{/if}-->
-<!--<Modal boulder={selectedBoulder} bind:showModal on:close={handleModalClose} />-->
+	</Alert>
+{/if}
 
 {#if clickOutsideModal && selectedBoulder}
 	<Modal title="Boulder preview" bind:open={clickOutsideModal} autoclose outsideclose>
@@ -75,6 +73,27 @@
 	</Modal>
 {/if}
 
-{#if $boulders?.length === 0}
-	<div class="alert">No boulders loaded. Please refresh the page.</div>
-{/if}
+<style lang="postcss">
+	table {
+		@apply text-left text-sm;
+	}
+	table thead {
+		@apply border-b bg-slate-50 text-xs uppercase text-slate-500 dark:border-slate-700 dark:bg-slate-800;
+	}
+	table tbody tr {
+		@apply border-b bg-white dark:border-slate-700 dark:bg-slate-900;
+	}
+	table tbody tr:hover {
+		@apply outline-dotted outline-1 outline-slate-700 dark:outline-slate-500;
+	}
+	table th {
+		@apply px-3 py-2 align-bottom dark:text-slate-300;
+		text-wrap: balance;
+	}
+	table td {
+		@apply px-3 py-2 tabular-nums lg:pr-8;
+	}
+	table td button {
+		@apply text-sky-500 underline hover:no-underline dark:text-sky-500 dark:hover:text-sky-400;
+	}
+</style>

@@ -34,11 +34,15 @@
 	];
 </script>
 
-<nav class="relative z-10 border-b border-slate-200 bg-slate-100">
+<nav
+	class="relative z-10 border-b border-slate-200 bg-slate-100 dark:border-slate-900 dark:bg-slate-950"
+>
 	<div class="container mx-auto">
 		<div class="relative flex h-14 items-center justify-between px-4">
 			<a href="/" class="flex items-center"
-				><Logo class="mb-0.5 mr-4 block h-6 w-auto text-sky-900 hover:text-sky-600" /></a
+				><Logo
+					class="mb-0.5 mr-4 block h-6 w-auto text-sky-900 hover:text-sky-600 dark:text-sky-500 dark:hover:text-sky-400"
+				/></a
 			>
 			<div class="absolute inset-y-0 right-3 flex items-center sm:hidden">
 				<!-- Mobile menu button-->
@@ -60,8 +64,8 @@
 							<a
 								href={path}
 								class="block rounded-md px-3 py-1.5 text-sm font-medium {currentPath === path
-									? ' text-sky-900 ring-1 ring-slate-200'
-									: ' text-sky-500 hover:bg-sky-100 hover:text-sky-600 hover:ring-1 hover:ring-sky-200'}"
+									? ' text-sky-900 ring-1 ring-slate-200 dark:text-slate-500 dark:ring-slate-500'
+									: ' text-sky-500 hover:bg-sky-100 hover:text-sky-600 hover:ring-1 hover:ring-sky-200 dark:hover:bg-transparent dark:hover:text-sky-400 dark:hover:ring-sky-400'}"
 								aria-current={currentPath === path ? 'page' : undefined}
 							>
 								{name}
