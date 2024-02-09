@@ -26,38 +26,51 @@
 
 <Toast />
 
-{#if $boulders?.length > 0}
-	<div id="table-container" class="overflow-x-auto">
-		<table id="dataTable" class="w-full text-left text-sm">
-			<thead class="bg-slate-50 text-xs uppercase text-slate-500">
-				<tr class="border-b bg-white">
-					<th class="px-3 py-3 lg:px-6 lg:py-3">ID</th>
-					<th class="px-3 py-3 lg:px-6 lg:py-3">Cells</th>
+<div class="min-h-screen bg-white text-gray-800">
+	{#if $boulders?.length > 0}
+		<div id="table-container" class="overflow-x-auto m-8">
+			<table id="dataTable" class="w-full text-left">
+				<thead>
+				<tr class="text-sm font-medium text-gray-500">
+					<th class="px-4 py-2">ID</th>
+					<th class="px-4 py-2">Cells</th>
+					<th class="px-4 py-2">Actions</th>
 				</tr>
-			</thead>
-			<tbody>
+				</thead>
+				<tbody>
 				{#each $boulders as boulder (boulder.id)}
-					<tr>
-						<td class="px-3 py-1.5 lg:px-6 lg:py-3">
+					<tr class="border-b border-gray-100">
+						<td class="px-4 py-2">
 							<button
+								class="text-blue-500 hover:underline"
 								on:click={() => {
-									showModal = true;
-									selectedBoulder = boulder;
-								}}
+                    showModal = true;
+                    selectedBoulder = boulder;
+                  }}
 							>
 								{boulder.id}
 							</button>
 						</td>
-						<td class="px-3 py-1.5 lg:px-6 lg:py-3">{boulder.clickedCells}</td>
-						<button on:click={() => removeBoulder(boulder.id)}>
-							<Icon path={mdiClose}/>
-						</button>
+						<td class="px-4 py-2">{boulder.clickedCells}</td>
+						<td class="px-4 py-2">
+							<button
+								class="text-gray-400 hover:text-gray-500"
+								on:click={() => removeBoulder(boulder.id)}
+							>
+								<Icon path={mdiClose} class="w-5 h-5"/>
+							</button>
+						</td>
 					</tr>
 				{/each}
-			</tbody>
-		</table>
-	</div>
-{/if}
+				</tbody>
+			</table>
+		</div>
+	{:else}
+		<div class="flex justify-center items-center h-full">
+			<div class="text-center text-sm text-gray-500">No boulders loaded. Please refresh the page.</div>
+		</div>
+	{/if}
+</div>
 <!--{:else}-->
 <!--	&lt;!&ndash; TODO: @artem create new component `atoms/Alert.svelte` &ndash;&gt;-->
 <!--	&lt;!&ndash; TODO> @strem  message id OK? What if I haven't no boulders created? &ndash;&gt;-->

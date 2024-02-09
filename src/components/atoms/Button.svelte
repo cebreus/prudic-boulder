@@ -20,7 +20,6 @@
 		| 'primary'
 		| 'red'
 		| 'yellow' = 'primary';
-	// export let onClick = () => {};
 	export let disabled: boolean = false;
 	export let href: string = '';
 	export let submit: boolean = false;

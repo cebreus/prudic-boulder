@@ -40,6 +40,9 @@
 	<section class="fixed top-5 right-5 z-50" transition:fade>
 		{#each toastsArray as toast (toast.id)}
 			<article class="relative bg-white rounded-lg p-4 mb-3 max-w-sm shadow-lg flex items-start overflow-hidden" role="alert">
+				<div class="absolute top-0 left-0 right-0 h-1 bg-gray-200">
+					<div class="{getProgressColorClass(toast.type)} rounded-b-lg" style="width: {toast.progress}%; transition: width linear;"></div>
+				</div>
 				<div class="{getIconColorClass(toast.type)} flex-shrink-0">
 					{#if toast.type === 'info'}
 						<Icon path={mdiInformation} width="1.2em" fill={getIconColorClass(toast.type)} strokeColor="{getIconColorClass(toast.type)} "/>
@@ -58,9 +61,6 @@
 						<Icon path={mdiClose}/>
 					</button>
 				{/if}
-				<div class="absolute bottom-0 left-0 right-0 h-1 bg-gray-200">
-					<div class="{getProgressColorClass(toast.type)} rounded-b-lg" style="width: {toast.progress}%; transition: width linear;"></div>
-				</div>
 			</article>
 		{/each}
 	</section>

@@ -3,8 +3,6 @@
 	import Button from '../atoms/Button.svelte';
 	import { addToast } from '../utils/TostService.mjs';
 	import Toast from '../atoms/Toast.svelte';
-	import { mdiAccountCircle } from '@mdi/js';
-	import Icon from '../../icons/Icon.svelte';
 
 	let rows = 18;
 	let cols = 10;
@@ -117,6 +115,7 @@
 	};
 
 	const setMode = (mode) => {
+		console.log('here')
 		selector.update((prevSelector) => {
 			return {
 				...prevSelector,
@@ -247,8 +246,8 @@ Buttons:
 </table>
 
 <div class="grid w-[20.8em] grid-flow-col justify-stretch gap-4 pl-9 pr-1 pt-4 sm:w-[23.5em]">
-	<Button variant="outline" on:click={setMode('Start')}>Start</Button>
-	<Button variant="outline" on:click={setMode('Top')}>Top</Button>
+	<Button variant="outline" on:click={() => setMode('Start')}>Start</Button>
+	<Button variant="outline" on:click={() => setMode('Top')}>Top</Button>
 	<Button
 		emoji="💾"
 		variant="outlineGreen"
