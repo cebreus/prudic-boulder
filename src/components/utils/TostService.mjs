@@ -8,7 +8,7 @@ export const dismissToast = (id) => {
 
 
 
-export const addToast = (type, message, extraMessage, timeout = 15000) => {
+export const addToast = (type, message, extraMessage = '', timeout = 15000) => {
 	const id = Math.floor(Math.random() * 10000);
 	const toast = {
 		id,

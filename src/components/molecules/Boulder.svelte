@@ -3,6 +3,8 @@
 	import Button from '../atoms/Button.svelte';
 	import { addToast } from '../utils/TostService.mjs';
 	import Toast from '../atoms/Toast.svelte';
+	import { mdiAccountCircle } from '@mdi/js';
+	import Icon from '../../icons/Icon.svelte';
 
 	let rows = 18;
 	let cols = 10;
@@ -139,7 +141,7 @@
 
 	export const saveBoulder = (clickedCells, selector) => {
 		if (clickedCells.size === 0) {
-			addToast('warning', 'Vyberte alespoň jednu buňku!', '');
+			addToast('info', 'Vyberte alespoň jednu buňku!', '');
 			return;
 		}
 
@@ -158,7 +160,7 @@
 			];
 
 			localStorage.setItem('boulders', JSON.stringify(newBoulders));
-			addToast('success', 'Prudič byl vytvořen', 'Přejděte na hlavní stránku pro zobrazení');
+			addToast('info', 'Prudič byl vytvořen', 'Přejděte na hlavní stránku pro zobrazení');
 
 			return newBoulders;
 		});

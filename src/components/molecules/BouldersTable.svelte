@@ -3,6 +3,8 @@
 	import Modal from './Modal.svelte';
 	import Toast from '../atoms/Toast.svelte';
 	import { addToast } from '../utils/TostService.mjs';
+	import { mdiClose } from '@mdi/js';
+	import Icon from '../../icons/Icon.svelte';
 
 	let showModal = false;
 	let selectedBoulder = null;
@@ -13,7 +15,7 @@
 	};
 
 	const removeBoulder = (boulderId) => {
-		addToast('success', 'Prudič byl odstraněn');
+		addToast('info', 'Prudič byl odstraněn');
 		boulders.update((prevBoulders) => {
 			const newBoulders = prevBoulders.filter((boulder) => boulder.id !== boulderId);
 			localStorage.setItem('boulders', JSON.stringify(newBoulders));
@@ -47,7 +49,9 @@
 							</button>
 						</td>
 						<td class="px-3 py-1.5 lg:px-6 lg:py-3">{boulder.clickedCells}</td>
-						<button on:click={() => removeBoulder(boulder.id)}>❌</button>
+						<button on:click={() => removeBoulder(boulder.id)}>
+							<Icon path={mdiClose}/>
+						</button>
 					</tr>
 				{/each}
 			</tbody>

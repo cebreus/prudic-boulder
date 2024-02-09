@@ -2,9 +2,9 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { toasts, dismissToast } from '../utils/TostService.mjs';
-	import SuccessIcon from '../../icons/SuccessIcon.svelte';
-	import InfoIcon from '../../icons/InfoIcon.svelte';
-	import CloseIcon from '../../icons/CloseIcon.svelte';
+	import { mdiClose, mdiInformation } from '@mdi/js';
+	import Icon from '../../icons/Icon.svelte';
+
 
 	let toastsArray = [];
 
@@ -41,21 +41,21 @@
 		{#each toastsArray as toast (toast.id)}
 			<article class="relative bg-white rounded-lg p-4 mb-3 max-w-sm shadow-lg flex items-start overflow-hidden" role="alert">
 				<div class="{getIconColorClass(toast.type)} flex-shrink-0">
-					{#if toast.type === 'success'}
-						<SuccessIcon width="1.5em" />
+					{#if toast.type === 'info'}
+						<Icon path={mdiInformation} width="1.2em" fill={getIconColorClass(toast.type)} strokeColor="{getIconColorClass(toast.type)} "/>
 					{:else if toast.type === 'warning'}
-						<InfoIcon width="1.5em" />
+						<Icon path={mdiInformation} width="1.2em" fill={getIconColorClass(toast.type)} strokeColor="{getIconColorClass(toast.type)} "/>
 					{:else}
-						<InfoIcon width="1.5em" />
+						<Icon path={mdiInformation} width="1.2em" fill={getIconColorClass(toast.type)} strokeColor="{getIconColorClass(toast.type)} "/>
 					{/if}
 				</div>
 				<div class="flex-grow mx-2 my-1 ml-3">
 					<p class="text-base pt-0.5 flex-1-1-0 leading-5">{toast.message}</p>
-					<p class="text-base text-gray-500 my-0.5">{toast.extraMessage}</p>
+					<p class="text-sm text-gray-500 my-0.5">{toast.extraMessage}</p>
 				</div>
 				{#if toast.dismissible}
 					<button class="ml-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none" on:click={() => dismissToast(toast.id)}>
-						<CloseIcon width="0.8em" />
+						<Icon path={mdiClose}/>
 					</button>
 				{/if}
 				<div class="absolute bottom-0 left-0 right-0 h-1 bg-gray-200">
