@@ -1,8 +1,8 @@
 <script>
+	import { addToast } from '../utils/TostService.ts';
 	import { boulders, clickedCells, selector } from '../molecules/BoulderStore.svelte';
-	import Button from '../atoms/Button.svelte';
-	import { addToast } from '../utils/TostService.mjs';
 	import { isSkippedCell } from '../utils/constants.mjs';
+	import Button from '../atoms/Button.svelte';
 	import Toast from '../atoms/Toast.svelte';
 	import {
 		rows,
@@ -51,7 +51,7 @@
 
 	export const saveBoulder = (clickedCells, selector) => {
 		if (clickedCells.size === 0) {
-			addToast('info', 'Vyberte alespoň jednu buňku!', '');
+			addToast('info', 'Vyberte alespoň jednu buňku!');
 			return;
 		}
 
@@ -70,7 +70,11 @@
 			];
 
 			localStorage.setItem('boulders', JSON.stringify(newBoulders));
-			addToast('info', 'Prudič byl vytvořen', 'Přejděte na hlavní stránku pro zobrazení');
+			addToast(
+				'success',
+				'Prudič byl vytvořen',
+				'Přejděte na <a href="/">hlavní stránku</a> pro zobrazení.'
+			);
 
 			return newBoulders;
 		});
@@ -100,17 +104,8 @@
 	};
 </script>
 
-<!-- 
-Buttons: 
-
-- Top: sets the end of the path
-- Start: sets start of path
-- Show: sends data to server, server lights up wall
-- Clear: clears set data Boulder
-- Save: send data to server
--->
-
 <Toast />
+
 <table class="wall">
 	<thead>
 		<tr>

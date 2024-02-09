@@ -1,11 +1,12 @@
 <script>
+	import { addToast } from '../utils/TostService.ts';
 	import { boulders } from './BoulderStore.svelte';
-	import Toast from '../atoms/Toast.svelte';
-	import { addToast } from '../utils/TostService.mjs';
-	import { mdiClose } from '@mdi/js';
-	import Icon from '../../icons/Icon.svelte';
+	import { mdiDelete, mdiInformationSlabCircle } from '@mdi/js';
 	import { Modal } from 'flowbite-svelte';
+	import Alert from '../atoms/Alert.svelte';
 	import BolderPreview from './BolderPreview.svelte';
+	import Icon from '../../icons/Icon.svelte';
+	import Toast from '../atoms/Toast.svelte';
 
 	let clickOutsideModal = false;
 	let selectedBoulder = [];
@@ -45,13 +46,7 @@
 									{boulder.id}
 								</button>
 							</td>
-							<td class="px-4 py-2">{Array.from(boulder.clickedCells)}</td>
-							<td class="px-4 py-2">
-								<button
-									class="text-gray-400 hover:text-gray-500"
-									on:click={() => removeBoulder(boulder.id)}
-								>
-									<Icon path={mdiClose} class="h-5 w-5" />
+								<Icon path={mdiDelete} class="h-5 w-5 text-red-500" />
 								</button>
 							</td>
 						</tr>
