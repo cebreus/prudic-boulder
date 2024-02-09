@@ -21,23 +21,28 @@
 	onDestroy(unsubscribe);
 
 	const getIconColorClass = (type) => {
-		return {
-			success: 'text-green-500',
-			warning: 'text-red-500',
-			info: 'text-blue-500',
-		}[type] || 'text-gray-500';
+		return (
+			{
+				success: 'text-green-500',
+				warning: 'text-red-500',
+				info: 'text-blue-500'
+			}[type] || 'text-gray-500'
+		);
 	};
 
 	const getProgressColorClass = (type) => {
-		return {
-			success: 'h-1 bg-green-500',
-			warning: 'h-1 bg-red-500',
-			info: 'h-1 bg-blue-500',
-		}[type] || 'h-1 bg-gray-500';
-	}
+		return (
+			{
+				success: 'h-1 bg-green-500',
+				warning: 'h-1 bg-red-500',
+				info: 'h-1 bg-blue-500'
+			}[type] || 'h-1 bg-gray-500'
+		);
+	};
 </script>
+
 {#if toastsArray.length > 0}
-	<section class="fixed top-5 right-5 z-50" transition:fade>
+	<section class="fixed right-5 top-5 z-50" transition:fade>
 		{#each toastsArray as toast (toast.id)}
 			<article class="relative bg-white rounded-lg p-4 mb-3 max-w-sm shadow-lg flex items-start overflow-hidden" role="alert">
 				<div class="absolute top-0 left-0 right-0 h-1 bg-gray-200">
