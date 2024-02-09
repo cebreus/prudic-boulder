@@ -1,18 +1,19 @@
 <script>
 	import { boulders } from './BoulderStore.svelte';
-	import Modal from './Modal.svelte';
 	import Toast from '../atoms/Toast.svelte';
 	import { addToast } from '../utils/TostService.mjs';
 	import { mdiClose } from '@mdi/js';
 	import Icon from '../../icons/Icon.svelte';
+	import { Modal } from 'flowbite-svelte';
+	import BolderPreview from './BolderPreview.svelte';
 
-	let showModal = false;
-	let selectedBoulder = null;
+	let clickOutsideModal = false;
+	let selectedBoulder = [];
+	function openModal(boulder) {
+		selectedBoulder = boulder;
+		clickOutsideModal = true;
+	}
 
-	const handleModalClose = () => {
-		showModal = false;
-		selectedBoulder = null;
-	};
 
 	const removeBoulder = (boulderId) => {
 		addToast('info', 'Prudič byl odstraněn');
@@ -25,6 +26,7 @@
 </script>
 
 <Toast />
+
 
 <div class="min-h-screen bg-white text-gray-800">
 	{#if $boulders?.length > 0}
@@ -43,15 +45,11 @@
 						<td class="px-4 py-2">
 							<button
 								class="text-blue-500 hover:underline"
-								on:click={() => {
-                    showModal = true;
-                    selectedBoulder = boulder;
-                  }}
-							>
+								on:click={() => openModal(boulder)}>
 								{boulder.id}
 							</button>
 						</td>
-						<td class="px-4 py-2">{boulder.clickedCells}</td>
+						<td class="px-4 py-2">{Array.from(boulder.clickedCells)}</td>
 						<td class="px-4 py-2">
 							<button
 								class="text-gray-400 hover:text-gray-500"
@@ -76,7 +74,13 @@
 <!--	&lt;!&ndash; TODO> @strem  message id OK? What if I haven't no boulders created? &ndash;&gt;-->
 <!--	<div class="alert">No boulders loaded. Please refresh the page.</div>-->
 <!--{/if}-->
-<Modal boulder={selectedBoulder} bind:showModal on:close={handleModalClose} />
+<!--<Modal boulder={selectedBoulder} bind:showModal on:close={handleModalClose} />-->
+
+{#if clickOutsideModal && selectedBoulder}
+	<Modal title="Boulder preview" bind:open={clickOutsideModal} autoclose outsideclose>
+		<BolderPreview {selectedBoulder}/>
+	</Modal>
+{/if}
 
 {#if $boulders?.length === 0}
 	<div class="alert">No boulders loaded. Please refresh the page.</div>
