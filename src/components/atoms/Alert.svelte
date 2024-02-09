@@ -1,23 +1,68 @@
-<script>
-	export let variation = 'info'; // Default variation
+<script lang="ts">
+	import { twMerge } from 'tailwind-merge';
 
-	const getAlertClasses = () => {
-		switch (variation) {
-			case 'success':
-				return 'bg-green-100 border border-green-400 text-green-700';
-			case 'warning':
-				return 'bg-yellow-100 border border-yellow-400 text-yellow-700';
-			case 'error':
-				return 'bg-red-100 border border-red-400 text-red-700';
-			default:
-				return 'bg-blue-100 border border-blue-400 text-blue-700';
+	let classNames = '';
+	let showComponent: boolean = true;
+
+	// Exported props for external configuration
+	export { classNames as class };
+	export let variant: 'success' | 'error' | 'warning' | 'info' = 'info';
+
+	// Default classes
+	const defaultClass: string =
+		'relative flex flex-row gap-3 rounded px-4 py-3 gap-3 text-sm _dark:bg-slate-800';
+
+	// Configuration and classes based on variant
+	const alertConfig: {
+		// eslint-disable-next-line no-unused-vars
+		[key in typeof variant]: {
+			classes: string;
+			badgeClasses: string;
+			role: 'status' | 'alert';
+			ariaLive: 'assertive' | 'polite' | 'off';
+		};
+	} = {
+		info: {
+			classes: 'bg-blue-50 text-blue-800 _dark:text-blue-400',
+			badgeClasses: 'bg-blue-200',
+			role: 'status',
+			ariaLive: 'off'
+		},
+		success: {
+			classes: 'bg-green-50 text-green-800 _dark:text-green-400',
+			badgeClasses: 'bg-green-200',
+			role: 'status',
+			ariaLive: 'polite'
+		},
+		error: {
+			classes: 'bg-red-50 text-red-800 _dark:text-red-400',
+			badgeClasses: 'bg-red-200',
+			role: 'alert',
+			ariaLive: 'assertive'
+		},
+		warning: {
+			classes: 'bg-amber-50 text-amber-800 _dark:text-amber-400',
+			badgeClasses: 'bg-amber-200',
+			role: 'alert',
+			ariaLive: 'assertive'
 		}
 	};
+
+	// Retrieve settings for the specified variant or default to 'info'
+	let alertSettings = alertConfig[variant] || alertConfig['info'];
+
+	// Final class construction
+	$: alertClass = twMerge(defaultClass, alertSettings.classes, classNames);
 </script>
 
-<div class="{getAlertClasses()} relative rounded px-4 py-3" role="alert">
-	<strong class="flex items-center justify-center font-bold">
+{#if showComponent}
+	<div
+		data-cy="alert"
+		class={alertClass}
+		role={alertSettings.role}
+		aria-live={alertSettings.ariaLive ?? 'off'}
+		{...$$restProps}
+	>
 		<slot />
-	</strong>
-	<span class="absolute bottom-0 right-0 top-0 px-4 py-3"> </span>
-</div>
+	</div>
+{/if}
