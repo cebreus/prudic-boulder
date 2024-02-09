@@ -14,7 +14,6 @@
 		clickOutsideModal = true;
 	}
 
-
 	const removeBoulder = (boulderId) => {
 		addToast('info', 'Prudič byl odstraněn');
 		boulders.update((prevBoulders) => {
@@ -27,45 +26,44 @@
 
 <Toast />
 
-
 <div class="min-h-screen bg-white text-gray-800">
 	{#if $boulders?.length > 0}
-		<div id="table-container" class="overflow-x-auto m-8">
+		<div id="table-container" class="m-8 overflow-x-auto">
 			<table id="dataTable" class="w-full text-left">
 				<thead>
-				<tr class="text-sm font-medium text-gray-500">
-					<th class="px-4 py-2">ID</th>
-					<th class="px-4 py-2">Cells</th>
-					<th class="px-4 py-2">Actions</th>
-				</tr>
+					<tr class="text-sm font-medium text-gray-500">
+						<th class="px-4 py-2">ID</th>
+						<th class="px-4 py-2">Cells</th>
+						<th class="px-4 py-2">Actions</th>
+					</tr>
 				</thead>
 				<tbody>
-				{#each $boulders as boulder (boulder.id)}
-					<tr class="border-b border-gray-100">
-						<td class="px-4 py-2">
-							<button
-								class="text-blue-500 hover:underline"
-								on:click={() => openModal(boulder)}>
-								{boulder.id}
-							</button>
-						</td>
-						<td class="px-4 py-2">{Array.from(boulder.clickedCells)}</td>
-						<td class="px-4 py-2">
-							<button
-								class="text-gray-400 hover:text-gray-500"
-								on:click={() => removeBoulder(boulder.id)}
-							>
-								<Icon path={mdiClose} class="w-5 h-5"/>
-							</button>
-						</td>
-					</tr>
-				{/each}
+					{#each $boulders as boulder (boulder.id)}
+						<tr class="border-b border-gray-100">
+							<td class="px-4 py-2">
+								<button class="text-blue-500 hover:underline" on:click={() => openModal(boulder)}>
+									{boulder.id}
+								</button>
+							</td>
+							<td class="px-4 py-2">{Array.from(boulder.clickedCells)}</td>
+							<td class="px-4 py-2">
+								<button
+									class="text-gray-400 hover:text-gray-500"
+									on:click={() => removeBoulder(boulder.id)}
+								>
+									<Icon path={mdiClose} class="h-5 w-5" />
+								</button>
+							</td>
+						</tr>
+					{/each}
 				</tbody>
 			</table>
 		</div>
 	{:else}
-		<div class="flex justify-center items-center h-full">
-			<div class="text-center text-sm text-gray-500">No boulders loaded. Please refresh the page.</div>
+		<div class="flex h-full items-center justify-center">
+			<div class="text-center text-sm text-gray-500">
+				No boulders loaded. Please refresh the page.
+			</div>
 		</div>
 	{/if}
 </div>
@@ -78,7 +76,7 @@
 
 {#if clickOutsideModal && selectedBoulder}
 	<Modal title="Boulder preview" bind:open={clickOutsideModal} autoclose outsideclose>
-		<BolderPreview {selectedBoulder}/>
+		<BolderPreview {selectedBoulder} />
 	</Modal>
 {/if}
 

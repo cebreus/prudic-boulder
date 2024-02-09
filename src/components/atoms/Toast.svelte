@@ -5,7 +5,6 @@
 	import { mdiClose, mdiInformation } from '@mdi/js';
 	import Icon from '../../icons/Icon.svelte';
 
-
 	let toastsArray = [];
 
 	const unsubscribe = toasts.subscribe(($toasts) => {
@@ -44,26 +43,50 @@
 {#if toastsArray.length > 0}
 	<section class="fixed right-5 top-5 z-50" transition:fade>
 		{#each toastsArray as toast (toast.id)}
-			<article class="relative bg-white rounded-lg p-4 mb-3 max-w-sm shadow-lg flex items-start overflow-hidden" role="alert">
-				<div class="absolute top-0 left-0 right-0 h-1 bg-gray-200">
-					<div class="{getProgressColorClass(toast.type)} rounded-b-lg" style="width: {toast.progress}%; transition: width linear;"></div>
+			<article
+				class="relative mb-3 flex max-w-sm items-start overflow-hidden rounded-lg bg-white p-4 shadow-lg"
+				role="alert"
+			>
+				<div class="absolute left-0 right-0 top-0 h-1 bg-gray-200">
+					<div
+						class="{getProgressColorClass(toast.type)} rounded-b-lg"
+						style="width: {toast.progress}%; transition: width linear;"
+					></div>
 				</div>
 				<div class="{getIconColorClass(toast.type)} flex-shrink-0">
 					{#if toast.type === 'info'}
-						<Icon path={mdiInformation} width="1.2em" fill={getIconColorClass(toast.type)} strokeColor="{getIconColorClass(toast.type)} "/>
+						<Icon
+							path={mdiInformation}
+							width="1.2em"
+							fill={getIconColorClass(toast.type)}
+							strokeColor="{getIconColorClass(toast.type)} "
+						/>
 					{:else if toast.type === 'warning'}
-						<Icon path={mdiInformation} width="1.2em" fill={getIconColorClass(toast.type)} strokeColor="{getIconColorClass(toast.type)} "/>
+						<Icon
+							path={mdiInformation}
+							width="1.2em"
+							fill={getIconColorClass(toast.type)}
+							strokeColor="{getIconColorClass(toast.type)} "
+						/>
 					{:else}
-						<Icon path={mdiInformation} width="1.2em" fill={getIconColorClass(toast.type)} strokeColor="{getIconColorClass(toast.type)} "/>
+						<Icon
+							path={mdiInformation}
+							width="1.2em"
+							fill={getIconColorClass(toast.type)}
+							strokeColor="{getIconColorClass(toast.type)} "
+						/>
 					{/if}
 				</div>
-				<div class="flex-grow mx-2 my-1 ml-3">
-					<p class="text-base pt-0.5 flex-1-1-0 leading-5">{toast.message}</p>
-					<p class="text-sm text-gray-500 my-0.5">{toast.extraMessage}</p>
+				<div class="mx-2 my-1 ml-3 flex-grow">
+					<p class="flex-1-1-0 pt-0.5 text-base leading-5">{toast.message}</p>
+					<p class="my-0.5 text-sm text-gray-500">{toast.extraMessage}</p>
 				</div>
 				{#if toast.dismissible}
-					<button class="ml-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none" on:click={() => dismissToast(toast.id)}>
-						<Icon path={mdiClose}/>
+					<button
+						class="ml-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none"
+						on:click={() => dismissToast(toast.id)}
+					>
+						<Icon path={mdiClose} />
 					</button>
 				{/if}
 			</article>

@@ -6,10 +6,7 @@ export const dismissToast = (id) => {
 	toasts.update((all) => all.filter((t) => t.id !== id));
 };
 
-
-
 export const addToast = (type, message, extraMessage = '', timeout = 15000) => {
-
 	const id = Math.floor(Math.random() * 10000);
 	const toast = {
 		id,

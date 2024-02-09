@@ -2,9 +2,16 @@
 	import { boulders, clickedCells, selector } from '../molecules/BoulderStore.svelte';
 	import Button from '../atoms/Button.svelte';
 	import { addToast } from '../utils/TostService.mjs';
-	import {isSkippedCell} from '../utils/constants.mjs'
+	import { isSkippedCell } from '../utils/constants.mjs';
 	import Toast from '../atoms/Toast.svelte';
-	import {rows, cols, topClass, skippedClass, startClass, clickedClass} from '../utils/constants.mjs'
+	import {
+		rows,
+		cols,
+		topClass,
+		skippedClass,
+		startClass,
+		clickedClass
+	} from '../utils/constants.mjs';
 
 	let selectingMode, selectedStartCell, selectedTopCell;
 	selector.subscribe(($selector) => {
@@ -19,7 +26,7 @@
 	};
 
 	const setMode = (mode) => {
-		console.log('here')
+		console.log('here');
 		selector.update((prevSelector) => {
 			return {
 				...prevSelector,
@@ -91,7 +98,6 @@
 			return updatedSelector;
 		});
 	};
-
 </script>
 
 <!-- 
@@ -104,55 +110,55 @@ Buttons:
 - Save: send data to server
 -->
 
-<Toast/>
+<Toast />
 <table class="wall">
 	<thead>
-	<tr>
-		<th></th>
-		{#each Array(cols) as _, col (col)}
-			<th>{col}</th>
-		{/each}
-	</tr>
-	</thead>
-	<tbody>
-	{#each tableRows as row, rowIndex}
 		<tr>
-			<th>{String.fromCharCode(65 + rowIndex)}</th>
-			{#each tableCols as col}
-				{@const cellId = `${row}${col}`}
-				<td
-					class="{selectingMode === 'Start' && selectedStartCell === cellId || selectedStartCell === cellId
-                        ? startClass
-                        : selectingMode === 'Top' && selectedTopCell === cellId || selectedTopCell === cellId
-                        ? topClass
-                        : $clickedCells?.has(cellId)
-                        ? clickedClass
-                        : isSkippedCell(cellId)
-                        ? skippedClass
-                        : ''}"
-					on:click={() => toggleCell(cellId)}
-				>
-					{isSkippedCell(cellId) ? '' : cellId}
-				</td>
+			<th></th>
+			{#each Array(cols) as _, col (col)}
+				<th>{col}</th>
 			{/each}
 		</tr>
-	{/each}
+	</thead>
+	<tbody>
+		{#each tableRows as row, rowIndex}
+			<tr>
+				<th>{String.fromCharCode(65 + rowIndex)}</th>
+				{#each tableCols as col}
+					{@const cellId = `${row}${col}`}
+					<td
+						class={(selectingMode === 'Start' && selectedStartCell === cellId) ||
+						selectedStartCell === cellId
+							? startClass
+							: (selectingMode === 'Top' && selectedTopCell === cellId) ||
+								  selectedTopCell === cellId
+								? topClass
+								: $clickedCells?.has(cellId)
+									? clickedClass
+									: isSkippedCell(cellId)
+										? skippedClass
+										: ''}
+						on:click={() => toggleCell(cellId)}
+					>
+						{isSkippedCell(cellId) ? '' : cellId}
+					</td>
+				{/each}
+			</tr>
+		{/each}
 	</tbody>
 </table>
 
-	<div class="grid w-[20.8em] grid-flow-col justify-stretch gap-4 pl-9 pr-1 pt-4 sm:w-[23.5em]">
-		<Button variant="outline" on:click={() => setMode('Start')}>Start</Button>
-		<Button variant="outline" on:click={() => setMode('Top')}>Top</Button>
-		<Button
-			emoji="💾"
-			variant="outlineGreen"
-			aria-label="Save"
-			on:click={() => saveBoulder($clickedCells, $selector)}
-		></Button>
-		<Button emoji="🗑️" variant="outlineYellow" aria-label="Clear" on:click={clearBoulder}></Button>
-	</div>
-
-
+<div class="grid w-[20.8em] grid-flow-col justify-stretch gap-4 pl-9 pr-1 pt-4 sm:w-[23.5em]">
+	<Button variant="outline" on:click={() => setMode('Start')}>Start</Button>
+	<Button variant="outline" on:click={() => setMode('Top')}>Top</Button>
+	<Button
+		emoji="💾"
+		variant="outlineGreen"
+		aria-label="Save"
+		on:click={() => saveBoulder($clickedCells, $selector)}
+	></Button>
+	<Button emoji="🗑️" variant="outlineYellow" aria-label="Clear" on:click={clearBoulder}></Button>
+</div>
 
 <style lang="postcss">
 	:global(table.wall) {

@@ -84,11 +84,9 @@ export const cellsToSkip = new Set([
 	'R8'
 ]);
 
-export 	const isSkippedCell = (cellId) => {
+export const isSkippedCell = (cellId) => {
 	return cellsToSkip.has(cellId);
 };
-
-
 
 export let rows = 18;
 export let cols = 10;
