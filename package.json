@@ -17,6 +17,8 @@
 		"@astrojs/svelte": "^5.0.3",
 		"@astrojs/tailwind": "^5.1.0",
 		"@mdi/js": "^7.4.47",
+		"@melt-ui/pp": "^0.3.0",
+		"@melt-ui/svelte": "^0.73.0",
 		"@tailwindcss/typography": "^0.5.10",
 		"@typescript-eslint/parser": "^6.21.0",
 		"astro": "^4.3.5",

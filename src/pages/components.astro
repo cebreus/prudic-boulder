@@ -3,9 +3,30 @@ import Layout from '../layouts/Layout.astro';
 import Alert from '../components/atoms/Alert.svelte';
 ---
 
+<script lang="ts">
+	import { createSeparator, melt } from '@melt-ui/svelte';
+
+	export let orientation = 'vertical';
+
+	const {
+		elements: { root: horizontal }
+	} = createSeparator({
+		orientation: 'horizontal',
+		decorative: true
+	});
+</script>
+
 <Layout title="Design system">
-	<main class="container mx-auto px-4 py-12">
+	<main class="container mx-auto grid gap-y-8 px-4 py-12">
 		<h1 class="mb-8 text-2xl font-extrabold tracking-tight sm:text-3xl">Design system</h1>
+		<section>
+			<div class="prose mb-4 dark:prose-invert">
+				<h2>Melt UI: Separator</h2>
+				<p>Evidentně chybná implementace</p>
+			</div>
+			<div use:melt="horizontal" class="my-3.5 h-[1px] w-full bg-yellow-900"></div>
+		</section>
+
 		<section>
 			<div class="prose mb-4 dark:prose-invert">
 				<h2>Alerts</h2>
