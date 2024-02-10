@@ -52,5 +52,9 @@
 		"*.js": [
 			"eslint --fix"
 		]
+	},
+	"dependencies": {
+		"@sentry/astro": "^7.100.1",
+		"@spotlightjs/astro": "^1.0.15"
 	}
 }
