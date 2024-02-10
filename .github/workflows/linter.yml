@@ -1,4 +1,4 @@
-name: Build Astro Project
+name: Static Code Analysis
 
 on:
   workflow_dispatch:
@@ -6,8 +6,8 @@ on:
     branches: [main]
 
 jobs:
-  build:
-    name: Build
+  lint-and-format:
+    name: Check Code Quality
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -36,12 +36,18 @@ jobs:
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
-
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build with Astro
+      - name: Check formatting
+        run: pnpm lint
+
+      - name: Check Astro
         run: |
-          pnpm exec astro build \
+          pnpm exec astro check \
             --site "${{ steps.pages.outputs.origin }}" \
             --base "${{ steps.pages.outputs.base_path }}"
+
+      - name: Check code quality
+        run: pnpm run format
+        continue-on-error: true
