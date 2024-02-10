@@ -7,29 +7,26 @@ import Alert from '../components/atoms/Alert.svelte';
 	<main class="container mx-auto px-4 py-12">
 		<h1 class="mb-8 text-2xl font-extrabold tracking-tight sm:text-3xl">Design system</h1>
 		<section>
-			<div class="prose mb-8 dark:prose-invert">
+			<div class="prose mb-4 dark:prose-invert">
 				<h2>Alerts</h2>
-				<p class="lead">
-					A simple, customizable alert component using Svelte and TailwindCSS, designed for
-					displaying messages with support for several variants and custom styling.
+				<p>
+					The <code>Alert</code> component provides contextual feedback messages for typical user actions
+					with the handful of available and flexible alert messages.
 				</p>
-				<p><strong>Props</strong></p>
-				<ul>
-					<li>
-						<code>class (string)</code>: Custom classes for styling.
-					</li>
-					<li>
-						<code>variant (string)</code>: Type of alert (success, error, warning, info). Default is
-						info.
-					</li>
-				</ul>
 			</div>
 			<div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
 				<Alert>Base</Alert>
 				<Alert variant="info">Info</Alert>
 				<Alert variant="success">Success</Alert>
-				<Alert variant="warning">Blank</Alert>
-				<Alert variant="error">Error</Alert>
+				<Alert variant="warning" title="Warning">
+					Vivamus lacinia placerat urna, eget ornare tellus facilisis quis. Nulla vehicula ornare
+					urna at condimentum.</Alert
+				>
+				<Alert variant="error" iconName="mdiAlphaCBox" showIcon>Error with custom icon</Alert>
+				<Alert variant="info" showIcon title="variant: Info, showIcon">
+					Vivamus lacinia placerat urna, eget ornare tellus facilisis quis. Nulla vehicula ornare
+					urna at condimentum.
+				</Alert>
 			</div>
 		</section>
 	</main>
