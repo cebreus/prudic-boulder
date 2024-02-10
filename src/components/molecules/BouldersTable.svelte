@@ -47,7 +47,7 @@
 						<td>{Array.from(boulder.clickedCells)}</td>
 						<td>
 							<button on:click={() => removeBoulder(boulder.id)}>
-								<Icon path={mdiDelete} class="h-5 w-5 text-red-500" />
+								<Icon iconName="mdiDelete" class="h-5 w-5 text-red-500" />
 							</button>
 						</td>
 					</tr>
@@ -57,7 +57,7 @@
 	</div>
 {:else}
 	<Alert>
-		<Icon path={mdiInformationSlabCircle} class="inline-block h-5 w-5 text-blue-400" />
+		<Icon iconName="mdiInformationSlabCircle" class="inline-block h-5 w-5 text-blue-400" />
 		<div>
 			Vytvořte si
 			<a href="/new-boulder" class="text-blue-600 underline hover:no-underline dark:text-blue-300"
