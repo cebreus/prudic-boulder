@@ -1,68 +1,107 @@
 <script lang="ts">
 	import { twMerge } from 'tailwind-merge';
+	import Icon from '../../icons/Icon.svelte';
 
-	let classNames = '';
-	let showComponent: boolean = true;
-
-	// Exported props for external configuration
-	export { classNames as class };
-	export let variant: 'success' | 'error' | 'warning' | 'info' = 'info';
-
-	// Default classes
-	const defaultClass: string =
-		'relative flex flex-row gap-3 rounded px-4 py-3 gap-3 text-sm dark:bg-slate-800';
-
-	// Configuration and classes based on variant
-	const alertConfig: {
-		// eslint-disable-next-line no-unused-vars
-		[key in typeof variant]: {
+	// Define TypeScript types for variants and configuration
+	type Variant = 'success' | 'error' | 'warning' | 'info';
+	type AlertConfig = Record<
+		Variant,
+		{
 			classes: string;
+			classesDesc: string;
 			badgeClasses: string;
+			icon: string;
+			iconClasses: string;
 			role: 'status' | 'alert';
 			ariaLive: 'assertive' | 'polite' | 'off';
-		};
-	} = {
+		}
+	>;
+
+	// Exported props for external configuration
+	export let classNames: string = '';
+	export let title: string = '';
+	export let showIcon: boolean = false;
+	export let iconName: string = '';
+	export let showComponent: boolean = true;
+	export let variant: Variant = 'info';
+
+	// Default classes
+	const defaultClass: string = 'relative rounded px-4 py-3 text-sm dark:bg-slate-800';
+	const withIconClass: string = 'flex flex-row gap-3';
+
+	// Configuration and classes based on variant
+	const alertConfig: AlertConfig = {
 		info: {
 			classes: 'bg-blue-50 text-blue-800 dark:text-blue-400',
+			classesDesc: 'text-blue-500 dark:text-blue-300',
 			badgeClasses: 'bg-blue-200',
+			icon: 'mdiInformationSlabCircle',
+			iconClasses: 'text-blue-400',
 			role: 'status',
 			ariaLive: 'off'
 		},
 		success: {
 			classes: 'bg-green-50 text-green-800 dark:text-green-400',
+			classesDesc: 'text-green-500 dark:text-green-300',
 			badgeClasses: 'bg-green-200',
+			icon: 'mdiCheckCircleOutline',
+			iconClasses: 'text-green-400',
 			role: 'status',
 			ariaLive: 'polite'
 		},
 		error: {
 			classes: 'bg-red-50 text-red-800 dark:text-red-400',
+			classesDesc: 'text-red-500 dark:text-red-300',
 			badgeClasses: 'bg-red-200',
+			icon: 'mdiCloseOctagon',
+			iconClasses: 'text-red-400',
 			role: 'alert',
 			ariaLive: 'assertive'
 		},
 		warning: {
 			classes: 'bg-amber-50 text-amber-800 dark:text-amber-400',
+			classesDesc: 'text-amber-500 dark:text-amber-300',
 			badgeClasses: 'bg-amber-200',
+			icon: 'mdiAlert',
+			iconClasses: 'text-amber-400',
 			role: 'alert',
 			ariaLive: 'assertive'
 		}
 	};
 
-	// Retrieve settings for the specified variant or default to 'info'
-	let alertSettings = alertConfig[variant] || alertConfig['info'];
-
-	// Final class construction
-	$: alertClass = twMerge(defaultClass, alertSettings.classes, classNames);
+	// Final class construction using reactive statement for Svelte
+	$: alertClass = twMerge(
+		defaultClass,
+		alertConfig[variant].classes,
+		showIcon ? withIconClass : '',
+		classNames
+	);
 </script>
 
 {#if showComponent}
 	<div
 		data-cy="alert"
 		class={alertClass}
-		role={alertSettings.role}
-		aria-live={alertSettings.ariaLive ?? 'off'}
+		role={alertConfig[variant].role}
+		aria-live={alertConfig[variant].ariaLive ?? 'off'}
 		{...$$restProps}
 	>
-		<slot />
+		{#if showIcon}
+			<Icon
+				class="min-h-5 min-w-5  {alertConfig[variant].iconClasses}"
+				iconName={iconName || alertConfig[variant].icon}
+			/>
+			<div>
+				{#if title?.length}
+					<strong class="block font-semibold">{title}</strong>
+				{/if}
+				<slot />
+			</div>
+		{:else}
+			{#if title?.length}
+				<strong class="block font-semibold">{title}</strong>
+			{/if}
+			<slot />
+		{/if}
 	</div>
 {/if}
