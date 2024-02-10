@@ -13,7 +13,7 @@
 		"prepare": "husky"
 	},
 	"devDependencies": {
-		"@astrojs/check": "^0.4.1",
+		"@astrojs/check": "^0.5.2",
 		"@astrojs/svelte": "^5.0.3",
 		"@astrojs/tailwind": "^5.1.0",
 		"@mdi/js": "^7.4.47",
