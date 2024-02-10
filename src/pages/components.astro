@@ -1,0 +1,54 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Alert from '../components/atoms/Alert.svelte';
+---
+
+<Layout title="Design system">
+	<main class="container mx-auto px-4 py-12">
+		<h1 class="mb-8 text-2xl font-extrabold tracking-tight sm:text-3xl">Design system</h1>
+		<section>
+			<div class="prose mb-4 dark:prose-invert">
+				<h2>Alerts</h2>
+				<p>
+					The <code>Alert</code> component provides contextual feedback messages for typical user actions
+					with the handful of available and flexible alert messages.
+				</p>
+			</div>
+			<div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+				<Alert>Base</Alert>
+				<Alert variant="info">Info</Alert>
+				<Alert variant="success">Success</Alert>
+				<Alert variant="warning" title="Warning">
+					Vivamus lacinia placerat urna, eget ornare tellus facilisis quis. Nulla vehicula ornare
+					urna at condimentum.</Alert
+				>
+				<Alert variant="error" iconName="mdiAlphaCBox" showIcon>Error with custom icon</Alert>
+				<Alert variant="info" showIcon title="variant: Info, showIcon">
+					Vivamus lacinia placerat urna, eget ornare tellus facilisis quis. Nulla vehicula ornare
+					urna at condimentum.
+				</Alert>
+			</div>
+		</section>
+	</main>
+</Layout>
+
+<style>
+	.prose :where(h2):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+		margin-top: 0.5rem;
+		margin-bottom: 0;
+	}
+
+	.prose :where([class~='lead']):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+		margin-top: 0.5rem;
+		margin-bottom: 0;
+	}
+
+	.prose :where(p):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+		margin-top: 0.5rem;
+		margin-bottom: 0;
+	}
+	.prose :where(ul):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+		margin-top: 0.5rem;
+		margin-bottom: 0;
+	}
+</style>

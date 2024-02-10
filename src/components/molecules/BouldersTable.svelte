@@ -1,7 +1,6 @@
 <script>
 	import { addToast } from '../utils/TostService.ts';
 	import { boulders } from './BoulderStore.svelte';
-	import { mdiDelete, mdiInformationSlabCircle } from '@mdi/js';
 	import { Modal } from 'flowbite-svelte';
 	import Alert from '../atoms/Alert.svelte';
 	import BolderPreview from './BolderPreview.svelte';
@@ -56,14 +55,11 @@
 		</table>
 	</div>
 {:else}
-	<Alert>
-		<Icon iconName="mdiInformationSlabCircle" class="inline-block h-5 w-5 text-blue-400" />
-		<div>
-			Vytvořte si
-			<a href="/new-boulder" class="text-blue-600 underline hover:no-underline dark:text-blue-300"
-				>novou cestu</a
-			> na lezecké stěně.
-		</div>
+	<Alert showIcon>
+		Vytvořte si
+		<a href="/new-boulder" class="text-blue-600 underline hover:no-underline dark:text-blue-300"
+			>novou cestu</a
+		> na lezecké stěně.
 	</Alert>
 {/if}
 
