@@ -1,20 +1,29 @@
 import { writable } from 'svelte/store';
-
-import type { Toast, ToastVariant } from './toastTypes';
+import type { Toast, ToastVariant } from './ToastTypes';
 
 export const toasts = writable<Toast[]>([]);
 
+// Utility function to generate a unique toast ID
+function generateToastId(): string {
+	return `${Date.now()}-${Math.random().toString(16).slice(2, 10)}`;
+}
+
+// Utility function to calculate timeout based on message length
+function calculateTimeout(title: string, description: string): number {
+	const baseTimeout = 2000;
+	const incrementalTimeout = 30;
+	return baseTimeout + (title.length + description.length) * incrementalTimeout;
+}
+
+// Dismiss a toast by ID
 export const dismissToast = (id: string): void => {
 	toasts.update((allToasts) => allToasts.filter((toast) => toast.id !== id));
 };
 
+// Add a new toast with progress bar logic
 export const addToast = (variant: ToastVariant, title: string, description: string = ''): void => {
-	const id = `${Date.now()}-${Math.random().toString(16).slice(8)}`;
-	const baseTimeout = 50000;
-	const incrementalTimeout = 50;
-	const timeout = Math.max(baseTimeout + (title.length + description.length) * incrementalTimeout);
-
-	// console.log(`Toast ID: ${id}, Timeout: ${timeout}`);
+	const id = generateToastId();
+	const timeout = calculateTimeout(title, description);
 
 	const toast: Toast = {
 		id,
@@ -28,24 +37,32 @@ export const addToast = (variant: ToastVariant, title: string, description: stri
 
 	toasts.update((allToasts) => [toast, ...allToasts]);
 
+	updateToastProgress(id, timeout);
+};
+
+// Handle the progress bar update logic separately for clarity
+function updateToastProgress(id: string, timeout: number): void {
 	const intervalDuration = 10;
 	const totalSteps = timeout / intervalDuration;
 	const progressDecrement = 100 / totalSteps;
 
-	const intervalId = setInterval(() => {
-		toasts.update((allToasts) =>
-			allToasts.map((currentToast) => {
-				if (currentToast.id === id) {
-					const updatedProgress = currentToast.progress - progressDecrement;
-					return { ...currentToast, progress: Math.max(0, updatedProgress) };
-				}
-				return currentToast;
-			})
-		);
-	}, intervalDuration);
+	let currentProgress = 100;
 
-	setTimeout(() => {
-		clearInterval(intervalId);
-		dismissToast(id);
-	}, timeout);
-};
+	const intervalId = setInterval(() => {
+		currentProgress = Math.max(0, currentProgress - progressDecrement);
+
+		if (currentProgress <= 0) {
+			clearInterval(intervalId);
+			dismissToast(id);
+		} else {
+			toasts.update((allToasts) =>
+				allToasts.map((toast) => {
+					if (toast.id === id) {
+						return { ...toast, progress: currentProgress };
+					}
+					return toast;
+				})
+			);
+		}
+	}, intervalDuration);
+}
