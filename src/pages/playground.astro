@@ -1,10 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Playground from '../components/Playground.svelte';
+import PlaygroundComponent from '../components/templates/Playground.svelte';
 ---
 
-<Layout title="Playground">
-	<div class="container mx-auto py-12">
-		<Playground />
-	</div>
+<Layout title="Vytvoř si vlasrní cesty a obrázky na boulderu">
+	<main class="container mx-auto px-4 py-12">
+		<h1 class="mb-4 text-2xl font-extrabold tracking-tight sm:text-3xl">
+			Vytvoř si vlasrní cesty a obrázky na boulderu
+		</h1>
+		<PlaygroundComponent />
+	</main>
 </Layout>

@@ -1,0 +1,99 @@
+<script>
+	import { addToast } from '../utils/TostService.ts';
+	import { boulders } from './BoulderStore.svelte';
+	import { mdiDelete, mdiInformationSlabCircle } from '@mdi/js';
+	import { Modal } from 'flowbite-svelte';
+	import Alert from '../atoms/Alert.svelte';
+	import BolderPreview from './BolderPreview.svelte';
+	import Icon from '../../icons/Icon.svelte';
+	import Toast from '../atoms/Toast.svelte';
+
+	let clickOutsideModal = false;
+	let selectedBoulder = [];
+	function openModal(boulder) {
+		selectedBoulder = boulder;
+		clickOutsideModal = true;
+	}
+
+	const removeBoulder = (boulderId) => {
+		addToast('info', 'Prudič byl odstraněn');
+		boulders.update((prevBoulders) => {
+			const newBoulders = prevBoulders.filter((boulder) => boulder.id !== boulderId);
+			localStorage.setItem('boulders', JSON.stringify(newBoulders));
+			return newBoulders;
+		});
+	};
+</script>
+
+<Toast />
+
+{#if $boulders?.length > 0}
+	<div id="table-container" class="my-8 overflow-x-auto">
+		<table id="dataTable">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th colspan="2">Cells</th>
+				</tr>
+			</thead>
+			<tbody>
+				{#each $boulders as boulder (boulder.id)}
+					<tr>
+						<td>
+							<button on:click={() => openModal(boulder)}>
+								{boulder.id}
+							</button>
+						</td>
+						<td>{Array.from(boulder.clickedCells)}</td>
+						<td>
+							<button on:click={() => removeBoulder(boulder.id)}>
+								<Icon path={mdiDelete} class="h-5 w-5 text-red-500" />
+							</button>
+						</td>
+					</tr>
+				{/each}
+			</tbody>
+		</table>
+	</div>
+{:else}
+	<Alert>
+		<Icon path={mdiInformationSlabCircle} class="inline-block h-5 w-5 text-blue-400" />
+		<div>
+			Vytvořte si
+			<a href="/new-boulder" class="text-blue-600 underline hover:no-underline dark:text-blue-300"
+				>novou cestu</a
+			> na lezecké stěně.
+		</div>
+	</Alert>
+{/if}
+
+{#if clickOutsideModal && selectedBoulder}
+	<Modal title="Boulder preview" bind:open={clickOutsideModal} autoclose outsideclose>
+		<BolderPreview {selectedBoulder} />
+	</Modal>
+{/if}
+
+<style lang="postcss">
+	table {
+		@apply text-left text-sm;
+	}
+	table thead {
+		@apply border-b bg-slate-50 text-xs uppercase text-slate-500 dark:border-slate-700 dark:bg-slate-800;
+	}
+	table tbody tr {
+		@apply border-b bg-white dark:border-slate-700 dark:bg-slate-900;
+	}
+	table tbody tr:hover {
+		@apply outline-dotted outline-1 outline-slate-700 dark:outline-slate-500;
+	}
+	table th {
+		@apply px-3 py-2 align-bottom dark:text-slate-300;
+		text-wrap: balance;
+	}
+	table td {
+		@apply px-3 py-2 tabular-nums lg:pr-8;
+	}
+	table td button {
+		@apply text-sky-500 underline hover:no-underline dark:text-sky-500 dark:hover:text-sky-400;
+	}
+</style>
