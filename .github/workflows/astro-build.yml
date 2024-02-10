@@ -45,9 +45,3 @@ jobs:
           pnpm exec astro build \
             --site "${{ steps.pages.outputs.origin }}" \
             --base "${{ steps.pages.outputs.base_path }}"
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./dist
-          # Upraveno na './dist', předpokládá se, že 'dist' je výstupní složka pro Astro build. Upravte podle konfigurace vašeho projektu.
