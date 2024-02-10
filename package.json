@@ -18,7 +18,7 @@
 		"@astrojs/tailwind": "^5.1.0",
 		"@mdi/js": "^7.4.47",
 		"@typescript-eslint/parser": "^6.21.0",
-		"astro": "^4.3.2",
+		"astro": "^4.3.5",
 		"eslint": "^8.56.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-astro": "^0.31.4",
