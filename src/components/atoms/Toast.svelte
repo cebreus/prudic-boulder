@@ -1,18 +1,11 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
-	import {
-		mdiClose,
-		mdiInformationSlabCircle,
-		mdiAlert,
-		mdiCheckCircleOutline,
-		mdiCloseOctagon
-	} from '@mdi/js';
 	import { onMount, onDestroy } from 'svelte';
 	import { toasts, dismissToast } from '../utils/TostService.ts';
 	import { twMerge } from 'tailwind-merge';
 	import Icon from '../../icons/Icon.svelte';
 
-	import type { Toast } from '../utils/toastTypes';
+	import type { Toast } from '../utils/ToastTypes.ts';
 
 	let toastsArray: Toast[] = [];
 
@@ -49,7 +42,7 @@
 		info: {
 			classes: 'text-slate-800 dark:text-slate-200',
 			classesDesc: 'text-slate-500 dark:text-slate-300',
-			icon: mdiInformationSlabCircle,
+			icon: 'mdiInformationSlabCircle',
 			iconClasses: 'text-blue-400',
 			progressClasses: 'bg-blue-400',
 			role: 'status',
@@ -58,7 +51,7 @@
 		success: {
 			classes: 'text-slate-800 dark:text-slate-200',
 			classesDesc: 'text-slate-500 dark:text-slate-400',
-			icon: mdiCheckCircleOutline,
+			icon: 'mdiCheckCircleOutline',
 			iconClasses: 'text-green-400',
 			progressClasses: 'bg-green-400',
 			role: 'status',
@@ -67,7 +60,7 @@
 		error: {
 			classes: 'text-slate-800 dark:text-slate-200',
 			classesDesc: 'text-slate-500 dark:text-slate-400',
-			icon: mdiCloseOctagon,
+			icon: 'mdiCloseOctagon',
 			iconClasses: 'text-red-400',
 			progressClasses: 'bg-red-400',
 			role: 'alert',
@@ -76,7 +69,7 @@
 		warning: {
 			classes: 'text-slate-800 dark:text-slate-200',
 			classesDesc: 'text-slate-500 dark:text-slate-400',
-			icon: mdiAlert,
+			icon: 'mdiAlert',
 			iconClasses: 'text-amber-500',
 			progressClasses: 'bg-amber-500',
 			role: 'alert',
@@ -115,7 +108,7 @@
 				</div>
 				<!-- {JSON.stringify(toastConfig[toast.variant])} -->
 				<Icon
-					path={toastConfig[toast.variant].icon}
+					iconName={toastConfig[toast.variant].icon}
 					class="h-6 w-6 {toastConfig[toast.variant].iconClasses}"
 				/>
 				<div class="mt-0.5 leading-tight">
@@ -133,7 +126,7 @@
 						class="ml-auto rounded-full text-slate-400 hover:text-slate-600 focus:outline-none dark:hover:text-slate-200"
 						on:click={() => dismissToast(toast.id)}
 					>
-						<Icon path={mdiClose} class="h-5 w-5" />
+						<Icon iconName="mdiClose" class="h-5 w-5" />
 					</button>
 				{/if}
 			</div>
