@@ -1,5 +1,5 @@
 <script>
-	import Boulder from '../molecules/Boulder.svelte';
+	import Boulder from '../molecules/NewBoulder.svelte';
 </script>
 
 <Boulder />

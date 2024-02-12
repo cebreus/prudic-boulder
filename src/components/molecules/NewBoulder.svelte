@@ -1,17 +1,10 @@
 <script>
 	import { addToast } from '../utils/ToastService.ts';
 	import { boulders, clickedCells, selector } from '../molecules/BoulderStore.svelte';
-	import {
-		isSkippedCell,
-		rows,
-		cols,
-		topClass,
-		skippedClass,
-		startClass,
-		clickedClass
-	} from '../utils/constants.mjs';
+	import { isSkippedCell } from '../utils/constants.mjs';
 	import Button from '../atoms/Button.svelte';
 	import Toast from '../atoms/Toast.svelte';
+	import UniversalBoulder from '../atoms/Boulder.svelte';
 
 	let selectingMode = null;
 	let selectedStartCell = null;
@@ -20,9 +13,6 @@
 	selector.subscribe(($selector) => {
 		({ selectingMode, selectedStartCell, selectedTopCell } = $selector);
 	});
-
-	$: tableRows = Array.from({ length: rows }, (_, index) => String.fromCharCode(65 + index));
-	$: tableCols = Array.from({ length: cols }, (_, index) => index + 1);
 
 	export const generateBoulderId = () => '_' + Math.random().toString(36).substr(2, 9);
 
@@ -82,43 +72,13 @@
 </script>
 
 <Toast />
-
-<table class="wall">
-	<thead>
-		<tr>
-			<th></th>
-			{#each Array(cols) as _, col (col)}
-				<th>{col}</th>
-			{/each}
-		</tr>
-	</thead>
-	<tbody>
-		{#each tableRows as row, rowIndex}
-			<tr>
-				<th>{String.fromCharCode(65 + rowIndex)}</th>
-				{#each tableCols as col}
-					{@const cellId = `${row}${col}`}
-					<td
-						class={(selectingMode === 'Start' && selectedStartCell === cellId) ||
-						selectedStartCell === cellId
-							? startClass
-							: (selectingMode === 'Top' && selectedTopCell === cellId) ||
-								  selectedTopCell === cellId
-								? topClass
-								: $clickedCells?.has(cellId)
-									? clickedClass
-									: isSkippedCell(cellId)
-										? skippedClass
-										: ''}
-						on:click={() => toggleCell(cellId)}
-					>
-						{isSkippedCell(cellId) ? '' : cellId}
-					</td>
-				{/each}
-			</tr>
-		{/each}
-	</tbody>
-</table>
+<UniversalBoulder
+	{selectingMode}
+	{selectedStartCell}
+	{selectedTopCell}
+	{toggleCell}
+	clickedCells={$clickedCells}
+/>
 
 <div class="grid w-[20.8em] grid-flow-col justify-stretch gap-4 pl-9 pr-1 pt-4 sm:w-[23.5em]">
 	<Button variant="outline" on:click={() => setMode('Start')}>Start</Button>

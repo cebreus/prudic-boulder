@@ -3,9 +3,9 @@
 	import { boulders } from './BoulderStore.svelte';
 	import { Modal } from 'flowbite-svelte';
 	import Alert from '../atoms/Alert.svelte';
-	import BolderPreview from './BolderPreview.svelte';
 	import Icon from '../../icons/Icon.svelte';
 	import Toast from '../atoms/Toast.svelte';
+	import UniversalBoulder from '../atoms/Boulder.svelte';
 
 	let clickOutsideModal = false;
 	let selectedBoulder = [];
@@ -65,7 +65,7 @@
 
 {#if clickOutsideModal && selectedBoulder}
 	<Modal title="Boulder preview" bind:open={clickOutsideModal} autoclose outsideclose>
-		<BolderPreview {selectedBoulder} />
+		<UniversalBoulder {selectedBoulder} />
 	</Modal>
 {/if}
 
