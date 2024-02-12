@@ -37,7 +37,7 @@
 					{@const cellId = `${row}${col}`}
 					<td
 						class={(() => {
-							let classList = selectedBoulder ? 'pointer-events-none ' : ''; // Disable pointer events if selectedBoulder is present
+							let classList = selectedBoulder ? 'pointer-events-none ' : '';
 							classList +=
 								(selectedBoulder
 									? selectedBoulder.pathStart === cellId
@@ -59,7 +59,7 @@
 												? clickedClass
 												: isSkippedCell(cellId)
 													? skippedClass
-													: '') + ' border border-slate-300'; // Always add these classes
+													: '') + ' border border-slate-300';
 							return classList;
 						})()}
 						on:click={selectedBoulder ? null : () => toggleCell(cellId)}
