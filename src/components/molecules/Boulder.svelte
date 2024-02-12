@@ -4,6 +4,8 @@
 	import { isSkippedCell } from '../utils/constants.mjs';
 	import Button from '../atoms/Button.svelte';
 	import Toast from '../atoms/Toast.svelte';
+	import log from '../utils/logger.ts';
+
 	import {
 		rows,
 		cols,
@@ -26,7 +28,7 @@
 	};
 
 	const setMode = (mode) => {
-		console.log('here');
+		log.trace('here');
 		selector.update((prevSelector) => {
 			return {
 				...prevSelector,
