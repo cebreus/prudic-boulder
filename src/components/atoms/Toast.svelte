@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
 	import { onMount, onDestroy } from 'svelte';
-	import { toasts, dismissToast } from '../utils/TostService.ts';
+	import { toasts, dismissToast } from '../utils/ToastService.ts';
 	import { twMerge } from 'tailwind-merge';
 	import Icon from '../../icons/Icon.svelte';
 

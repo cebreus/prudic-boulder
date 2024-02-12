@@ -1,5 +1,5 @@
 <script>
-	import { addToast } from '../utils/TostService.ts';
+	import { addToast } from '../utils/ToastService.ts';
 	import { boulders } from './BoulderStore.svelte';
 	import { Modal } from 'flowbite-svelte';
 	import Alert from '../atoms/Alert.svelte';

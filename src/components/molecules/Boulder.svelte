@@ -1,10 +1,8 @@
 <script>
-	import { addToast } from '../utils/TostService.ts';
+	import { addToast } from '../utils/ToastService.ts';
 	import { boulders, clickedCells, selector } from '../molecules/BoulderStore.svelte';
-	import { isSkippedCell } from '../utils/constants.mjs';
-	import Button from '../atoms/Button.svelte';
-	import Toast from '../atoms/Toast.svelte';
 	import {
+		isSkippedCell,
 		rows,
 		cols,
 		topClass,
@@ -12,95 +10,74 @@
 		startClass,
 		clickedClass
 	} from '../utils/constants.mjs';
+	import Button from '../atoms/Button.svelte';
+	import Toast from '../atoms/Toast.svelte';
 
-	let selectingMode, selectedStartCell, selectedTopCell;
+	let selectingMode = null;
+	let selectedStartCell = null;
+	let selectedTopCell = null;
+
 	selector.subscribe(($selector) => {
 		({ selectingMode, selectedStartCell, selectedTopCell } = $selector);
 	});
 
-	$: tableRows = Array.from({ length: rows }, (_, i) => String.fromCharCode(65 + i));
-	$: tableCols = Array.from({ length: cols }, (_, i) => i);
+	$: tableRows = Array.from({ length: rows }, (_, index) => String.fromCharCode(65 + index));
+	$: tableCols = Array.from({ length: cols }, (_, index) => index + 1);
 
-	export const generateBoulderId = () => {
-		return '_' + Math.random().toString(36).substring(2, 9);
-	};
+	export const generateBoulderId = () => '_' + Math.random().toString(36).substr(2, 9);
 
 	const setMode = (mode) => {
-		console.log('here');
-		selector.update((prevSelector) => {
-			return {
-				...prevSelector,
-				selectingMode: mode
-			};
-		});
+		selector.update((prev) => ({ ...prev, selectingMode: mode }));
+		console.log(`Změna zežimu ${mode}`);
 	};
 
 	const clearBoulder = () => {
-		clickedCells.update((prevClickedCells) => {
-			prevClickedCells = new Set();
-			return prevClickedCells;
-		});
-		selector.update((prevSelector) => {
-			return {
-				...prevSelector,
-				selectedStartCell: null,
-				selectedTopCell: null
-			};
-		});
+		clickedCells.set(new Set());
+		selector.set({ selectingMode: null, selectedStartCell: null, selectedTopCell: null });
+		console.log('Cesta smazána');
 	};
 
-	export const saveBoulder = (clickedCells, selector) => {
-		if (clickedCells.size === 0) {
+	export const saveBoulder = (clickedCellsSet, currentSelector) => {
+		if (!clickedCellsSet.size) {
 			addToast('info', 'Vyberte alespoň jednu buňku!');
 			return;
 		}
 
-		const timestamp = new Date().toLocaleString();
+		const newBoulder = {
+			id: generateBoulderId(),
+			clickedCells: clickedCellsSet,
+			pathStart: currentSelector.selectedStartCell,
+			pathEnd: currentSelector.selectedTopCell,
+			timestamp: new Date().toLocaleString()
+		};
 
-		boulders.update((prevBoulders) => {
-			const newBoulders = [
-				...prevBoulders,
-				{
-					id: generateBoulderId(),
-					clickedCells: clickedCells,
-					pathStart: selector?.selectedStartCell,
-					pathEnd: selector?.selectedTopCell,
-					timestamp: timestamp
-				}
-			];
-
-			localStorage.setItem('boulders', JSON.stringify(newBoulders));
-			addToast(
-				'success',
-				'Prudič byl vytvořen',
-				'Přejděte na <a href="/">hlavní stránku</a> pro zobrazení.'
-			);
-
-			return newBoulders;
-		});
+		boulders.update((bouldersList) => [...bouldersList, newBoulder]);
+		localStorage.setItem('boulders', JSON.stringify(newBoulder));
+		addToast(
+			'success',
+			'Prudič byl vytvořen',
+			'Přejděte na <a href="/">hlavní stránku</a> pro zobrazení.'
+		);
+		console.log('Cesta uložena', newBoulder);
 	};
+
 	const toggleCell = (cellId) => {
-		if (isSkippedCell(cellId)) {
-			return;
-		}
+		if (isSkippedCell(cellId)) return;
 
-		selector.update((prevSelector) => {
-			let updatedSelector = { ...prevSelector, selectingMode: null };
+		clickedCells.update((cells) => {
+			const updatedCells = new Set(cells);
+			updatedCells.has(cellId) ? updatedCells.delete(cellId) : updatedCells.add(cellId);
+			return updatedCells;
+		});
 
-			if (prevSelector.selectingMode === 'Start') {
-				updatedSelector.selectedStartCell = cellId;
-			} else if (prevSelector.selectingMode === 'Top') {
-				updatedSelector.selectedTopCell = cellId;
-			}
-			clickedCells.update((prevClickedCells) => {
-				const newClickedCells = new Set(prevClickedCells);
-				newClickedCells.has(cellId) ? newClickedCells.delete(cellId) : newClickedCells.add(cellId);
-				console.log('new clicked cells:', newClickedCells);
-				return newClickedCells;
-			});
-
+		selector.update((prev) => {
+			const updatedSelector = { ...prev, selectingMode: null };
+			if (prev.selectingMode === 'Start') updatedSelector.selectedStartCell = cellId;
+			else if (prev.selectingMode === 'Top') updatedSelector.selectedTopCell = cellId;
 			return updatedSelector;
 		});
+
+		console.log(`Buňka ${cellId} změněna`);
 	};
 </script>
 
