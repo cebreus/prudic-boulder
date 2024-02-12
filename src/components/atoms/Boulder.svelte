@@ -8,13 +8,14 @@
 		startClass,
 		topClass
 	} from '../utils/constants.mjs';
-	import { clickedCells } from '../molecules/BoulderStore.svelte';
 
 	export let selectingMode = null;
 	export let selectedStartCell = null;
 	export let selectedTopCell = null;
 	export let toggleCell; // = ??
 	export let selectedBoulder; // = ??
+
+	export let clickedCells;
 
 	$: tableRows = Array.from({ length: rows }, (_, i) => String.fromCharCode(65 + i));
 	$: tableCols = Array.from({ length: cols }, (_, i) => i);
@@ -55,7 +56,7 @@
 										: (selectingMode === 'Top' && selectedTopCell === cellId) ||
 											  selectedTopCell === cellId
 											? topClass
-											: $clickedCells?.has(cellId)
+											: clickedCells?.has(cellId)
 												? clickedClass
 												: isSkippedCell(cellId)
 													? skippedClass

@@ -1,0 +1,23 @@
+<script>
+	import Button from './Button.svelte';
+
+	export let setMode;
+	export let saveBoulder;
+
+	export let clearBoulder;
+
+	export let clickedCells;
+	export let selector;
+</script>
+
+<div class="grid w-[20.8em] grid-flow-col justify-stretch gap-4 pl-9 pr-1 pt-4 sm:w-[23.5em]">
+	<Button variant="outline" on:click={() => setMode('Start')}>Start</Button>
+	<Button variant="outline" on:click={() => setMode('Top')}>Top</Button>
+	<Button
+		emoji="💾"
+		variant="outlineGreen"
+		aria-label="Save"
+		on:click={() => saveBoulder(clickedCells, selector)}
+	></Button>
+	<Button emoji="🗑️" variant="outlineYellow" aria-label="Clear" on:click={clearBoulder}></Button>
+</div>
