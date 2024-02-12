@@ -5,7 +5,7 @@
 	import Alert from '../atoms/Alert.svelte';
 	import Icon from '../../icons/Icon.svelte';
 	import Toast from '../atoms/Toast.svelte';
-	import UniversalBoulder from '../atoms/Boulder.svelte';
+	import Boulder from '../atoms/Boulder.svelte';
 
 	let clickOutsideModal = false;
 	let selectedBoulder = [];
@@ -65,7 +65,7 @@
 
 {#if clickOutsideModal && selectedBoulder}
 	<Modal title="Boulder preview" bind:open={clickOutsideModal} autoclose outsideclose>
-		<UniversalBoulder {selectedBoulder} />
+		<Boulder {selectedBoulder} />
 	</Modal>
 {/if}
 

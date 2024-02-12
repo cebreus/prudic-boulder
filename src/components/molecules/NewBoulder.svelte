@@ -4,7 +4,7 @@
 	import { isSkippedCell } from '../utils/constants.mjs';
 	import Button from '../atoms/Button.svelte';
 	import Toast from '../atoms/Toast.svelte';
-	import UniversalBoulder from '../atoms/Boulder.svelte';
+	import Boulder from '../atoms/Boulder.svelte';
 
 	let selectingMode = null;
 	let selectedStartCell = null;
@@ -72,7 +72,7 @@
 </script>
 
 <Toast />
-<UniversalBoulder
+<Boulder
 	{selectingMode}
 	{selectedStartCell}
 	{selectedTopCell}
