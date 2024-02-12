@@ -59,7 +59,7 @@
 												? clickedClass
 												: isSkippedCell(cellId)
 													? skippedClass
-													: '') + ' border border-slate-300';
+													: '') + '';
 							return classList;
 						})()}
 						on:click={selectedBoulder ? null : () => toggleCell(cellId)}
