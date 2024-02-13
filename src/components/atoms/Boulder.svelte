@@ -13,8 +13,7 @@
 	export let selectedStartCell = null;
 	export let selectedTopCell = null;
 	export let toggleCell; // = ??
-	export let selectedBoulder; // = ??
-
+	export let selectedBoulder;
 	export let clickedCells;
 
 	$: tableRows = Array.from({ length: rows }, (_, i) => String.fromCharCode(65 + i));
@@ -45,7 +44,7 @@
 										? startClass
 										: selectedBoulder.pathEnd === cellId
 											? topClass
-											: selectedBoulder.clickedCells?.has(cellId)
+											: selectedBoulder.clickedCells?.includes(cellId)
 												? clickedClass
 												: isSkippedCell(cellId)
 													? skippedClass
