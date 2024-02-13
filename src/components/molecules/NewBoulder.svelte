@@ -27,6 +27,8 @@
 	};
 
 	export const saveBoulder = (clickedCellsSet, currentSelector) => {
+		console.log('clickedCellsSet', clickedCellsSet);
+
 		if (!clickedCellsSet.size) {
 			addToast('info', 'Vyberte alespoň jednu buňku!');
 			return;
@@ -34,14 +36,18 @@
 
 		const newBoulder = {
 			id: generateBoulderId(),
-			clickedCells: clickedCellsSet,
+			clickedCells: [...clickedCellsSet],
 			pathStart: currentSelector.selectedStartCell,
 			pathEnd: currentSelector.selectedTopCell,
 			timestamp: new Date().toLocaleString()
 		};
 
 		boulders.update((bouldersList) => [...bouldersList, newBoulder]);
-		localStorage.setItem('boulders', JSON.stringify(newBoulder));
+
+		const existingBoulders = JSON.parse(localStorage.getItem('boulders')) || [];
+		const updatedBoulders = [...existingBoulders, newBoulder];
+		localStorage.setItem('boulders', JSON.stringify(updatedBoulders));
+
 		addToast(
 			'success',
 			'Prudič byl vytvořen',

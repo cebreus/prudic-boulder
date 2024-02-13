@@ -6,27 +6,39 @@
 	import Icon from '../../icons/Icon.svelte';
 	import Toast from '../atoms/Toast.svelte';
 	import Boulder from '../atoms/Boulder.svelte';
+	import { onMount } from 'svelte';
 
-	let clickOutsideModal = false;
+	let bouldersFromLS = [];
 	let selectedBoulder = [];
+	let clickOutsideModal = false;
+
+	onMount(() => {
+		const storedBoulders = localStorage.getItem('boulders');
+		if (storedBoulders) {
+			bouldersFromLS = JSON.parse(storedBoulders);
+		}
+	});
+
 	function openModal(boulder) {
 		selectedBoulder = boulder;
 		clickOutsideModal = true;
 	}
 
 	const removeBoulder = (boulderId) => {
+		const newBoulders = bouldersFromLS.filter((boulder) => boulder.id !== boulderId);
+
+		localStorage.setItem('boulders', JSON.stringify(newBoulders));
+		bouldersFromLS = newBoulders;
+
+		boulders.update(() => newBoulders);
+
 		addToast('info', 'Prudič byl odstraněn');
-		boulders.update((prevBoulders) => {
-			const newBoulders = prevBoulders.filter((boulder) => boulder.id !== boulderId);
-			localStorage.setItem('boulders', JSON.stringify(newBoulders));
-			return newBoulders;
-		});
 	};
 </script>
 
 <Toast />
 
-{#if $boulders?.length > 0}
+{#if bouldersFromLS?.length > 0}
 	<div id="table-container" class="my-8 overflow-x-auto">
 		<table id="dataTable">
 			<thead>
@@ -36,7 +48,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#each $boulders as boulder (boulder.id)}
+				{#each bouldersFromLS as boulder (boulder.id)}
 					<tr>
 						<td>
 							<button on:click={() => openModal(boulder)}>
