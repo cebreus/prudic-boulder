@@ -1,23 +1,31 @@
 <script>
+	import { clickedCells } from '../molecules/BoulderStore.svelte';
 	import {
-		clickedClass,
-		cols,
 		isSkippedCell,
-		rows,
-		skippedClass,
+		clickedClass,
 		startClass,
-		topClass
+		topClass,
+		skippedClass,
+		cols,
+		rows
 	} from '../utils/constants.mjs';
-
-	export let selectingMode = null;
-	export let selectedStartCell = null;
-	export let selectedTopCell = null;
-	export let toggleCell; // = ??
+	import { selector } from '../molecules/BoulderStore.svelte';
 	export let selectedBoulder;
-	export let clickedCells;
 
 	$: tableRows = Array.from({ length: rows }, (_, i) => String.fromCharCode(65 + i));
-	$: tableCols = Array.from({ length: cols }, (_, i) => i);
+	$: tableCols = Array.from({ length: cols }, (_, i) => i + 1);
+
+	$: selectingMode = $selector.selectingMode;
+	$: selectedStartCell = $selector.selectedStartCell;
+	$: selectedTopCell = $selector.selectedTopCell;
+
+	function toggleCellAndUpdateSelector(cellId) {
+		if (isSkippedCell(cellId)) return;
+
+		clickedCells.toggle(cellId);
+
+		selector.updateSelector(cellId);
+	}
 </script>
 
 <table class="wall">
@@ -55,14 +63,14 @@
 										: (selectingMode === 'Top' && selectedTopCell === cellId) ||
 											  selectedTopCell === cellId
 											? topClass
-											: clickedCells?.has(cellId)
+											: $clickedCells?.has(cellId)
 												? clickedClass
 												: isSkippedCell(cellId)
 													? skippedClass
 													: '') + '';
 							return classList;
 						})()}
-						on:click={selectedBoulder ? null : () => toggleCell(cellId)}
+						on:click={selectedBoulder ? null : () => toggleCellAndUpdateSelector(cellId)}
 					>
 						{isSkippedCell(cellId) ? '' : cellId}
 					</td>
