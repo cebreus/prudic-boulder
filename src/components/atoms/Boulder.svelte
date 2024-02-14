@@ -13,18 +13,38 @@
 	export let selectedBoulder;
 
 	$: tableRows = Array.from({ length: rows }, (_, i) => String.fromCharCode(65 + i));
-	$: tableCols = Array.from({ length: cols }, (_, i) => i + 1);
+	$: tableCols = Array.from({ length: cols }, (_, i) => i);
 
 	$: selectingMode = $selector.selectingMode;
 	$: selectedStartCell = $selector.selectedStartCell;
 	$: selectedTopCell = $selector.selectedTopCell;
 
+	$: {
+		console.log('selectingMode', selectingMode);
+	}
+	$: {
+		console.log('selectedTopCell', selectedTopCell);
+	}
+	$: {
+		console.log('selectedStartCell', selectedStartCell);
+	}
+
 	function toggleCellAndUpdateSelector(cellId) {
 		if (isSkippedCell(cellId)) return;
 
-		clickedCells.toggle(cellId);
+		// clickedCells.toggle(cellId);
 
 		selector.updateSelector(cellId);
+		if (!(selectedStartCell === cellId || selectedTopCell === cellId)) {
+			clickedCells.toggle(cellId); // Toggle pouze pokud buňka není již vybrána jako start/top
+			selector.setMode(null); // Zrušit režim výběru pouze pokud buňka není již vybrána jako start/top
+		} else {
+			clickedCells.toggle(cellId);
+		}
+	}
+
+	$: {
+		console.log($clickedCells);
 	}
 </script>
 
@@ -44,33 +64,12 @@
 				{#each tableCols as col}
 					{@const cellId = `${row}${col}`}
 					<td
-						class={(() => {
-							let classList = selectedBoulder ? 'pointer-events-none ' : '';
-							classList +=
-								(selectedBoulder
-									? selectedBoulder.pathStart === cellId
-										? startClass
-										: selectedBoulder.pathEnd === cellId
-											? topClass
-											: selectedBoulder.clickedCells?.includes(cellId)
-												? clickedClass
-												: isSkippedCell(cellId)
-													? skippedClass
-													: ''
-									: (selectingMode === 'Start' && selectedStartCell === cellId) ||
-										  selectedStartCell === cellId
-										? startClass
-										: (selectingMode === 'Top' && selectedTopCell === cellId) ||
-											  selectedTopCell === cellId
-											? topClass
-											: $clickedCells?.has(cellId)
-												? clickedClass
-												: isSkippedCell(cellId)
-													? skippedClass
-													: '') + '';
-							return classList;
-						})()}
 						on:click={selectedBoulder ? null : () => toggleCellAndUpdateSelector(cellId)}
+						class={`${selectedBoulder ? 'pointer-events-none' : ''}
+          ${selectedStartCell === cellId && $clickedCells.has(cellId) ? startClass : ''}
+          ${selectedTopCell === cellId && $clickedCells.has(cellId) ? topClass : ''}
+          ${$clickedCells.has(cellId) ? clickedClass : ''}
+          ${isSkippedCell(cellId) ? skippedClass : ''}`}
 					>
 						{isSkippedCell(cellId) ? '' : cellId}
 					</td>

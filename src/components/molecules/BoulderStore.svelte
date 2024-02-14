@@ -12,7 +12,6 @@
 			subscribe,
 			toggle: (cellId) => {
 				console.log('cellId:', cellId);
-				if (isSkippedCell(cellId)) return;
 				update((cells) => {
 					const updated = new Set(cells);
 					if (updated.has(cellId)) {
