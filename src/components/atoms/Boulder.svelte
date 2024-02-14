@@ -15,24 +15,11 @@
 	$: tableRows = Array.from({ length: rows }, (_, i) => String.fromCharCode(65 + i));
 	$: tableCols = Array.from({ length: cols }, (_, i) => i);
 
-	$: selectingMode = $selector.selectingMode;
 	$: selectedStartCell = $selector.selectedStartCell;
 	$: selectedTopCell = $selector.selectedTopCell;
 
-	$: {
-		console.log('selectingMode', selectingMode);
-	}
-	$: {
-		console.log('selectedTopCell', selectedTopCell);
-	}
-	$: {
-		console.log('selectedStartCell', selectedStartCell);
-	}
-
 	function toggleCellAndUpdateSelector(cellId) {
 		if (isSkippedCell(cellId)) return;
-
-		// clickedCells.toggle(cellId);
 
 		selector.updateSelector(cellId);
 		if (!(selectedStartCell === cellId || selectedTopCell === cellId)) {
