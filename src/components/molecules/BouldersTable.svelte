@@ -24,19 +24,10 @@
 		clickOutsideModal = true;
 	}
 
-	const removeBoulder = (boulderId) => {
-		const newBoulders = bouldersFromLS.filter((boulder) => boulder.id !== boulderId);
-
-		localStorage.setItem('boulders', JSON.stringify(newBoulders));
-		bouldersFromLS = newBoulders;
-
-		boulders.update(() => newBoulders);
-
-		addToast('info', 'Prudič byl odstraněn');
-	};
+	function handleRemoveBoulder(boulderId) {
+		boulders.removeBoulder(boulderId);
+	}
 </script>
-
-<Toast />
 
 {#if bouldersFromLS?.length > 0}
 	<div id="table-container" class="my-8 overflow-x-auto">
@@ -57,7 +48,7 @@
 						</td>
 						<td>{Array.from(boulder.clickedCells)}</td>
 						<td>
-							<button on:click={() => removeBoulder(boulder.id)}>
+							<button on:click={() => handleRemoveBoulder(boulder.id)}>
 								<Icon iconName="mdiDelete" class="h-5 w-5 text-red-500" />
 							</button>
 						</td>
@@ -74,6 +65,8 @@
 		> na lezecké stěně.
 	</Alert>
 {/if}
+
+<Toast />
 
 {#if clickOutsideModal && selectedBoulder}
 	<Modal title="Boulder preview" bind:open={clickOutsideModal} autoclose outsideclose>

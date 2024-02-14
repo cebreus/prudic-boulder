@@ -27,7 +27,7 @@ const currentPath = Astro.url.pathname;
 		<ViewTransitions />
 	</head>
 	<body data-version="0.0.1" class="bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-200">
-		<Header currentPath={currentPath} />
+		<Header currentPath={currentPath} client:load/>
 		<slot />
 	</body>
 </html>
