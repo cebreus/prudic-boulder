@@ -5,7 +5,21 @@
 	import { twMerge } from 'tailwind-merge';
 	import Icon from '../../icons/Icon.svelte';
 
+	// Define TypeScript types for variants and configuration
 	import type { Toast } from '../utils/ToastTypes.ts';
+	type Variant = 'success' | 'error' | 'warning' | 'info';
+	type ToastConfig = Record<
+		Variant,
+		{
+			classes: string;
+			classesDesc: string;
+			icon: string;
+			iconClasses: string;
+			progressClasses: string;
+			role: 'status' | 'alert';
+			ariaLive: 'assertive' | 'polite' | 'off';
+		}
+	>;
 
 	let toastsArray: Toast[] = [];
 
@@ -27,18 +41,7 @@
 	export let variant: 'success' | 'error' | 'warning' | 'info' = 'info';
 
 	// Configuration and classes based on variant
-	const toastConfig: {
-		// eslint-disable-next-line no-unused-vars
-		[key in typeof variant]: {
-			classes: string;
-			classesDesc: string;
-			icon: string;
-			iconClasses: string;
-			progressClasses: string;
-			role: 'status' | 'alert';
-			ariaLive: 'assertive' | 'polite' | 'off';
-		};
-	} = {
+	const toastConfig: ToastConfig = {
 		info: {
 			classes: 'text-slate-800 dark:text-slate-200',
 			classesDesc: 'text-slate-500 dark:text-slate-300',
@@ -80,7 +83,7 @@
 	// Retrieve settings for the specified variant or default to 'info'
 	let toastSettings = toastConfig[variant] || toastConfig['info'];
 
-	// Final class construction
+	// Final class construction using reactive statement for Svelte
 	$: toastClass = twMerge(defaultClass, toastSettings.classes, classNames);
 </script>
 
@@ -106,7 +109,6 @@
 							.progressClasses}"
 					></div>
 				</div>
-				<!-- {JSON.stringify(toastConfig[toast.variant])} -->
 				<Icon
 					iconName={toastConfig[toast.variant].icon}
 					class="h-6 w-6 {toastConfig[toast.variant].iconClasses}"
