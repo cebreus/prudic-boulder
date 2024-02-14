@@ -1,8 +1,8 @@
 <script context="module">
-	import { writable } from 'svelte/store';
 	import { addToast } from '../utils/ToastService.ts';
-	import { isSkippedCell } from '../utils/constants.mjs';
 	import { generateBoulderId } from '../utils/functions.js';
+	import { writable } from 'svelte/store';
+	import log from '../utils/logger.ts';
 
 	// Custom Store for ClickedCells
 	function createClickedCellsStore() {
@@ -11,7 +11,7 @@
 		return {
 			subscribe,
 			toggle: (cellId) => {
-				console.log('cellId:', cellId);
+				log.info('cellId:', cellId);
 				update((cells) => {
 					const updated = new Set(cells);
 					if (updated.has(cellId)) {
