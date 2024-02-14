@@ -94,3 +94,4 @@ export const skippedClass = `skipped`;
 export const clickedClass = `holds`;
 export const startClass = `start`;
 export const topClass = `top`;
+export const generateId = () => `${Date.now()}-${Math.random().toString(16).slice(2, 10)}`;

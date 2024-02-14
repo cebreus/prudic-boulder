@@ -1,6 +1,6 @@
 <script context="module">
 	import { addToast } from '../utils/ToastService.ts';
-	import { generateBoulderId } from '../utils/functions.js';
+	import { generateId } from '../utils/utils.mjs';
 	import { writable } from 'svelte/store';
 	import log from '../utils/logger.ts';
 
@@ -64,7 +64,7 @@
 			}
 
 			const newBoulder = {
-				id: generateBoulderId(),
+				id: generateId(),
 				clickedCells: Array.from(clickedCellsSet),
 				pathStart: selectorState.selectedStartCell,
 				pathEnd: selectorState.selectedTopCell,

@@ -8,7 +8,7 @@
 		skippedClass,
 		cols,
 		rows
-	} from '../utils/constants.mjs';
+	} from '../utils/utils.mjs';
 	import { selector } from '../molecules/BoulderStore.svelte';
 	export let selectedBoulder;
 
