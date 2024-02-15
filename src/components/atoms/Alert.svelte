@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { twMerge } from 'tailwind-merge';
 	import Icon from '../../icons/Icon.svelte';
+	import log from '../utils/logger.ts';
 
 	// Define TypeScript types for variants and configuration
 	type Variant = 'success' | 'error' | 'warning' | 'info';
@@ -19,7 +20,6 @@
 
 	// Exported props for external configuration
 	export let classNames: string = '';
-	export let title: string = '';
 	export let showIcon: boolean = false;
 	export let iconName: string = '';
 	export let showComponent: boolean = true;
@@ -69,6 +69,8 @@
 		}
 	};
 
+	const uniqueId = `alert-${Math.random().toString(36).substring(2, 4)}`;
+
 	// Final class construction using reactive statement for Svelte
 	$: alertClass = twMerge(
 		defaultClass,
@@ -76,10 +78,21 @@
 		showIcon ? withIconClass : '',
 		classNames
 	);
+
+	$: {
+		log.debug(`Component '${uniqueId}':`, {
+			variant,
+			showIcon,
+			iconName,
+			showComponent,
+			alertClass
+		});
+	}
 </script>
 
 {#if showComponent}
 	<div
+		id={uniqueId}
 		data-cy="alert"
 		class={alertClass}
 		role={alertConfig[variant].role}
@@ -92,15 +105,13 @@
 				iconName={iconName || alertConfig[variant].icon}
 			/>
 			<div>
-				{#if title?.length}
-					<strong class="block font-semibold">{title}</strong>
-				{/if}
+				<slot name="title" />
+				<slot name="description" />
 				<slot />
 			</div>
 		{:else}
-			{#if title?.length}
-				<strong class="block font-semibold">{title}</strong>
-			{/if}
+			<slot name="title" />
+			<slot name="description" />
 			<slot />
 		{/if}
 	</div>
