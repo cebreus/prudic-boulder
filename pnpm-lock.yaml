@@ -79,6 +79,9 @@ devDependencies:
   svelte:
     specifier: ^4.2.10
     version: 4.2.10
+  svelte-reactive-preprocessor:
+    specifier: ^0.8.3
+    version: 0.8.3
   tailwind-merge:
     specifier: ^2.2.1
     version: 2.2.1
@@ -2798,6 +2801,10 @@ packages:
     engines: {node: '>=4.0'}
     dev: true
 
+  /estree-walker@2.0.2:
+    resolution: {integrity: sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==}
+    dev: true
+
   /estree-walker@3.0.3:
     resolution: {integrity: sha512-7RUKfXgSMMkzt6ZuXmqapOurLGPPfgj6l9uRZ7lRGolvk0y2yocc35LdcxKC5PQZdn2DMqioAQ2NoWcrTKmm6g==}
     dependencies:
@@ -3598,6 +3605,12 @@ packages:
     engines: {node: '>=12'}
     dev: true
 
+  /is-reference@1.2.1:
+    resolution: {integrity: sha512-U82MsXXiFIrjCK4otLT+o2NA2Cd2g5MLoOVXUZjIOhLurrRxpEXzI8O0KZHr3IjLvlAH1kTPYSuqer5T9ZVBKQ==}
+    dependencies:
+      '@types/estree': 1.0.5
+    dev: true
+
   /is-reference@3.0.2:
     resolution: {integrity: sha512-v3rht/LgVcsdZa3O2Nqs+NMowLOxeOm7Ay9+/ARQ2F+qEoANRcqrjAZKGN0v8ymUetZGgkp26LTnGT7H0Qo9Pg==}
     dependencies:
@@ -3762,6 +3775,10 @@ packages:
     resolution: {integrity: sha512-Bdboy+l7tA3OGW6FjyFHWkP5LuByj1Tk33Ljyq0axyzdk9//JSi2u3fP1QSmd1KNwq6VOKYGlAu87CisVir6Pw==}
     dev: true
 
+  /json-stringify-safe@5.0.1:
+    resolution: {integrity: sha512-ZClg6AaYvamvYEE82d3Iyd3vSSIjQ+odgjaTzRuO3s7toCdFKczob2i0zCh7JE8kWn17yvAWhUVxvqGwUalsRA==}
+    dev: true
+
   /json5@2.2.3:
     resolution: {integrity: sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==}
     engines: {node: '>=6'}
@@ -3838,6 +3855,10 @@ packages:
   /lilconfig@3.0.0:
     resolution: {integrity: sha512-K2U4W2Ff5ibV7j7ydLr+zLAkIg5JJ4lPn1Ltsdt+Tz/IjQ8buJ55pZAxoP34lqIiwtF9iAvtLv3JGv7CAyAg+g==}
     engines: {node: '>=14'}
+    dev: true
+
+  /linenumber@1.0.1:
+    resolution: {integrity: sha512-g7x+bxzGaJ7yUk1chFXmY4NT1oIiSQREUs33M29cjDPFUP1W/dlM3YGD1cR7qeSehp5TEpxAFP0L+Rpk3nUKzw==}
     dev: true
 
   /lines-and-columns@1.2.4:
@@ -4874,6 +4895,13 @@ packages:
   /path-type@4.0.0:
     resolution: {integrity: sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==}
     engines: {node: '>=8'}
+
+  /periscopic@2.0.3:
+    resolution: {integrity: sha512-FuCZe61mWxQOJAQFEfmt9FjzebRlcpFz8sFPbyaCKtdusPkMEbA9ey0eARnRav5zAhmXznhaQkKGFAPn7X9NUw==}
+    dependencies:
+      estree-walker: 2.0.2
+      is-reference: 1.2.1
+    dev: true
 
   /periscopic@3.1.0:
     resolution: {integrity: sha512-vKiQ8RRtkl9P+r/+oefh25C3fhybptkHKCZSPlcXiJux2tJF55GnEj3BVn4A5gKfq9NWWXXrxkHBwVPUfH0opw==}
@@ -5962,6 +5990,16 @@ packages:
       svelte: ^3.19.0 || ^4.0.0
     dependencies:
       svelte: 4.2.10
+    dev: true
+
+  /svelte-reactive-preprocessor@0.8.3:
+    resolution: {integrity: sha512-OZRorkMbIdrHfnvAYrY7brEUW6QOesh0TiIvQy2RQHly2hrvwhZbrH8Ec9KnAVcx9cCYVox26GqsHcLtVkud3g==}
+    dependencies:
+      acorn: 8.11.3
+      escape-string-regexp: 4.0.0
+      json-stringify-safe: 5.0.1
+      linenumber: 1.0.1
+      periscopic: 2.0.3
     dev: true
 
   /svelte2tsx@0.6.27(svelte@4.2.10)(typescript@5.3.3):
