@@ -20,6 +20,9 @@
 	$: selectedStartCell = $selector.selectedStartCell;
 	$: selectedTopCell = $selector.selectedTopCell;
 
+	$: {
+		console.log($clickedCells);
+	}
 	const toggleCellAndUpdateSelector = (cellId) => {
 		if (isSkippedCell(cellId)) return;
 
@@ -29,18 +32,14 @@
 	};
 
 	const handleSaveBoulder = () => {
-		isOpen = true;
+		if ($clickedCells.size > 0) {
+			isOpen = true;
+		}
 	};
 
 	function handleModalResponse(name) {
-		// Logic to handle the response, for example, adding a boulder
-		// After handling the response, you might want to close the modal
 		isOpen = false;
-		console.log(name); // Do something with the value
-		if (name) {
-			console.log('yes');
-			boulders.addBoulder($clickedCells, $selector, name);
-		}
+		boulders.addBoulder($clickedCells, $selector, name);
 	}
 </script>
 
@@ -48,6 +47,7 @@
 	{isOpen}
 	type="prompt"
 	title="Enter Boulder Name"
+	body="Enter Boulder Name"
 	on:close={() => (isOpen = false)}
 	response={handleModalResponse}
 />

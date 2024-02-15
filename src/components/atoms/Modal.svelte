@@ -9,6 +9,7 @@
 	export let title = '';
 	export let body = '';
 
+	// eslint-disable-next-line no-unused-vars
 	export let response: (name: string) => void;
 
 	let inputName: string = '';

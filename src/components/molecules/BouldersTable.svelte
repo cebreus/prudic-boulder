@@ -69,7 +69,7 @@
 
 <Toast />
 
-<Modal {isOpen} on:close={() => (isOpen = false)} type="basic">
+<Modal {isOpen} on:close={() => (isOpen = false)} type="basic" title={selectedBoulder.name}>
 	<Boulder {selectedBoulder} />
 </Modal>
 

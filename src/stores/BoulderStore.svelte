@@ -78,6 +78,11 @@
 				return;
 			}
 
+			if (!name) {
+				addToast('info', 'Zadejte název bouldera');
+				return;
+			}
+
 			const newBoulder = {
 				id: generateId(),
 				name: name,
