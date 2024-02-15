@@ -72,7 +72,7 @@
 		const initialValue = isBrowser ? JSON.parse(localStorage.getItem('boulders') || '[]') : [];
 		const { subscribe, update } = writable(initialValue);
 
-		const addBoulder = (clickedCellsSet, selectorState) => {
+		const addBoulder = (clickedCellsSet, selectorState, name) => {
 			if (!clickedCellsSet.size) {
 				addToast('info', 'Vyberte alespoň jednu buňku!');
 				return;
@@ -80,6 +80,7 @@
 
 			const newBoulder = {
 				id: generateId(),
+				name: name,
 				clickedCells: Array.from(clickedCellsSet),
 				pathStart: selectorState.selectedStartCell,
 				pathEnd: selectorState.selectedTopCell,

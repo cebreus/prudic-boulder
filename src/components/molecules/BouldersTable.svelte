@@ -31,13 +31,17 @@
 		<table id="dataTable">
 			<thead>
 				<tr>
+					<th>Name</th>
 					<th>ID</th>
-					<th colspan="2">Cells</th>
+					<th colspan="3">Cells</th>
 				</tr>
 			</thead>
 			<tbody>
 				{#each bouldersFromLS as boulder (boulder.id)}
 					<tr>
+						<td>
+							{boulder.name}
+						</td>
 						<td>
 							<button on:click={() => openModal(boulder)}>
 								{boulder.id}
@@ -65,7 +69,7 @@
 
 <Toast />
 
-<Modal {isOpen} on:close={() => (isOpen = false)}>
+<Modal {isOpen} on:close={() => (isOpen = false)} type="basic">
 	<Boulder {selectedBoulder} />
 </Modal>
 

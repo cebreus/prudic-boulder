@@ -1,5 +1,5 @@
 <script>
-	import { clickedCells, selector } from '../../stores/BoulderStore.svelte';
+	import { clickedCells, selector, boulders } from '../../stores/BoulderStore.svelte';
 	import {
 		isSkippedCell,
 		clickedClass,
@@ -9,7 +9,10 @@
 		cols,
 		rows
 	} from '../utils/utils.mjs';
+	import Button from '../atoms/Button.svelte';
+	import Modal from '../atoms/Modal.svelte';
 	export let selectedBoulder;
+	export let isOpen = false;
 
 	$: tableRows = Array.from({ length: rows }, (_, i) => String.fromCharCode(65 + i));
 	$: tableCols = Array.from({ length: cols }, (_, i) => i);
@@ -17,14 +20,37 @@
 	$: selectedStartCell = $selector.selectedStartCell;
 	$: selectedTopCell = $selector.selectedTopCell;
 
-	function toggleCellAndUpdateSelector(cellId) {
+	const toggleCellAndUpdateSelector = (cellId) => {
 		if (isSkippedCell(cellId)) return;
 
 		selector.updateSelector(cellId);
 
 		clickedCells.toggle(cellId);
+	};
+
+	const handleSaveBoulder = () => {
+		isOpen = true;
+	};
+
+	function handleModalResponse(name) {
+		// Logic to handle the response, for example, adding a boulder
+		// After handling the response, you might want to close the modal
+		isOpen = false;
+		console.log(name); // Do something with the value
+		if (name) {
+			console.log('yes');
+			boulders.addBoulder($clickedCells, $selector, name);
+		}
 	}
 </script>
+
+<Modal
+	{isOpen}
+	type="prompt"
+	title="Enter Boulder Name"
+	on:close={() => (isOpen = false)}
+	response={handleModalResponse}
+/>
 
 <table class="wall">
 	<thead>
@@ -56,6 +82,21 @@
 		{/each}
 	</tbody>
 </table>
+
+<div class="grid w-[20.8em] grid-flow-col justify-stretch gap-4 pl-9 pr-1 pt-4 sm:w-[23.5em]">
+	<Button variant="outline" on:click={() => selector.setMode('Start')}>Start</Button>
+	<Button variant="outline" on:click={() => selector.setMode('Top')}>Top</Button>
+	<Button emoji="💾" variant="outlineGreen" aria-label="Save" on:click={handleSaveBoulder}></Button>
+	<Button
+		emoji="🗑️"
+		variant="outlineYellow"
+		aria-label="Clear"
+		on:click={() => {
+			clickedCells.clear();
+			selector.clear();
+		}}
+	></Button>
+</div>
 
 <style lang="postcss">
 	:global(table.wall) {
