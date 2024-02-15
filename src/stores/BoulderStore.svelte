@@ -95,7 +95,7 @@
 			addToast(
 				'success',
 				'Prudič byl vytvořen',
-				'Přejděte na <a href="/public">hlavní stránku</a> pro zobrazení.'
+				'Přejděte na <a href="/">hlavní stránku</a> pro zobrazení.'
 			);
 		};
 
