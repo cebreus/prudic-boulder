@@ -22,12 +22,8 @@
 		if (isSkippedCell(cellId)) return;
 
 		selector.updateSelector(cellId);
-		if (!(selectedStartCell === cellId || selectedTopCell === cellId)) {
-			clickedCells.toggle(cellId); // Toggle pouze pokud buňka není již vybrána jako start/top
-			selector.setMode(null); // Zrušit režim výběru pouze pokud buňka není již vybrána jako start/top
-		} else {
-			clickedCells.toggle(cellId);
-		}
+
+		clickedCells.toggle(cellId);
 	}
 
 	$: {

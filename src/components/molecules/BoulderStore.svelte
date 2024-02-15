@@ -32,24 +32,35 @@
 	// Custom Store for Selector
 	function createSelectorStore() {
 		const { subscribe, set, update } = writable({
-			selectingMode: null,
+			selectedMode: null,
 			selectedStartCell: null,
 			selectedTopCell: null
 		});
 
 		return {
 			subscribe,
-			setMode: (mode) => update((s) => ({ ...s, selectingMode: mode })),
+			setMode: (mode) => update((s) => ({ ...s, selectedMode: mode })),
 			updateSelector: (cellId) =>
 				update((prev) => {
-					const updatedSelector = { ...prev, selectingMode: null };
-					if (prev.selectingMode === 'Start') updatedSelector.selectedStartCell = cellId;
-					else if (prev.selectingMode === 'Top') updatedSelector.selectedTopCell = cellId;
-					return updatedSelector;
+					if (cellId === prev.selectedStartCell || cellId === prev.selectedTopCell) {
+						const updatedSelector = { ...prev, selectedMode: null };
+						if (cellId === prev.selectedStartCell) {
+							updatedSelector.selectedStartCell = null; // Удалить из начальной, если она уже выбрана
+						} else if (cellId === prev.selectedTopCell) {
+							updatedSelector.selectedTopCell = null; // Удалить из конечной, если она уже выбрана
+						}
+						return updatedSelector;
+					} else {
+						const updatedSelector = { ...prev, selectedMode: null };
+						if (prev.selectedMode === 'Start') updatedSelector.selectedStartCell = cellId;
+						else if (prev.selectedMode === 'Top') updatedSelector.selectedTopCell = cellId;
+						return updatedSelector;
+					}
 				}),
+
 			clear: () =>
 				set({
-					selectingMode: null,
+					selectedMode: null,
 					selectedStartCell: null,
 					selectedTopCell: null
 				})
