@@ -1,12 +1,8 @@
 import { writable } from 'svelte/store';
 import type { Toast, ToastVariant } from './ToastTypes';
+import { generateId } from './utils.mjs';
 
 export const toasts = writable<Toast[]>([]);
-
-// Utility function to generate a unique toast ID
-function generateToastId(): string {
-	return `${Date.now()}-${Math.random().toString(16).slice(2, 10)}`;
-}
 
 // Utility function to calculate timeout based on message length
 function calculateTimeout(title: string, description: string): number {
@@ -22,7 +18,7 @@ export const dismissToast = (id: string): void => {
 
 // Add a new toast with progress bar logic
 export const addToast = (variant: ToastVariant, title: string, description: string = ''): void => {
-	const id = generateToastId();
+	const id = generateId();
 	const timeout = calculateTimeout(title, description);
 
 	const toast: Toast = {

@@ -18,14 +18,18 @@ import Alert from '../components/atoms/Alert.svelte';
 				<Alert>Base</Alert>
 				<Alert variant="info">Info</Alert>
 				<Alert variant="success">Success</Alert>
-				<Alert variant="warning" title="Warning">
-					Vivamus lacinia placerat urna, eget ornare tellus facilisis quis. Nulla vehicula ornare
-					urna at condimentum.</Alert
-				>
+				<Alert variant="warning">
+					<strong slot="title">Warning:</strong>
+					Vivamus lacinia placerat urna, eget ornare tellus facilisis quis. Nulla vehicula ornare urna
+					at condimentum.
+				</Alert>
 				<Alert variant="error" iconName="mdiAlphaCBox" showIcon>Error with custom icon</Alert>
-				<Alert variant="info" showIcon title="variant: Info, showIcon">
-					Vivamus lacinia placerat urna, eget ornare tellus facilisis quis. Nulla vehicula ornare
-					urna at condimentum.
+				<Alert variant="info" showIcon>
+					<strong slot="title">variant: Info, showIcon</strong>
+					<div slot="description">
+						Vivamus lacinia placerat urna, eget ornare tellus facilisis quis. Nulla vehicula ornare
+						urna at condimentum.
+					</div>
 				</Alert>
 			</div>
 		</section>

@@ -1,32 +1,32 @@
 <script>
-	import { addToast } from '../utils/TostService.ts';
-	import { boulders } from './BoulderStore.svelte';
+	import { boulders } from '../../stores/BoulderStore.svelte';
 	import { Modal } from 'flowbite-svelte';
 	import Alert from '../atoms/Alert.svelte';
-	import BolderPreview from './BolderPreview.svelte';
 	import Icon from '../../icons/Icon.svelte';
 	import Toast from '../atoms/Toast.svelte';
+	import Boulder from './Boulder.svelte';
+	import { onDestroy } from 'svelte';
 
-	let clickOutsideModal = false;
+	let bouldersFromLS = [];
 	let selectedBoulder = [];
+	let clickOutsideModal = false;
+
+	const unsubscribe = boulders.subscribe((value) => {
+		bouldersFromLS = value;
+	});
+
+	onDestroy(unsubscribe);
 	function openModal(boulder) {
 		selectedBoulder = boulder;
 		clickOutsideModal = true;
 	}
 
-	const removeBoulder = (boulderId) => {
-		addToast('info', 'Prudič byl odstraněn');
-		boulders.update((prevBoulders) => {
-			const newBoulders = prevBoulders.filter((boulder) => boulder.id !== boulderId);
-			localStorage.setItem('boulders', JSON.stringify(newBoulders));
-			return newBoulders;
-		});
-	};
+	function handleRemoveBoulder(boulderId) {
+		boulders.removeBoulder(boulderId);
+	}
 </script>
 
-<Toast />
-
-{#if $boulders?.length > 0}
+{#if bouldersFromLS?.length > 0}
 	<div id="table-container" class="my-8 overflow-x-auto">
 		<table id="dataTable">
 			<thead>
@@ -36,7 +36,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#each $boulders as boulder (boulder.id)}
+				{#each bouldersFromLS as boulder (boulder.id)}
 					<tr>
 						<td>
 							<button on:click={() => openModal(boulder)}>
@@ -45,7 +45,7 @@
 						</td>
 						<td>{Array.from(boulder.clickedCells)}</td>
 						<td>
-							<button on:click={() => removeBoulder(boulder.id)}>
+							<button on:click={() => handleRemoveBoulder(boulder.id)}>
 								<Icon iconName="mdiDelete" class="h-5 w-5 text-red-500" />
 							</button>
 						</td>
@@ -63,9 +63,11 @@
 	</Alert>
 {/if}
 
+<Toast />
+
 {#if clickOutsideModal && selectedBoulder}
 	<Modal title="Boulder preview" bind:open={clickOutsideModal} autoclose outsideclose>
-		<BolderPreview {selectedBoulder} />
+		<Boulder {selectedBoulder} />
 	</Modal>
 {/if}
 

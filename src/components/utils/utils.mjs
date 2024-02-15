@@ -87,7 +87,6 @@ export const cellsToSkip = new Set([
 export const isSkippedCell = (cellId) => {
 	return cellsToSkip.has(cellId);
 };
-
 export let rows = 18;
 export let cols = 10;
 
@@ -95,3 +94,4 @@ export const skippedClass = `skipped`;
 export const clickedClass = `holds`;
 export const startClass = `start`;
 export const topClass = `top`;
+export const generateId = () => `${Date.now()}-${Math.random().toString(16).slice(2, 10)}`;
