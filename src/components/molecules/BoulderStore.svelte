@@ -4,6 +4,9 @@
 	import { writable } from 'svelte/store';
 	import log from '../utils/logger.ts';
 
+	// check for browser environment
+	const isBrowser = typeof window !== 'undefined';
+
 	// Custom Store for ClickedCells
 	function createClickedCellsStore() {
 		const { subscribe, set, update } = writable(new Set());
@@ -55,7 +58,8 @@
 
 	// Custom Store for Boulders
 	function createBouldersStore() {
-		const { subscribe, update } = writable([]);
+		const initialValue = isBrowser ? JSON.parse(localStorage.getItem('boulders') || '[]') : [];
+		const { subscribe, update } = writable(initialValue);
 
 		const addBoulder = (clickedCellsSet, selectorState) => {
 			if (!clickedCellsSet.size) {

@@ -5,19 +5,17 @@
 	import Icon from '../../icons/Icon.svelte';
 	import Toast from '../atoms/Toast.svelte';
 	import Boulder from '../atoms/Boulder.svelte';
-	import { onMount } from 'svelte';
+	import { onDestroy } from 'svelte';
 
 	let bouldersFromLS = [];
 	let selectedBoulder = [];
 	let clickOutsideModal = false;
 
-	onMount(() => {
-		const storedBoulders = localStorage.getItem('boulders');
-		if (storedBoulders) {
-			bouldersFromLS = JSON.parse(storedBoulders);
-		}
+	const unsubscribe = boulders.subscribe((value) => {
+		bouldersFromLS = value;
 	});
 
+	onDestroy(unsubscribe);
 	function openModal(boulder) {
 		selectedBoulder = boulder;
 		clickOutsideModal = true;
