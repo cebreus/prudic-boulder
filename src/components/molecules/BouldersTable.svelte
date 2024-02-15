@@ -1,10 +1,10 @@
 <script>
-	import { boulders } from './BoulderStore.svelte';
+	import { boulders } from '../../stores/BoulderStore.svelte';
 	import { Modal } from 'flowbite-svelte';
 	import Alert from '../atoms/Alert.svelte';
 	import Icon from '../../icons/Icon.svelte';
 	import Toast from '../atoms/Toast.svelte';
-	import Boulder from '../atoms/Boulder.svelte';
+	import Boulder from './Boulder.svelte';
 	import { onDestroy } from 'svelte';
 
 	let bouldersFromLS = [];

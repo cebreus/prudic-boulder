@@ -1,6 +1,6 @@
 <script>
 	import Button from './Button.svelte';
-	import { selector, boulders, clickedCells } from '../molecules/BoulderStore.svelte';
+	import { selector, boulders, clickedCells } from '../../stores/BoulderStore.svelte';
 </script>
 
 <div class="grid w-[20.8em] grid-flow-col justify-stretch gap-4 pl-9 pr-1 pt-4 sm:w-[23.5em]">

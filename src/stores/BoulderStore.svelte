@@ -1,8 +1,8 @@
 <script context="module">
-	import { addToast } from '../utils/ToastService.ts';
-	import { generateId } from '../utils/utils.mjs';
+	import { addToast } from '../components/utils/ToastService.ts';
+	import { generateId } from '../components/utils/utils.mjs';
 	import { writable } from 'svelte/store';
-	import log from '../utils/logger.ts';
+	import log from '../components/utils/logger.ts';
 
 	// check for browser environment
 	const isBrowser = typeof window !== 'undefined';
@@ -95,7 +95,7 @@
 			addToast(
 				'success',
 				'Prudič byl vytvořen',
-				'Přejděte na <a href="/">hlavní stránku</a> pro zobrazení.'
+				'Přejděte na <a href="/public">hlavní stránku</a> pro zobrazení.'
 			);
 		};
 

@@ -1,5 +1,5 @@
 <script>
-	import { clickedCells } from '../molecules/BoulderStore.svelte';
+	import { clickedCells, selector } from '../../stores/BoulderStore.svelte';
 	import {
 		isSkippedCell,
 		clickedClass,
@@ -9,7 +9,6 @@
 		cols,
 		rows
 	} from '../utils/utils.mjs';
-	import { selector } from '../molecules/BoulderStore.svelte';
 	export let selectedBoulder;
 
 	$: tableRows = Array.from({ length: rows }, (_, i) => String.fromCharCode(65 + i));
@@ -24,10 +23,6 @@
 		selector.updateSelector(cellId);
 
 		clickedCells.toggle(cellId);
-	}
-
-	$: {
-		console.log($clickedCells);
 	}
 </script>
 
