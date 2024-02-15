@@ -1,15 +1,15 @@
 <script>
 	import { boulders } from '../../stores/BoulderStore.svelte';
-	import { Modal } from 'flowbite-svelte';
 	import Alert from '../atoms/Alert.svelte';
 	import Icon from '../../icons/Icon.svelte';
 	import Toast from '../atoms/Toast.svelte';
 	import Boulder from './Boulder.svelte';
 	import { onDestroy } from 'svelte';
+	import Modal from '../atoms/Modal.svelte';
 
 	let bouldersFromLS = [];
 	let selectedBoulder = [];
-	let clickOutsideModal = false;
+	export let isOpen = false;
 
 	const unsubscribe = boulders.subscribe((value) => {
 		bouldersFromLS = value;
@@ -18,7 +18,7 @@
 	onDestroy(unsubscribe);
 	function openModal(boulder) {
 		selectedBoulder = boulder;
-		clickOutsideModal = true;
+		isOpen = true;
 	}
 
 	function handleRemoveBoulder(boulderId) {
@@ -65,11 +65,9 @@
 
 <Toast />
 
-{#if clickOutsideModal && selectedBoulder}
-	<Modal title="Boulder preview" bind:open={clickOutsideModal} autoclose outsideclose>
-		<Boulder {selectedBoulder} />
-	</Modal>
-{/if}
+<Modal {isOpen} on:close={() => (isOpen = false)}>
+	<Boulder {selectedBoulder} />
+</Modal>
 
 <style lang="postcss">
 	table {
