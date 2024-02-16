@@ -9,6 +9,7 @@
 	export let title = '';
 	export let body = '';
 
+	// eslint-disable-next-line no-unused-vars
 	export let response: (name: string) => void;
 
 	let inputName: string = '';
@@ -28,9 +29,21 @@
 	$: if (!isOpen) {
 		inputName = ''; // Reset input value when modal closes
 	}
+
+	function handleKeyDown(event: KeyboardEvent) {
+		if (event.key === 'Enter') {
+			submitResponse();
+			setTimeout(closeModal, 0);
+		}
+	}
 </script>
 
-<Dialog open={isOpen} on:close={closeModal} class="fixed inset-0 z-10 overflow-y-auto">
+<Dialog
+	open={isOpen}
+	on:close={closeModal}
+	class="fixed inset-0 z-10 overflow-y-auto"
+	on:keydown={handleKeyDown}
+>
 	<DialogOverlay class="fixed inset-0 bg-black bg-opacity-50" />
 
 	<div class="flex min-h-screen items-center justify-center">
@@ -57,6 +70,7 @@
 						class="mt-1 w-full rounded border p-3 hover:border-sky-600 focus:border-blue-700 focus:outline-none"
 						placeholder="Enter Boulder Name"
 						bind:value={inputName}
+						on:keydown={handleKeyDown}
 					/>
 				{/if}
 				<div class="mt-4 flex justify-end space-x-2">

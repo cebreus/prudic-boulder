@@ -17,7 +17,9 @@
 
 	onDestroy(unsubscribe);
 	function openModal(boulder) {
+		console.log('boulder:', boulder);
 		selectedBoulder = boulder;
+		console.log('selectedBoulder', selectedBoulder);
 		isOpen = true;
 	}
 
@@ -70,7 +72,7 @@
 <Toast />
 
 <Modal {isOpen} on:close={() => (isOpen = false)} type="basic">
-	<Boulder {selectedBoulder} />
+	<Boulder {selectedBoulder} variant="preview" />
 </Modal>
 
 <style lang="postcss">

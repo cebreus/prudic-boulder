@@ -13,14 +13,27 @@
 
 		return {
 			subscribe,
-			toggle: (cellId) => {
-				log.info('cellId:', cellId);
+			toggle: (cellId, selectedMode) => {
+				log.info('cellId:', cellId, 'selectedMode:', selectedMode);
+				update((cells) => {
+					const updated = new Set(cells);
+					if (selectedMode !== 'Start' && selectedMode !== 'Top') {
+						if (updated.has(cellId)) {
+							updated.delete(cellId);
+						} else {
+							updated.add(cellId);
+						}
+					} else {
+						updated.add(cellId);
+					}
+					return updated;
+				});
+			},
+			removeCellById: (cellId) => {
 				update((cells) => {
 					const updated = new Set(cells);
 					if (updated.has(cellId)) {
 						updated.delete(cellId);
-					} else {
-						updated.add(cellId);
 					}
 					return updated;
 				});
@@ -40,22 +53,31 @@
 		return {
 			subscribe,
 			setMode: (mode) => update((s) => ({ ...s, selectedMode: mode })),
-			updateSelector: (cellId) =>
+			updateSelector: (cellId, selectedMode) =>
 				update((prev) => {
-					if (cellId === prev.selectedStartCell || cellId === prev.selectedTopCell) {
-						const updatedSelector = { ...prev, selectedMode: null };
-						if (cellId === prev.selectedStartCell) {
-							updatedSelector.selectedStartCell = null; // Удалить из начальной, если она уже выбрана
-						} else if (cellId === prev.selectedTopCell) {
-							updatedSelector.selectedTopCell = null; // Удалить из конечной, если она уже выбрана
+					let updatedSelector = { ...prev };
+
+					if (selectedMode === 'Start') {
+						if (prev.selectedStartCell) {
+							clickedCells.removeCellById(prev.selectedStartCell);
 						}
-						return updatedSelector;
-					} else {
-						const updatedSelector = { ...prev, selectedMode: null };
-						if (prev.selectedMode === 'Start') updatedSelector.selectedStartCell = cellId;
-						else if (prev.selectedMode === 'Top') updatedSelector.selectedTopCell = cellId;
-						return updatedSelector;
+						if (cellId === prev.selectedTopCell) {
+							updatedSelector.selectedTopCell = null;
+						}
+						updatedSelector.selectedStartCell = cellId;
+					} else if (selectedMode === 'Top') {
+						if (prev.selectedTopCell) {
+							clickedCells.removeCellById(prev.selectedTopCell);
+						}
+						if (cellId === prev.selectedStartCell) {
+							updatedSelector.selectedStartCell = null;
+						}
+						updatedSelector.selectedTopCell = cellId;
 					}
+
+					updatedSelector.selectedMode = null;
+
+					return updatedSelector;
 				}),
 
 			clear: () =>

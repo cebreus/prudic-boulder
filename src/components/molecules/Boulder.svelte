@@ -13,34 +13,33 @@
 	import Modal from '../atoms/Modal.svelte';
 	export let selectedBoulder;
 	export let isOpen = false;
+	export let variant = 'default';
 
 	$: tableRows = Array.from({ length: rows }, (_, i) => String.fromCharCode(65 + i));
 	$: tableCols = Array.from({ length: cols }, (_, i) => i);
 
 	$: selectedStartCell = $selector.selectedStartCell;
 	$: selectedTopCell = $selector.selectedTopCell;
+	$: selectedMode = $selector.selectedMode;
 
 	const toggleCellAndUpdateSelector = (cellId) => {
 		if (isSkippedCell(cellId)) return;
 
-		selector.updateSelector(cellId);
+		selector.updateSelector(cellId, selectedMode);
 
-		clickedCells.toggle(cellId);
+		clickedCells.toggle(cellId, selectedMode);
 	};
 
 	const handleSaveBoulder = () => {
-		isOpen = true;
+		if ($clickedCells.size > 0) {
+			isOpen = true;
+		}
 	};
 
 	function handleModalResponse(name) {
-		// Logic to handle the response, for example, adding a boulder
-		// After handling the response, you might want to close the modal
+		console.log('here response');
 		isOpen = false;
-		console.log(name); // Do something with the value
-		if (name) {
-			console.log('yes');
-			boulders.addBoulder($clickedCells, $selector, name);
-		}
+		boulders.addBoulder($clickedCells, $selector, name);
 	}
 </script>
 
@@ -68,12 +67,33 @@
 				{#each tableCols as col}
 					{@const cellId = `${row}${col}`}
 					<td
-						on:click={selectedBoulder ? null : () => toggleCellAndUpdateSelector(cellId)}
-						class={`${selectedBoulder ? 'pointer-events-none' : ''}
-          ${selectedStartCell === cellId && $clickedCells.has(cellId) ? startClass : ''}
-          ${selectedTopCell === cellId && $clickedCells.has(cellId) ? topClass : ''}
-          ${$clickedCells.has(cellId) ? clickedClass : ''}
-          ${isSkippedCell(cellId) ? skippedClass : ''}`}
+						class={(() => {
+							let classList = selectedBoulder ? 'pointer-events-none ' : '';
+							classList +=
+								(selectedBoulder
+									? selectedBoulder.pathStart === cellId
+										? startClass
+										: selectedBoulder.pathEnd === cellId
+											? topClass
+											: selectedBoulder.clickedCells?.includes(cellId)
+												? clickedClass
+												: isSkippedCell(cellId)
+													? skippedClass
+													: ''
+									: selectedStartCell === cellId && $clickedCells.has(cellId)
+										? startClass
+										: selectedTopCell === cellId && $clickedCells.has(cellId)
+											? topClass
+											: $clickedCells?.has(cellId)
+												? clickedClass
+												: isSkippedCell(cellId)
+													? skippedClass
+													: '') + '';
+							return classList;
+						})()}
+						on:click={selectedBoulder
+							? null
+							: () => toggleCellAndUpdateSelector(cellId, selectedMode)}
 					>
 						{isSkippedCell(cellId) ? '' : cellId}
 					</td>
@@ -83,20 +103,23 @@
 	</tbody>
 </table>
 
-<div class="grid w-[20.8em] grid-flow-col justify-stretch gap-4 pl-9 pr-1 pt-4 sm:w-[23.5em]">
-	<Button variant="outline" on:click={() => selector.setMode('Start')}>Start</Button>
-	<Button variant="outline" on:click={() => selector.setMode('Top')}>Top</Button>
-	<Button emoji="💾" variant="outlineGreen" aria-label="Save" on:click={handleSaveBoulder}></Button>
-	<Button
-		emoji="🗑️"
-		variant="outlineYellow"
-		aria-label="Clear"
-		on:click={() => {
-			clickedCells.clear();
-			selector.clear();
-		}}
-	></Button>
-</div>
+{#if variant === 'default'}
+	<div class="grid w-[20.8em] grid-flow-col justify-stretch gap-4 pl-9 pr-1 pt-4 sm:w-[23.5em]">
+		<Button variant="outline" on:click={() => selector.setMode('Start')}>Start</Button>
+		<Button variant="outline" on:click={() => selector.setMode('Top')}>Top</Button>
+		<Button emoji="💾" variant="outlineGreen" aria-label="Save" on:click={handleSaveBoulder}
+		></Button>
+		<Button
+			emoji="🗑️"
+			variant="outlineYellow"
+			aria-label="Clear"
+			on:click={() => {
+				clickedCells.clear();
+				selector.clear();
+			}}
+		></Button>
+	</div>
+{/if}
 
 <style lang="postcss">
 	:global(table.wall) {
