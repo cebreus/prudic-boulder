@@ -6,6 +6,7 @@ _site/
 .eslintcache
 .idea
 .netlify
+.vscode/
 .pnpm-store
 .turbo/
 .vercel
