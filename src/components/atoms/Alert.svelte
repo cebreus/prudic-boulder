@@ -1,29 +1,18 @@
 <script lang="ts">
 	import { twMerge } from 'tailwind-merge';
 	import Icon from '../../icons/Icon.svelte';
-	import log from '../utils/logger.ts';
+	import { generateId } from '../utils/utils';
+	import log from '../utils/logger';
 
 	// Define TypeScript types for variants and configuration
-	type Variant = 'success' | 'error' | 'warning' | 'info';
-	type AlertConfig = Record<
-		Variant,
-		{
-			classes: string;
-			classesDesc: string;
-			badgeClasses: string;
-			icon: string;
-			iconClasses: string;
-			role: 'status' | 'alert';
-			ariaLive: 'assertive' | 'polite' | 'off';
-		}
-	>;
+	import type { AlertVariant, AlertConfig } from '../utils/AlertTypes';
 
 	// Exported props for external configuration
 	export let classNames: string = '';
 	export let showIcon: boolean = false;
 	export let iconName: string = '';
 	export let showComponent: boolean = true;
-	export let variant: Variant = 'info';
+	export let variant: AlertVariant = 'info';
 
 	// Default classes
 	const defaultClass: string = 'relative rounded px-4 py-3 text-sm dark:bg-slate-800';
@@ -69,7 +58,7 @@
 		}
 	};
 
-	const uniqueId = `alert-${Math.random().toString(36).substring(2, 4)}`;
+	const uniqueId = generateId('alert');
 
 	// Final class construction using reactive statement for Svelte
 	$: alertClass = twMerge(
