@@ -4,7 +4,6 @@
 	import { toasts, dismissToast } from '../utils/ToastService';
 	import { twMerge } from 'tailwind-merge';
 	import Icon from '../../icons/Icon.svelte';
-	import log from '../utils/logger';
 
 	// Define TypeScript types for variants and configuration
 	import type { ToastVariant, Toast, ToastConfig } from '../utils/ToastTypes';
