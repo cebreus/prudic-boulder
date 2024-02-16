@@ -1,6 +1,6 @@
 <script context="module">
-	import { addToast } from '../components/utils/ToastService.ts';
-	import { generateId } from '../components/utils/utils.mjs';
+	import { addToast } from '../components/utils/ToastService';
+	import { generateId, calculateTimeout } from '../components/utils/utils';
 	import { writable } from 'svelte/store';
 	import log from '../components/utils/logger.ts';
 
