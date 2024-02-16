@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 import type { Toast, ToastVariant } from './ToastTypes';
-import { generateId } from './utils.mjs';
+import { generateId } from './utils';
 
 export const toasts = writable<Toast[]>([]);
 
