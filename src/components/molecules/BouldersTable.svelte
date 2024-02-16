@@ -33,23 +33,36 @@
 		<table id="dataTable">
 			<thead>
 				<tr>
-					<th>Name</th>
-					<th>ID</th>
-					<th colspan="3">Cells</th>
+					<th>Name/ID</th>
+					<th>Cells</th>
+					<th colspan="3"></th>
 				</tr>
 			</thead>
 			<tbody>
 				{#each bouldersFromLS as boulder (boulder.id)}
 					<tr>
-						<td>
-							{boulder.name}
+						<td id={boulder.id}>
+							{#if boulder.name}
+								<button on:click={() => openModal(boulder)}>
+									{boulder.name}
+								</button>
+							{:else}
+								<button on:click={() => openModal(boulder)}>
+									{boulder.id}
+								</button>
+							{/if}
 						</td>
 						<td>
-							<button on:click={() => openModal(boulder)}>
-								{boulder.id}
-							</button>
+							{Array.from(boulder.clickedCells)}
+							<div>
+								{#if boulder.pathStart}
+									Start: {boulder.pathStart}
+								{/if}
+								{#if boulder.pathEnd}
+									Top: {boulder.pathEnd}
+								{/if}
+							</div>
 						</td>
-						<td>{Array.from(boulder.clickedCells)}</td>
 						<td>
 							<button on:click={() => handleRemoveBoulder(boulder.id)}>
 								<Icon iconName="mdiDelete" class="h-5 w-5 text-red-500" />

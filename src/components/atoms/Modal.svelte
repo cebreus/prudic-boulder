@@ -21,13 +21,12 @@
 
 	function submitResponse() {
 		if (type === 'prompt') {
-			response(inputName); // Call the passed-in response function with the input value
-			closeModal();
+			response(inputName);
 		}
 	}
 
 	$: if (!isOpen) {
-		inputName = ''; // Reset input value when modal closes
+		inputName = '';
 	}
 
 	function handleKeyDown(event: KeyboardEvent) {
