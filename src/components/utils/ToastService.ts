@@ -1,24 +1,36 @@
 import { writable } from 'svelte/store';
 import type { Toast, ToastVariant } from './ToastTypes';
-import { generateId } from './utils.mjs';
+import { generateId } from './utils';
+import log from '../utils/logger';
 
 export const toasts = writable<Toast[]>([]);
 
-// Utility function to calculate timeout based on message length
-function calculateTimeout(title: string, description: string): number {
-	const baseTimeout = 2000;
-	const incrementalTimeout = 30;
-	return baseTimeout + (title.length + description.length) * incrementalTimeout;
-}
-
 // Dismiss a toast by ID
 export const dismissToast = (id: string): void => {
+	if (typeof id !== 'string' || id.trim() === '') {
+		log.error('Invalid or empty ID provided to dismissToast');
+		return;
+	}
 	toasts.update((allToasts) => allToasts.filter((toast) => toast.id !== id));
 };
 
 // Add a new toast with progress bar logic
-export const addToast = (variant: ToastVariant, title: string, description: string = ''): void => {
-	const id = generateId();
+export const addToast = (
+	title: string,
+	variant: ToastVariant = 'info',
+	description: string = ''
+): void => {
+	if (typeof title !== 'string' || title.trim() === '') {
+		log.error('Title must be a non-empty string in addToast');
+		return;
+	}
+
+	if (typeof description !== 'string') {
+		log.error('Description must be a string in addToast');
+		return;
+	}
+
+	const id = generateId('toast');
 	const timeout = calculateTimeout(title, description);
 
 	const toast: Toast = {
@@ -37,28 +49,36 @@ export const addToast = (variant: ToastVariant, title: string, description: stri
 };
 
 // Handle the progress bar update logic separately for clarity
-function updateToastProgress(id: string, timeout: number): void {
-	const intervalDuration = 10;
-	const totalSteps = timeout / intervalDuration;
-	const progressDecrement = 100 / totalSteps;
+const updateToastProgress = (id: string, timeout: number): void => {
+	// Kontrola platnosti vstupních dat
+	if (typeof id !== 'string' || id.trim() === '') {
+		log.error('Invalid id provided to updateToastProgress');
+		return;
+	}
+	if (typeof timeout !== 'number' || timeout <= 0) {
+		log.error(
+			'Invalid timeout provided to updateToastProgress. Timeout must be a positive number.'
+		);
+		return;
+	}
 
-	let currentProgress = 100;
+	const updateIntervalMs = 10;
+	const decrementAmount = (updateIntervalMs / timeout) * 100;
 
-	const intervalId = setInterval(() => {
-		currentProgress = Math.max(0, currentProgress - progressDecrement);
+	let progress = 100;
 
-		if (currentProgress <= 0) {
+	const updateProgress = (): void => {
+		progress = Math.max(0, progress - decrementAmount);
+
+		toasts.update((allToasts) =>
+			allToasts.map((toast) => (toast.id === id ? { ...toast, progress } : toast))
+		);
+
+		if (progress <= 0) {
 			clearInterval(intervalId);
 			dismissToast(id);
-		} else {
-			toasts.update((allToasts) =>
-				allToasts.map((toast) => {
-					if (toast.id === id) {
-						return { ...toast, progress: currentProgress };
-					}
-					return toast;
-				})
-			);
 		}
-	}, intervalDuration);
-}
+	};
+
+	const intervalId = setInterval(updateProgress, updateIntervalMs);
+};

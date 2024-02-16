@@ -8,7 +8,7 @@
 		skippedClass,
 		cols,
 		rows
-	} from '../utils/utils.mjs';
+	} from '../utils/utils';
 	import Button from '../atoms/Button.svelte';
 	import Modal from '../atoms/Modal.svelte';
 	export let selectedBoulder;

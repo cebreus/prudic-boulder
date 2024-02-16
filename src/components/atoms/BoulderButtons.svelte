@@ -11,7 +11,6 @@
 		variant="outlineGreen"
 		aria-label="Save"
 		on:click={() => boulders.addBoulder($clickedCells, $selector)}
-		on:click={() => boulders.addBoulder($clickedCells, $selector)}
 	></Button>
 	<Button
 		emoji="🗑️"
