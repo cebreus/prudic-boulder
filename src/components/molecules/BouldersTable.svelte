@@ -1,11 +1,11 @@
 <script>
 	import { boulders } from '../../stores/BoulderStore.svelte';
-	import Alert from '../atoms/Alert.svelte';
-	import Icon from '../../icons/Icon.svelte';
-	import Toast from '../atoms/Toast.svelte';
-	import Boulder from './Boulder.svelte';
 	import { onDestroy } from 'svelte';
+	import Alert from '../atoms/Alert.svelte';
+	import Boulder from './Boulder.svelte';
+	import Icon from '../../components/atoms/Icon.svelte';
 	import Modal from '../atoms/Modal.svelte';
+	import Toast from '../atoms/Toast.svelte';
 
 	let bouldersFromLS = [];
 	let selectedBoulder = [];

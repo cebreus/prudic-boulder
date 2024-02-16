@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import { Dialog, DialogOverlay, DialogTitle } from '@rgossiaux/svelte-headlessui';
-	import Icon from '../../icons/Icon.svelte';
 	import Button from './Button.svelte';
+	import Icon from '../../components/atoms/Icon.svelte';
 
 	export let isOpen: boolean;
 	export let type: 'basic' | 'prompt' = 'basic';

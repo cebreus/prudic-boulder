@@ -3,7 +3,7 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { toasts, dismissToast } from '../utils/ToastService';
 	import { twMerge } from 'tailwind-merge';
-	import Icon from '../../icons/Icon.svelte';
+	import Icon from '../../components/atoms/Icon.svelte';
 
 	// Define TypeScript types for variants and configuration
 	import type { ToastVariant, Toast, ToastConfig } from '../utils/ToastTypes';

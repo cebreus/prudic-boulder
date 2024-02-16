@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { twMerge } from 'tailwind-merge';
-	import Icon from '../../icons/Icon.svelte';
 	import { generateId } from '../utils/utils';
+	import { twMerge } from 'tailwind-merge';
+	import Icon from '../../components/atoms/Icon.svelte';
 	import log from '../utils/logger';
 
 	// Define TypeScript types for variants and configuration
