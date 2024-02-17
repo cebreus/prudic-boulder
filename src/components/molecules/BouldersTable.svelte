@@ -4,7 +4,7 @@
 	import Alert from '../atoms/Alert.svelte';
 	import BoulderComponent from './Boulder.svelte';
 	import Icon from '../../components/atoms/Icon.svelte';
-	import Dialog from '../atoms/Dialog.svelte';
+	import Dialog from './Dialog.svelte';
 	import Toast from '../atoms/Toast.svelte';
 
 	// Define TypeScript types

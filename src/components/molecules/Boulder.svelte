@@ -3,7 +3,7 @@
 	import { isSkippedCell, cols, rows, skippedClass } from '../utils/utils';
 	import Button from '../atoms/Button.svelte';
 	import log from '../utils/logger';
-	import Dialog from '../atoms/Dialog.svelte';
+	import Dialog from './Dialog.svelte';
 
 	// Define TypeScript types
 	import type { Boulder, CellId } from '../utils/BoulderTypes';
