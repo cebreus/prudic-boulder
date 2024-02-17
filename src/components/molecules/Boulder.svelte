@@ -1,30 +1,22 @@
-<script>
+<script lang="ts">
 	import { clickedCells, selector, boulders } from '../../stores/BoulderStore.svelte';
-	import {
-		isSkippedCell,
-		clickedClass,
-		startClass,
-		topClass,
-		skippedClass,
-		cols,
-		rows
-	} from '../utils/utils';
+	import { isSkippedCell, cols, rows, skippedClass } from '../utils/utils';
 	import Button from '../atoms/Button.svelte';
-	import Modal from '../atoms/Modal.svelte';
 	import log from '../utils/logger';
+	import Modal from '../atoms/Modal.svelte';
 
-	export let selectedBoulder;
-	export let isOpen = false;
-	export let variant = 'default';
+	// Define TypeScript types
+	import type { Boulder, CellId } from '../utils/BoulderTypes';
+
+	export let selectedBoulder: Boulder;
+	export let isOpen: boolean = false;
+	export let variant: string = 'default';
 
 	$: tableRows = Array.from({ length: rows }, (_, i) => String.fromCharCode(65 + i));
 	$: tableCols = Array.from({ length: cols }, (_, i) => i);
-
-	$: selectedStartCell = $selector.selectedStartCell;
-	$: selectedTopCell = $selector.selectedTopCell;
 	$: selectedMode = $selector.selectedMode;
 
-	const toggleCellAndUpdateSelector = (cellId) => {
+	const toggleCellAndUpdateSelector = (cellId: CellId) => {
 		if (isSkippedCell(cellId)) {
 			log.debug(`Toggling cell: ${cellId} SKIPPED with mode: ${selectedMode}`);
 			return;
@@ -44,11 +36,11 @@
 		log.error('@artem: missing toast; see `boulders.addBoulder` cast `!clickedCellsSet.size`');
 	};
 
-	function handleModalResponse(name) {
+	const handleModalResponse = (name: string) => {
 		log.debug('handleModalResponse()');
 		isOpen = false;
 		boulders.addBoulder($clickedCells, $selector, name);
-	}
+	};
 </script>
 
 <Modal
@@ -75,30 +67,7 @@
 				{#each tableCols as col}
 					{@const cellId = `${row}${col}`}
 					<td
-						class={(() => {
-							let classList = selectedBoulder ? 'pointer-events-none ' : '';
-							classList +=
-								(selectedBoulder
-									? selectedBoulder.pathStart === cellId
-										? startClass
-										: selectedBoulder.pathEnd === cellId
-											? topClass
-											: selectedBoulder.clickedCells?.includes(cellId)
-												? clickedClass
-												: isSkippedCell(cellId)
-													? skippedClass
-													: ''
-									: selectedStartCell === cellId && $clickedCells.has(cellId)
-										? startClass
-										: selectedTopCell === cellId && $clickedCells.has(cellId)
-											? topClass
-											: $clickedCells?.has(cellId)
-												? clickedClass
-												: isSkippedCell(cellId)
-													? skippedClass
-													: '') + '';
-							return classList;
-						})()}
+						class={isSkippedCell(cellId) ? skippedClass : $clickedCells.get(cellId)?.class}
 						on:click={selectedBoulder
 							? null
 							: () => toggleCellAndUpdateSelector(cellId, selectedMode)}
