@@ -45,11 +45,26 @@
 
 <Dialog
 	{isOpen}
-	type="prompt"
-	title="Enter Boulder Name"
+	type="withFooter"
+	title="New boulder"
 	on:close={() => (isOpen = false)}
 	response={handleDialogResponse}
-/>
+>
+	<svelte:fragment slot="body">
+		<input
+			type="text"
+			required
+			class=" w-full rounded border p-3 hover:border-sky-600 focus:border-blue-700 focus:outline-none"
+			placeholder="Enter Boulder Name"
+		/>
+	</svelte:fragment>
+	<svelte:fragment slot="footer">
+		<Button class="inline-flex w-full justify-center rounded-md sm:w-auto">Save</Button>
+		<Button variant="outline" class="inline-flex w-full justify-center rounded-md sm:w-auto"
+			>Cancel</Button
+		>
+	</svelte:fragment>
+</Dialog>
 
 <table class="wall">
 	<thead>
@@ -100,7 +115,7 @@
 
 <style lang="postcss">
 	:global(table.wall) {
-		@apply mb-6 table-fixed border-separate text-xs sm:text-base;
+		@apply table-fixed border-separate text-xs sm:text-base;
 	}
 	:global(table.wall th) {
 		@apply h-7 w-7 rounded-sm text-center slashed-zero tabular-nums text-slate-400 sm:h-8 sm:w-8 dark:text-slate-400;

@@ -88,8 +88,17 @@
 
 <Toast />
 
-<Dialog {isOpen} on:close={() => (isOpen = false)} type="basic">
-	<BoulderComponent {selectedBoulder} variant="preview" />
+<Dialog
+	{isOpen}
+	on:close={() => (isOpen = false)}
+	title={selectedBoulder.name || selectedBoulder.id}
+>
+	<div
+		slot="body"
+		class="relative flex touch-none select-none flex-col before:absolute before:inset-0 before:content-['']"
+	>
+		<BoulderComponent {selectedBoulder} variant="preview"></BoulderComponent>
+	</div>
 </Dialog>
 
 <style lang="postcss">

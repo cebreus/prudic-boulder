@@ -4,8 +4,8 @@
 	import Button from '../atoms/Button.svelte';
 	import Icon from '../../components/atoms/Icon.svelte';
 
-	export let isOpen: boolean;
-	export let type: 'basic' | 'prompt' = 'basic';
+	export let isOpen: boolean = false;
+	export let type: 'basic' | 'prompt' | 'withFooter' = 'basic';
 	export let title = '';
 	export let body = '';
 
@@ -43,22 +43,47 @@
 	class="fixed inset-0 z-10 overflow-y-auto"
 	on:keydown={handleKeyDown}
 >
-	<DialogOverlay class="fixed inset-0 bg-black bg-opacity-50" />
+	<DialogOverlay class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
 
-	<div class="flex min-h-screen items-center justify-center">
-		<div class="relative mx-auto w-full max-w-md rounded-lg bg-white shadow-lg">
-			<button
-				class="absolute right-0 top-0 m-4 text-gray-400 hover:text-gray-600"
-				on:click={closeDialog}
-			>
-				<Icon iconName="mdiClose" class="h-5 w-5" />
-			</button>
-
-			<div class="rounded-t-lg px-6 py-5">
-				<DialogTitle class="text-xl font-semibold text-gray-700">{title}</DialogTitle>
+	<div class="flex min-h-full items-end justify-center p-4 py-8 sm:items-center">
+		<div class=" _w-full relative mx-auto max-w-md overflow-clip rounded-lg bg-white shadow-lg">
+			<div class="modal-content">
+				<div class="modal-header flex items-start justify-between gap-x-6 px-4 pt-5 sm:p-6 sm:pb-0">
+					<!-- <DialogTitle class="text-base font-semibold leading-6 text-gray-900">
+						{#if title}
+							{title}
+						{:else}
+							<slot name="title" />
+						{/if}
+					</DialogTitle> -->
+					{#if title}
+						<h6 class="text-base font-semibold leading-6 text-gray-900">{title}</h6>
+					{:else}
+						<slot name="title" />
+					{/if}
+					<button class="text-gray-400 hover:text-red-600" on:click={closeDialog}>
+						<Icon iconName="mdiClose" class="mt-0.5 h-5 w-5" />
+					</button>
+				</div>
+				<div
+					class={`modal-body px-4 py-5 sm:px-6 sm:py-6 ${type === 'basic' ? 'pb-6 sm:pb-8' : ''}`}
+				>
+					{#if body}
+						{body}
+					{:else}
+						<slot name="body" />
+					{/if}
+				</div>
+				{#if type === 'withFooter'}
+					<div
+						class="modal-footer flex flex-col gap-x-4 gap-y-2 bg-gray-50 px-4 py-3 sm:flex-row-reverse sm:px-6"
+					>
+						<slot name="footer" />
+					</div>
+				{/if}
 			</div>
 
-			<div class="p-5">
+			<!-- <div class="p-5">
 				<p>{body}</p>
 				{#if type === 'basic'}
 					<slot />
@@ -78,7 +103,7 @@
 						<Button on:click={submitResponse}>Save</Button>
 					{/if}
 				</div>
-			</div>
+			</div> -->
 		</div>
 	</div>
 </Dialog>
