@@ -4,7 +4,7 @@
 	import Alert from '../atoms/Alert.svelte';
 	import BoulderComponent from './Boulder.svelte';
 	import Icon from '../../components/atoms/Icon.svelte';
-	import Modal from '../atoms/Modal.svelte';
+	import Dialog from '../atoms/Dialog.svelte';
 	import Toast from '../atoms/Toast.svelte';
 
 	// Define TypeScript types
@@ -22,7 +22,7 @@
 	});
 
 	onDestroy(unsubscribe);
-	function openModal(boulder: Boulder) {
+	function openDialog(boulder: Boulder) {
 		console.log('boulder:', boulder);
 		selectedBoulder = boulder;
 		console.log('selectedBoulder', selectedBoulder);
@@ -49,7 +49,7 @@
 					<tr>
 						<td>
 							<button
-								on:click={() => openModal(boulder)}
+								on:click={() => openDialog(boulder)}
 								id={boulder.id}
 								data-created={boulder.createdAt}
 							>
@@ -88,9 +88,9 @@
 
 <Toast />
 
-<Modal {isOpen} on:close={() => (isOpen = false)} type="basic">
+<Dialog {isOpen} on:close={() => (isOpen = false)} type="basic">
 	<BoulderComponent {selectedBoulder} variant="preview" />
-</Modal>
+</Dialog>
 
 <style lang="postcss">
 	table {

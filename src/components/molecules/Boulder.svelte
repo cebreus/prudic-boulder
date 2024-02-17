@@ -3,7 +3,7 @@
 	import { isSkippedCell, cols, rows, skippedClass } from '../utils/utils';
 	import Button from '../atoms/Button.svelte';
 	import log from '../utils/logger';
-	import Modal from '../atoms/Modal.svelte';
+	import Dialog from '../atoms/Dialog.svelte';
 
 	// Define TypeScript types
 	import type { Boulder, CellId } from '../utils/BoulderTypes';
@@ -36,19 +36,19 @@
 		log.error('@artem: missing toast; see `boulders.addBoulder` cast `!clickedCellsSet.size`');
 	};
 
-	const handleModalResponse = (name: string) => {
-		log.debug('handleModalResponse()');
+	const handleDialogResponse = (name: string) => {
+		log.debug('handleDialogResponse()');
 		isOpen = false;
 		boulders.addBoulder($clickedCells, $selector, name);
 	};
 </script>
 
-<Modal
+<Dialog
 	{isOpen}
 	type="prompt"
 	title="Enter Boulder Name"
 	on:close={() => (isOpen = false)}
-	response={handleModalResponse}
+	response={handleDialogResponse}
 />
 
 <table class="wall">

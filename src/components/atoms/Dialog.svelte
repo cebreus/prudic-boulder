@@ -15,7 +15,7 @@
 	let inputName: string = '';
 
 	const dispatch = createEventDispatcher();
-	function closeModal() {
+	function closeDialog() {
 		dispatch('close');
 	}
 
@@ -32,14 +32,14 @@
 	function handleKeyDown(event: KeyboardEvent) {
 		if (event.key === 'Enter') {
 			submitResponse();
-			setTimeout(closeModal, 0);
+			setTimeout(closeDialog, 0);
 		}
 	}
 </script>
 
 <Dialog
 	open={isOpen}
-	on:close={closeModal}
+	on:close={closeDialog}
 	class="fixed inset-0 z-10 overflow-y-auto"
 	on:keydown={handleKeyDown}
 >
@@ -49,7 +49,7 @@
 		<div class="relative mx-auto w-full max-w-md rounded-lg bg-white shadow-lg">
 			<button
 				class="absolute right-0 top-0 m-4 text-gray-400 hover:text-gray-600"
-				on:click={closeModal}
+				on:click={closeDialog}
 			>
 				<Icon iconName="mdiClose" class="h-5 w-5" />
 			</button>
@@ -73,7 +73,7 @@
 					/>
 				{/if}
 				<div class="mt-4 flex justify-end space-x-2">
-					<Button variant="outline" on:click={closeModal}>Cancel</Button>
+					<Button variant="outline" on:click={closeDialog}>Cancel</Button>
 					{#if type === 'prompt'}
 						<Button on:click={submitResponse}>Save</Button>
 					{/if}
