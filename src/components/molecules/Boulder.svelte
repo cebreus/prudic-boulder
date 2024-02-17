@@ -11,6 +11,8 @@
 	} from '../utils/utils';
 	import Button from '../atoms/Button.svelte';
 	import Modal from '../atoms/Modal.svelte';
+	import log from '../utils/logger';
+
 	export let selectedBoulder;
 	export let isOpen = false;
 	export let variant = 'default';
@@ -23,21 +25,27 @@
 	$: selectedMode = $selector.selectedMode;
 
 	const toggleCellAndUpdateSelector = (cellId) => {
-		if (isSkippedCell(cellId)) return;
-
+		if (isSkippedCell(cellId)) {
+			log.debug(`Toggling cell: ${cellId} SKIPPED with mode: ${selectedMode}`);
+			return;
+		}
+		log.debug(`Toggling cell: ${cellId} with mode: ${selectedMode}`);
 		selector.updateSelector(cellId, selectedMode);
-
 		clickedCells.toggle(cellId, selectedMode);
 	};
 
 	const handleSaveBoulder = () => {
+		log.debug('handleSaveBoulder()');
 		if ($clickedCells.size > 0) {
 			isOpen = true;
+			log.info('    isOpen = true');
 		}
+		// FIXME: @artem missing toast; see `boulders.addBoulder` cast `!clickedCellsSet.size`
+		log.error('@artem: missing toast; see `boulders.addBoulder` cast `!clickedCellsSet.size`');
 	};
 
 	function handleModalResponse(name) {
-		console.log('here response');
+		log.debug('handleModalResponse()');
 		isOpen = false;
 		boulders.addBoulder($clickedCells, $selector, name);
 	}
