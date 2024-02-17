@@ -23,14 +23,19 @@
 	});
 
 	onDestroy(unsubscribe);
-	const openDialog = (boulder: Boulder) => {
+
+	function openDialog(boulder: Boulder) {
+		console.log('boulder:', boulder);
 		selectedBoulder = boulder;
+		console.log('selectedBoulder', selectedBoulder);
 		isOpen = true;
-	};
+	}
 
 	const handleRemoveBoulder = (boulderId: BoulderId) => {
 		boulders.removeBoulder(boulderId);
 	};
+
+	console.log(bouldersFromLS, bouldersFromLS?.length > 0);
 </script>
 
 {#if bouldersFromLS?.length > 0}
@@ -56,7 +61,7 @@
 								id={boulder.id}
 								data-created={boulder?.createdAt}
 							>
-								{boulder.name || boulder.id}
+								{boulder.name ? boulder.name : boulder.id}
 							</button>
 						</td>
 						<td>
@@ -93,18 +98,11 @@
 
 <Toast />
 
-<Dialog
-	{isOpen}
-	on:close={() => (isOpen = false)}
-	title={selectedBoulder.name || selectedBoulder.id}
-	response={undefined}
->
-	<div
-		slot="body"
-		class="relative flex touch-none select-none flex-col before:absolute before:inset-0 before:content-['']"
-	>
-		<BoulderComponent {selectedBoulder} variant="preview"></BoulderComponent>
-	</div>
+<Dialog {isOpen} on:close={() => (isOpen = false)}>
+	<svelte:fragment slot="DialogTitle">{selectedBoulder.name || selectedBoulder.id}</svelte:fragment>
+	<svelte:fragment slot="DialogContent">
+		<BoulderComponent {selectedBoulder} variant="preview" />
+	</svelte:fragment>
 </Dialog>
 
 <style lang="postcss">

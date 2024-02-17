@@ -1,69 +1,55 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import { Dialog, DialogOverlay } from '@rgossiaux/svelte-headlessui';
+	import {
+		Dialog,
+		DialogOverlay,
+		DialogTitle,
+		DialogDescription
+	} from '@rgossiaux/svelte-headlessui';
 	import Icon from '../../components/atoms/Icon.svelte';
 
 	export let isOpen: boolean = false;
-	export let type: 'basic' | 'prompt' | 'withFooter' = 'basic';
-	export let title = '';
-	export let body = '';
-
-	export let response: (() => void) | undefined = undefined;
+	let onlyTitle: boolean = (!$$slots.DialogDescription && !$$slots.DialogContent) ?? true;
 
 	const dispatch = createEventDispatcher();
-	const closeDialog = () => {
+
+	function closeDialog() {
+		isOpen = false;
 		dispatch('close');
-	};
-
-	const submitResponse = () => {
-		if ((type === 'withFooter' || type === 'prompt') && response) {
-			response();
-		}
-	};
-
-	const handleKeyDown = (event: any) => {
-		if (event.key === 'Enter') {
-			submitResponse();
-			setTimeout(closeDialog, 0);
-		}
-	};
+	}
 </script>
 
-<Dialog
-	open={isOpen}
-	on:close={closeDialog}
-	class="fixed inset-0 z-10 overflow-y-auto"
-	on:keydown={handleKeyDown}
->
-	<DialogOverlay class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+<Dialog open={isOpen} on:close={closeDialog} class="fixed inset-0 z-10 overflow-y-auto">
+	<DialogOverlay class="fixed inset-0 bg-black bg-opacity-50" />
 
 	<div class="flex min-h-full items-end justify-center p-4 py-8 sm:items-center">
-		<div class=" _w-full relative mx-auto max-w-md overflow-clip rounded-lg bg-white shadow-lg">
-			<div class="modal-content">
-				<div class="modal-header flex items-start justify-between gap-x-6 px-4 pt-5 sm:p-6 sm:pb-0">
-					{#if title}
-						<h6 class="text-base font-semibold leading-6 text-gray-900">{title}</h6>
-					{:else}
-						<slot name="title" />
-					{/if}
-					<button class="text-gray-400 hover:text-red-600" on:click={closeDialog}>
+		<div
+			class="relative mx-auto max-w-md overflow-clip rounded-lg bg-white shadow-lg dark:bg-slate-800"
+		>
+			<div class="modal-body">
+				<div
+					class={`modal-header flex items-start justify-between gap-x-6 p-4 sm:p-6 ${onlyTitle ? '' : ' pb-0 sm:pb-0'}`}
+				>
+					<DialogTitle as="h6" class="text-xl font-semibold">
+						<slot name="DialogTitle" />
+					</DialogTitle>
+					<button on:click={() => (isOpen = false)} class="text-gray-400 hover:text-red-600">
 						<Icon iconName="mdiClose" class="mt-0.5 h-5 w-5" />
 					</button>
 				</div>
-				<div
-					class={`modal-body px-4 py-5 sm:px-6 sm:py-6 ${type === 'basic' ? 'pb-6 sm:pb-8' : ''}`}
-				>
-					{#if body}
-						{body}
-					{:else}
-						<slot name="body" />
-					{/if}
-				</div>
-				{#if type === 'withFooter'}
+				{#if $$slots.DialogDescription || $$slots.DialogContent}
+					<div class="modal-content mt-2 flex flex-col gap-y-4 px-4 sm:px-6">
+						<DialogDescription as="div">
+							<slot name="DialogDescription" />
+						</DialogDescription>
+						<slot name="DialogContent" />
+					</div>
+				{/if}
+				{#if $$slots.DialogFooter}
 					<div
-						class="modal-footer flex flex-col gap-x-4 gap-y-2 bg-gray-50 px-4 py-3 sm:flex-row-reverse sm:px-6"
+						class="modal-footer m:-mx-6 flex gap-x-4 gap-y-2 bg-slate-50 px-4 sm:flex-row-reverse sm:px-6 sm:py-6 dark:bg-slate-900"
 					>
-						<slot name="footer" />
+						<slot name="DialogFooter" />
 					</div>
 				{/if}
 			</div>
