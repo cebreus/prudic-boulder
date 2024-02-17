@@ -1,29 +1,35 @@
-<script>
+<script lang="ts">
 	import { boulders } from '../../stores/BoulderStore.svelte';
 	import { onDestroy } from 'svelte';
 	import Alert from '../atoms/Alert.svelte';
-	import Boulder from './Boulder.svelte';
+	import BoulderComponent from './Boulder.svelte';
 	import Icon from '../../components/atoms/Icon.svelte';
 	import Modal from '../atoms/Modal.svelte';
 	import Toast from '../atoms/Toast.svelte';
 
-	let bouldersFromLS = [];
-	let selectedBoulder = [];
+	// Define TypeScript types
+	import type { Boulder, BouldersArray, BoulderId } from '../utils/BoulderTypes';
+
+	let bouldersFromLS: BouldersArray = [];
+	let selectedBoulder: Boulder = { id: '', createdAt: 0, path: [] };
 	export let isOpen = false;
 
 	const unsubscribe = boulders.subscribe((value) => {
-		bouldersFromLS = value;
+		bouldersFromLS = value.map((boulder: Boulder) => ({
+			...boulder,
+			createdAt: new Date(boulder.createdAt).toLocaleString()
+		}));
 	});
 
 	onDestroy(unsubscribe);
-	function openModal(boulder) {
+	function openModal(boulder: Boulder) {
 		console.log('boulder:', boulder);
 		selectedBoulder = boulder;
 		console.log('selectedBoulder', selectedBoulder);
 		isOpen = true;
 	}
 
-	function handleRemoveBoulder(boulderId) {
+	function handleRemoveBoulder(boulderId: BoulderId) {
 		boulders.removeBoulder(boulderId);
 	}
 </script>
@@ -41,19 +47,17 @@
 			<tbody>
 				{#each bouldersFromLS as boulder (boulder.id)}
 					<tr>
-						<td id={boulder.id}>
-							{#if boulder.name}
-								<button on:click={() => openModal(boulder)}>
-									{boulder.name}
-								</button>
-							{:else}
-								<button on:click={() => openModal(boulder)}>
-									{boulder.id}
-								</button>
-							{/if}
+						<td>
+							<button
+								on:click={() => openModal(boulder)}
+								id={boulder.id}
+								data-created={boulder.createdAt}
+							>
+								{boulder.name ? boulder.name : boulder.id}
+							</button>
 						</td>
 						<td>
-							{Array.from(boulder.clickedCells)}
+							{Array.from(boulder.path)}
 							<div>
 								{#if boulder.pathStart}
 									Start: {boulder.pathStart}
@@ -85,7 +89,7 @@
 <Toast />
 
 <Modal {isOpen} on:close={() => (isOpen = false)} type="basic">
-	<Boulder {selectedBoulder} variant="preview" />
+	<BoulderComponent {selectedBoulder} variant="preview" />
 </Modal>
 
 <style lang="postcss">
