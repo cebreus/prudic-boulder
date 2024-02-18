@@ -19,20 +19,27 @@
 			...boulder,
 			createdAt: new Date(boulder.createdAt).toLocaleString()
 		}));
+		console.log('Boilders:', bouldersFromLS);
 	});
 
 	onDestroy(unsubscribe);
-	function openModal(boulder: Boulder) {
+	const openModal = (boulder: Boulder) => {
 		console.log('boulder:', boulder);
 		selectedBoulder = boulder;
 		console.log('selectedBoulder', selectedBoulder);
 		isOpen = true;
-	}
+	};
 
-	function handleRemoveBoulder(boulderId: BoulderId) {
+	const handleRemoveBoulder = (boulderId: BoulderId) => {
 		boulders.removeBoulder(boulderId);
-	}
+	};
+
+	console.log(bouldersFromLS, bouldersFromLS?.length > 0);
 </script>
+
+{#if bouldersFromLS?.length > 0}
+	<div>YEs</div>
+{/if}
 
 {#if bouldersFromLS?.length > 0}
 	<div id="table-container" class="my-8 overflow-x-auto">
@@ -45,19 +52,21 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#each bouldersFromLS as boulder (boulder.id)}
+				{#each bouldersFromLS as boulder (boulder?.id)}
 					<tr>
 						<td>
 							<button
 								on:click={() => openModal(boulder)}
 								id={boulder.id}
-								data-created={boulder.createdAt}
+								data-created={boulder?.createdAt}
 							>
 								{boulder.name ? boulder.name : boulder.id}
 							</button>
 						</td>
 						<td>
-							{Array.from(boulder.path)}
+							{#if boulder.path}
+								{Array.from(boulder.path)}
+							{/if}
 							<div>
 								{#if boulder.pathStart}
 									Start: {boulder.pathStart}

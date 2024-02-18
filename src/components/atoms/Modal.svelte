@@ -15,26 +15,26 @@
 	let inputName: string = '';
 
 	const dispatch = createEventDispatcher();
-	function closeModal() {
+	const closeModal = () => {
 		dispatch('close');
-	}
+	};
 
-	function submitResponse() {
+	const submitResponse = () => {
 		if (type === 'prompt') {
 			response(inputName);
 		}
-	}
+	};
 
 	$: if (!isOpen) {
 		inputName = '';
 	}
 
-	function handleKeyDown(event: KeyboardEvent) {
+	const handleKeyDown = (event: KeyboardEvent) => {
 		if (event.key === 'Enter') {
 			submitResponse();
 			setTimeout(closeModal, 0);
 		}
-	}
+	};
 </script>
 
 <Dialog
