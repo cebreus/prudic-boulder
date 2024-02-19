@@ -16,10 +16,8 @@
 	};
 
 	const submitResponse = () => {
-		if (type === 'prompt') {
-			if (response) {
-				response();
-			}
+		if ((type === 'withFooter' || type === 'prompt') && response) {
+			response();
 		}
 	};
 

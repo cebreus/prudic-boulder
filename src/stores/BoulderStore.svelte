@@ -16,7 +16,7 @@
 
 		return {
 			subscribe,
-			toggle: (cellId: CellId, selectedMode) => {
+			toggle: (cellId: CellId, selectedMode: string | null) => {
 				log.info('  createClickedCellsStore.toggle');
 				log.info('    Toggle:   ', cellId, 'with mode:', selectedMode);
 				update((cells) => {
@@ -63,7 +63,7 @@
 
 	// Custom Store for Selector
 	const createSelectorStore = () => {
-		const { subscribe, set, update } = writable({
+		const { subscribe, set, update } = writable<Selector>({
 			selectedMode: null,
 			selectedStartCell: null,
 			selectedTopCell: null
@@ -76,7 +76,7 @@
 				update((s) => ({ ...s, selectedMode: mode }));
 			},
 
-			updateSelector: (cellId: CellId, selectedMode) => {
+			updateSelector: (cellId: CellId, selectedMode: string | null) => {
 				log.debug('  createSelectorStore.updateSelector');
 				update((prev) => {
 					let updatedSelector = { ...prev };
@@ -139,8 +139,8 @@
 				id: generateId(),
 				name: name,
 				path: clickedCellKeys,
-				pathStart: selectorState.selectedStartCell,
-				pathEnd: selectorState.selectedTopCell,
+				start: selectorState.selectedStartCell,
+				top: selectorState.selectedTopCell,
 				createdAt: new Date().toISOString() //.toLocaleString()
 			};
 

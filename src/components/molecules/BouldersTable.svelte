@@ -51,7 +51,7 @@
 								id={boulder.id}
 								data-created={boulder.createdAt}
 							>
-								{boulder.name ? boulder.name : boulder.id}
+								{boulder.name || boulder.id}
 							</button>
 						</td>
 						<td>
@@ -59,12 +59,8 @@
 								{Array.from(boulder.path)}
 							{/if}
 							<div>
-								{#if boulder.pathStart}
-									Start: {boulder.pathStart}
-								{/if}
-								{#if boulder.pathEnd}
-									Top: {boulder.pathEnd}
-								{/if}
+								{#if boulder.start}Start: {boulder.start}{/if}
+								{#if boulder.top}Top: {boulder.top}{/if}
 							</div>
 						</td>
 						<td>
