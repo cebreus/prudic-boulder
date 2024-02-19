@@ -127,7 +127,6 @@
 			name: string | null
 		) => {
 			log.debug('createBouldersStore.addBoulder');
-			console.log('hete!!!');
 			if (!clickedCellsMap.size) {
 				log.trace('Pick at least one cell');
 				addToast('Vyberte alespoň jednu buňku!');
@@ -149,7 +148,6 @@
 
 			update((boulders) => [...boulders, newBoulder]);
 			const existingBoulders = JSON.parse(localStorage.getItem('boulders') || '[]');
-			console.log(existingBoulders);
 			localStorage.setItem('boulders', JSON.stringify([...existingBoulders, newBoulder]));
 			addToast(
 				'Prudič byl vytvořen',

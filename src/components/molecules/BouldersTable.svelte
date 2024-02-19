@@ -23,9 +23,7 @@
 
 	onDestroy(unsubscribe);
 	function openDialog(boulder: Boulder) {
-		console.log('boulder:', boulder);
 		selectedBoulder = boulder;
-		console.log('selectedBoulder', selectedBoulder);
 		isOpen = true;
 	}
 

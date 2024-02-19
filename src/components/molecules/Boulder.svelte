@@ -37,12 +37,9 @@
 			isOpen = true;
 			log.info('    isOpen = true');
 		}
-		// FIXME: @artem missing toast; see `boulders.addBoulder` cast `!clickedCellsSet.size`
-		log.error('@artem: missing toast; see `boulders.addBoulder` cast `!clickedCellsSet.size`');
 	};
 
 	const handleDialogResponse = () => {
-		console.log('handleDialogResponse');
 		log.debug('handleDialogResponse()');
 		isOpen = false;
 		boulders.addBoulder($clickedCells, $selector, inputBoulderName);
@@ -90,9 +87,7 @@
 					{@const cellId = `${row}${col}`}
 					<td
 						class={isSkippedCell(cellId) ? skippedClass : $clickedCells.get(cellId)?.class}
-						on:click={selectedBoulder
-							? null
-							: () => toggleCellAndUpdateSelector(cellId, selectedMode)}
+						on:click={selectedBoulder ? null : () => toggleCellAndUpdateSelector(cellId)}
 					>
 						{isSkippedCell(cellId) ? '' : cellId}
 					</td>

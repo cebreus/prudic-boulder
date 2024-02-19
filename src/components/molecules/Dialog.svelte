@@ -13,7 +13,6 @@
 
 	const dispatch = createEventDispatcher();
 	function closeDialog() {
-		console.log('close');
 		dispatch('close');
 	}
 
@@ -24,11 +23,9 @@
 	}
 
 	function handleKeyDown(event: any) {
-		console.log();
 		if (event.key === 'Enter') {
-			console.log('hura enter!');
 			submitResponse();
-			// setTimeout(closeDialog, 0)
+			setTimeout(closeDialog, 0);
 		}
 	}
 </script>
