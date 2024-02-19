@@ -1,6 +1,14 @@
 <script lang="ts">
 	import { clickedCells, selector, boulders } from '../../stores/BoulderStore.svelte';
-	import { isSkippedCell, cols, rows, skippedClass } from '../utils/utils';
+	import {
+		isSkippedCell,
+		cols,
+		rows,
+		skippedClass,
+		startClass,
+		topClass,
+		clickedClass
+	} from '../utils/utils';
 	import Button from '../atoms/Button.svelte';
 	import log from '../utils/logger';
 	import Modal from '../atoms/Modal.svelte';
@@ -41,6 +49,20 @@
 		isOpen = false;
 		boulders.addBoulder($clickedCells, $selector, name);
 	};
+
+	const getClassFromBoulder = (cellId) => {
+		if (!selectedBoulder) return '';
+
+		if (selectedBoulder.start === cellId) {
+			return startClass;
+		} else if (selectedBoulder.top === cellId) {
+			return topClass;
+		} else if (selectedBoulder.path?.includes(cellId)) {
+			return clickedClass;
+		}
+
+		return '';
+	};
 </script>
 
 <Modal
@@ -67,10 +89,12 @@
 				{#each tableCols as col}
 					{@const cellId = `${row}${col}`}
 					<td
-						class={isSkippedCell(cellId) ? skippedClass : $clickedCells.get(cellId)?.class}
-						on:click={selectedBoulder
-							? null
-							: () => toggleCellAndUpdateSelector(cellId, selectedMode)}
+						class={isSkippedCell(cellId)
+							? skippedClass
+							: selectedBoulder
+								? getClassFromBoulder(cellId)
+								: $clickedCells.get(cellId)?.class ?? ''}
+						on:click={selectedBoulder ? null : () => toggleCellAndUpdateSelector(cellId)}
 					>
 						{isSkippedCell(cellId) ? '' : cellId}
 					</td>

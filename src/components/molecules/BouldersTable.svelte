@@ -68,11 +68,11 @@
 								{Array.from(boulder.path)}
 							{/if}
 							<div>
-								{#if boulder.pathStart}
-									Start: {boulder.pathStart}
+								{#if boulder.start}
+									Start: {boulder.start}
 								{/if}
-								{#if boulder.pathEnd}
-									Top: {boulder.pathEnd}
+								{#if boulder.top}
+									Top: {boulder.top}
 								{/if}
 							</div>
 						</td>

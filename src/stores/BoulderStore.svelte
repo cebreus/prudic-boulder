@@ -134,13 +134,15 @@
 			}
 
 			const clickedCellKeys = Array.from(clickedCellsMap.keys());
+			console.log('keys', clickedCellKeys);
+			console.log('selectorState', selectorState);
 
 			const newBoulder = {
 				id: generateId(),
 				name: name,
 				path: clickedCellKeys,
-				pathStart: selectorState.selectedStartCell,
-				pathEnd: selectorState.selectedTopCell,
+				start: selectorState.selectedStartCell,
+				top: selectorState.selectedTopCell,
 				createdAt: new Date().toISOString() //.toLocaleString()
 			};
 
