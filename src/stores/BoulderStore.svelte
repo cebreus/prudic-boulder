@@ -5,7 +5,7 @@
 	import log from '../components/utils/logger.ts';
 
 	// Define TypeScript types
-	import type { CellId, BoulderId, Boulder } from '../components/utils/BoulderTypes';
+	import type { CellId, BoulderId, Boulder, Selector } from '../components/utils/BoulderTypes';
 
 	// check for browser environment
 	const isBrowser = typeof window !== 'undefined';
@@ -123,10 +123,11 @@
 
 		const addBoulder = (
 			clickedCellsMap: Map<CellId, { class: string }>,
-			selectorState: string,
-			name: string
+			selectorState: Selector,
+			name: string | null
 		) => {
-			log.debug('  createBouldersStore.addBoulder');
+			log.debug('createBouldersStore.addBoulder');
+			console.log('hete!!!');
 			if (!clickedCellsMap.size) {
 				log.trace('Pick at least one cell');
 				addToast('Vyberte alespoň jednu buňku!');
@@ -147,7 +148,8 @@
 			log.debug('  newBoulder:', newBoulder);
 
 			update((boulders) => [...boulders, newBoulder]);
-			const existingBoulders = JSON.parse(localStorage.getItem('boulders')) || [];
+			const existingBoulders = JSON.parse(localStorage.getItem('boulders') || '[]');
+			console.log(existingBoulders);
 			localStorage.setItem('boulders', JSON.stringify([...existingBoulders, newBoulder]));
 			addToast(
 				'Prudič byl vytvořen',

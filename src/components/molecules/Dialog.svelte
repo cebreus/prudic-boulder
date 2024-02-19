@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import { Dialog, DialogOverlay, DialogTitle } from '@rgossiaux/svelte-headlessui';
-	import Button from '../atoms/Button.svelte';
+	import { Dialog, DialogOverlay } from '@rgossiaux/svelte-headlessui';
 	import Icon from '../../components/atoms/Icon.svelte';
 
 	export let isOpen: boolean = false;
@@ -10,29 +9,26 @@
 	export let body = '';
 
 	// eslint-disable-next-line no-unused-vars
-	export let response: (name: string) => void;
-
-	let inputName: string = '';
+	export let response: () => void;
 
 	const dispatch = createEventDispatcher();
 	function closeDialog() {
+		console.log('close');
 		dispatch('close');
 	}
 
 	function submitResponse() {
 		if (type === 'prompt') {
-			response(inputName);
+			response();
 		}
 	}
 
-	$: if (!isOpen) {
-		inputName = '';
-	}
-
-	function handleKeyDown(event: KeyboardEvent) {
+	function handleKeyDown(event: any) {
+		console.log();
 		if (event.key === 'Enter') {
+			console.log('hura enter!');
 			submitResponse();
-			setTimeout(closeDialog, 0);
+			// setTimeout(closeDialog, 0)
 		}
 	}
 </script>
@@ -49,13 +45,6 @@
 		<div class=" _w-full relative mx-auto max-w-md overflow-clip rounded-lg bg-white shadow-lg">
 			<div class="modal-content">
 				<div class="modal-header flex items-start justify-between gap-x-6 px-4 pt-5 sm:p-6 sm:pb-0">
-					<!-- <DialogTitle class="text-base font-semibold leading-6 text-gray-900">
-						{#if title}
-							{title}
-						{:else}
-							<slot name="title" />
-						{/if}
-					</DialogTitle> -->
 					{#if title}
 						<h6 class="text-base font-semibold leading-6 text-gray-900">{title}</h6>
 					{:else}
@@ -82,28 +71,6 @@
 					</div>
 				{/if}
 			</div>
-
-			<!-- <div class="p-5">
-				<p>{body}</p>
-				{#if type === 'basic'}
-					<slot />
-				{/if}
-				{#if type === 'prompt'}
-					<input
-						type="text"
-						class="mt-1 w-full rounded border p-3 hover:border-sky-600 focus:border-blue-700 focus:outline-none"
-						placeholder="Enter Boulder Name"
-						bind:value={inputName}
-						on:keydown={handleKeyDown}
-					/>
-				{/if}
-				<div class="mt-4 flex justify-end space-x-2">
-					<Button variant="outline" on:click={closeDialog}>Cancel</Button>
-					{#if type === 'prompt'}
-						<Button on:click={submitResponse}>Save</Button>
-					{/if}
-				</div>
-			</div> -->
 		</div>
 	</div>
 </Dialog>

@@ -8,6 +8,7 @@
 	// Define TypeScript types
 	import type { Boulder, CellId } from '../utils/BoulderTypes';
 
+	export let inputBoulderName: string;
 	export let selectedBoulder: Boulder;
 	export let isOpen: boolean = false;
 	export let variant: string = 'default';
@@ -15,6 +16,10 @@
 	$: tableRows = Array.from({ length: rows }, (_, i) => String.fromCharCode(65 + i));
 	$: tableCols = Array.from({ length: cols }, (_, i) => i);
 	$: selectedMode = $selector.selectedMode;
+
+	$: if (!isOpen) {
+		inputBoulderName = '';
+	}
 
 	const toggleCellAndUpdateSelector = (cellId: CellId) => {
 		if (isSkippedCell(cellId)) {
@@ -36,16 +41,17 @@
 		log.error('@artem: missing toast; see `boulders.addBoulder` cast `!clickedCellsSet.size`');
 	};
 
-	const handleDialogResponse = (name: string) => {
+	const handleDialogResponse = () => {
+		console.log('handleDialogResponse');
 		log.debug('handleDialogResponse()');
 		isOpen = false;
-		boulders.addBoulder($clickedCells, $selector, name);
+		boulders.addBoulder($clickedCells, $selector, inputBoulderName);
 	};
 </script>
 
 <Dialog
 	{isOpen}
-	type="withFooter"
+	type="prompt"
 	title="New boulder"
 	on:close={() => (isOpen = false)}
 	response={handleDialogResponse}
@@ -56,6 +62,7 @@
 			required
 			class=" w-full rounded border p-3 hover:border-sky-600 focus:border-blue-700 focus:outline-none"
 			placeholder="Enter Boulder Name"
+			bind:value={inputBoulderName}
 		/>
 	</svelte:fragment>
 	<svelte:fragment slot="footer">
