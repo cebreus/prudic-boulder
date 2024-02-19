@@ -22,14 +22,14 @@
 	});
 
 	onDestroy(unsubscribe);
-	function openDialog(boulder: Boulder) {
+	const openDialog = (boulder: Boulder) => {
 		selectedBoulder = boulder;
 		isOpen = true;
-	}
+	};
 
-	function handleRemoveBoulder(boulderId: BoulderId) {
+	const handleRemoveBoulder = (boulderId: BoulderId) => {
 		boulders.removeBoulder(boulderId);
-	}
+	};
 </script>
 
 {#if bouldersFromLS?.length > 0}
@@ -55,7 +55,9 @@
 							</button>
 						</td>
 						<td>
-							{Array.from(boulder.path)}
+							{#if boulder.path}
+								{Array.from(boulder.path)}
+							{/if}
 							<div>
 								{#if boulder.pathStart}
 									Start: {boulder.pathStart}
@@ -90,6 +92,7 @@
 	{isOpen}
 	on:close={() => (isOpen = false)}
 	title={selectedBoulder.name || selectedBoulder.id}
+	response={undefined}
 >
 	<div
 		slot="body"

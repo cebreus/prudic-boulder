@@ -8,7 +8,7 @@
 	// Define TypeScript types
 	import type { Boulder, CellId } from '../utils/BoulderTypes';
 
-	export let inputBoulderName: string;
+	let inputBoulderName: string;
 	export let selectedBoulder: Boulder;
 	export let isOpen: boolean = false;
 	export let variant: string = 'default';

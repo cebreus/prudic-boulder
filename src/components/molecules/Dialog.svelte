@@ -8,26 +8,27 @@
 	export let title = '';
 	export let body = '';
 
-	// eslint-disable-next-line no-unused-vars
-	export let response: () => void;
+	export let response: (() => void) | undefined = undefined;
 
 	const dispatch = createEventDispatcher();
-	function closeDialog() {
+	const closeDialog = () => {
 		dispatch('close');
-	}
+	};
 
-	function submitResponse() {
+	const submitResponse = () => {
 		if (type === 'prompt') {
-			response();
+			if (response) {
+				response();
+			}
 		}
-	}
+	};
 
-	function handleKeyDown(event: any) {
+	const handleKeyDown = (event: any) => {
 		if (event.key === 'Enter') {
 			submitResponse();
 			setTimeout(closeDialog, 0);
 		}
-	}
+	};
 </script>
 
 <Dialog
