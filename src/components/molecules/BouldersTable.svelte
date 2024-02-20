@@ -100,9 +100,17 @@
 
 <Dialog {isOpen} on:close={() => (isOpen = false)}>
 	<svelte:fragment slot="DialogTitle">{selectedBoulder.name || selectedBoulder.id}</svelte:fragment>
+<<<<<<< HEAD
 	<svelte:fragment slot="DialogContent">
 		<BoulderComponent {selectedBoulder} variant="preview" />
 	</svelte:fragment>
+=======
+	<!-- <svelte:fragment slot="DialogDescription">adasdsa</svelte:fragment> -->
+	<svelte:fragment slot="DialogContent">
+		<BoulderComponent {selectedBoulder} variant="preview" />
+	</svelte:fragment>
+	<!-- <svelte:fragment slot="DialogFooter"></svelte:fragment> -->
+>>>>>>> 9f305ba (refactor: compoent Dialog with slots)
 </Dialog>
 
 <style lang="postcss">
