@@ -9,6 +9,7 @@
 
 	// Define TypeScript types
 	import type { Boulder, BouldersArray, BoulderId } from '../utils/BoulderTypes';
+	import log from 'loglevel';
 
 	let bouldersFromLS: BouldersArray = [];
 	let selectedBoulder: Boulder = { id: '', createdAt: 0, path: [] };
@@ -19,23 +20,20 @@
 			...boulder,
 			createdAt: new Date(boulder.createdAt).toLocaleString()
 		}));
-		console.log('Boilders:', bouldersFromLS);
+		log.info('Boilders:', bouldersFromLS);
 	});
 
 	onDestroy(unsubscribe);
 
 	function openDialog(boulder: Boulder) {
-		console.log('boulder:', boulder);
 		selectedBoulder = boulder;
-		console.log('selectedBoulder', selectedBoulder);
+		log.info('selectedBoulder', selectedBoulder);
 		isOpen = true;
 	}
 
 	const handleRemoveBoulder = (boulderId: BoulderId) => {
 		boulders.removeBoulder(boulderId);
 	};
-
-	console.log(bouldersFromLS, bouldersFromLS?.length > 0);
 </script>
 
 {#if bouldersFromLS?.length > 0}
