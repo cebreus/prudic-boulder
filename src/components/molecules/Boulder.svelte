@@ -84,9 +84,9 @@
 		/>
 	</svelte:fragment>
 	<svelte:fragment slot="footer">
-		<Button class="inline-flex w-full justify-center rounded-md sm:w-auto">Save</Button>
-		<Button variant="outline" class="inline-flex w-full justify-center rounded-md sm:w-auto"
-			>Cancel</Button
+		<Button
+			class="inline-flex w-full justify-center rounded-md sm:w-auto"
+			on:click={handleDialogResponse}>Save</Button
 		>
 	</svelte:fragment>
 </Dialog>
