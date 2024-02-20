@@ -5,7 +5,7 @@
 	import log from '../components/utils/logger.ts';
 
 	// Define TypeScript types
-	import type { CellId, BoulderId, Boulder } from '../components/utils/BoulderTypes';
+	import type { CellId, BoulderId, Boulder, Selector } from '../components/utils/BoulderTypes';
 
 	// check for browser environment
 	const isBrowser = typeof window !== 'undefined';
@@ -16,7 +16,7 @@
 
 		return {
 			subscribe,
-			toggle: (cellId: CellId, selectedMode) => {
+			toggle: (cellId: CellId, selectedMode: string | null) => {
 				log.info('  createClickedCellsStore.toggle');
 				log.info('    Toggle:   ', cellId, 'with mode:', selectedMode);
 				update((cells) => {
@@ -63,7 +63,7 @@
 
 	// Custom Store for Selector
 	const createSelectorStore = () => {
-		const { subscribe, set, update } = writable({
+		const { subscribe, set, update } = writable<Selector>({
 			selectedMode: null,
 			selectedStartCell: null,
 			selectedTopCell: null
@@ -76,7 +76,7 @@
 				update((s) => ({ ...s, selectedMode: mode }));
 			},
 
-			updateSelector: (cellId: CellId, selectedMode) => {
+			updateSelector: (cellId: CellId, selectedMode: string | null) => {
 				log.debug('  createSelectorStore.updateSelector');
 				update((prev) => {
 					let updatedSelector = { ...prev };
@@ -123,10 +123,10 @@
 
 		const addBoulder = (
 			clickedCellsMap: Map<CellId, { class: string }>,
-			selectorState: string,
-			name: string
+			selectorState: Selector,
+			name: string | null
 		) => {
-			log.debug('  createBouldersStore.addBoulder');
+			log.debug('createBouldersStore.addBoulder');
 			if (!clickedCellsMap.size) {
 				log.trace('Pick at least one cell');
 				addToast('Vyberte alespoň jednu buňku!');
@@ -134,8 +134,6 @@
 			}
 
 			const clickedCellKeys = Array.from(clickedCellsMap.keys());
-			console.log('keys', clickedCellKeys);
-			console.log('selectorState', selectorState);
 
 			const newBoulder = {
 				id: generateId(),
@@ -149,7 +147,7 @@
 			log.debug('  newBoulder:', newBoulder);
 
 			update((boulders) => [...boulders, newBoulder]);
-			const existingBoulders = JSON.parse(localStorage.getItem('boulders')) || [];
+			const existingBoulders = JSON.parse(localStorage.getItem('boulders') || '[]');
 			localStorage.setItem('boulders', JSON.stringify([...existingBoulders, newBoulder]));
 			addToast(
 				'Prudič byl vytvořen',

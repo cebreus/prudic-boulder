@@ -4,7 +4,7 @@
 	import Alert from '../atoms/Alert.svelte';
 	import BoulderComponent from './Boulder.svelte';
 	import Icon from '../../components/atoms/Icon.svelte';
-	import Modal from '../atoms/Modal.svelte';
+	import Dialog from './Dialog.svelte';
 	import Toast from '../atoms/Toast.svelte';
 
 	// Define TypeScript types
@@ -23,18 +23,14 @@
 	});
 
 	onDestroy(unsubscribe);
-	const openModal = (boulder: Boulder) => {
-		console.log('boulder:', boulder);
+	const openDialog = (boulder: Boulder) => {
 		selectedBoulder = boulder;
-		console.log('selectedBoulder', selectedBoulder);
 		isOpen = true;
 	};
 
 	const handleRemoveBoulder = (boulderId: BoulderId) => {
 		boulders.removeBoulder(boulderId);
 	};
-
-	console.log(bouldersFromLS, bouldersFromLS?.length > 0);
 </script>
 
 {#if bouldersFromLS?.length > 0}
@@ -56,11 +52,11 @@
 					<tr>
 						<td>
 							<button
-								on:click={() => openModal(boulder)}
+								on:click={() => openDialog(boulder)}
 								id={boulder.id}
 								data-created={boulder?.createdAt}
 							>
-								{boulder.name ? boulder.name : boulder.id}
+								{boulder.name || boulder.id}
 							</button>
 						</td>
 						<td>
@@ -97,9 +93,19 @@
 
 <Toast />
 
-<Modal {isOpen} on:close={() => (isOpen = false)} type="basic">
-	<BoulderComponent {selectedBoulder} variant="preview" />
-</Modal>
+<Dialog
+	{isOpen}
+	on:close={() => (isOpen = false)}
+	title={selectedBoulder.name || selectedBoulder.id}
+	response={undefined}
+>
+	<div
+		slot="body"
+		class="relative flex touch-none select-none flex-col before:absolute before:inset-0 before:content-['']"
+	>
+		<BoulderComponent {selectedBoulder} variant="preview"></BoulderComponent>
+	</div>
+</Dialog>
 
 <style lang="postcss">
 	table {

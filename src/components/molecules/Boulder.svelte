@@ -11,10 +11,12 @@
 	} from '../utils/utils';
 	import Button from '../atoms/Button.svelte';
 	import log from '../utils/logger';
-	import Modal from '../atoms/Modal.svelte';
+	import Dialog from './Dialog.svelte';
 
 	// Define TypeScript types
 	import type { Boulder, CellId } from '../utils/BoulderTypes';
+
+	let inputBoulderName: string;
 
 	export let selectedBoulder: Boulder;
 	export let isOpen: boolean = false;
@@ -23,6 +25,10 @@
 	$: tableRows = Array.from({ length: rows }, (_, i) => String.fromCharCode(65 + i));
 	$: tableCols = Array.from({ length: cols }, (_, i) => i);
 	$: selectedMode = $selector.selectedMode;
+
+	$: if (!isOpen) {
+		inputBoulderName = '';
+	}
 
 	const toggleCellAndUpdateSelector = (cellId: CellId) => {
 		if (isSkippedCell(cellId)) {
@@ -40,19 +46,17 @@
 			isOpen = true;
 			log.info('    isOpen = true');
 		}
-		// FIXME: @artem missing toast; see `boulders.addBoulder` cast `!clickedCellsSet.size`
-		log.error('@artem: missing toast; see `boulders.addBoulder` cast `!clickedCellsSet.size`');
 	};
 
-	const handleModalResponse = (name: string) => {
-		log.debug('handleModalResponse()');
+	const handleDialogResponse = () => {
+		log.debug('handleDialogResponse()');
 		isOpen = false;
-		boulders.addBoulder($clickedCells, $selector, name);
+		boulders.addBoulder($clickedCells, $selector, inputBoulderName);
 	};
 
-	const getClassFromBoulder = (cellId) => {
+	//fix type ==>
+	const getClassFromBoulder = (cellId: any) => {
 		if (!selectedBoulder) return '';
-
 		if (selectedBoulder.start === cellId) {
 			return startClass;
 		} else if (selectedBoulder.top === cellId) {
@@ -60,18 +64,33 @@
 		} else if (selectedBoulder.path?.includes(cellId)) {
 			return clickedClass;
 		}
-
 		return '';
 	};
 </script>
 
-<Modal
+<Dialog
 	{isOpen}
-	type="prompt"
-	title="Enter Boulder Name"
+	type="withFooter"
+	title="New boulder"
 	on:close={() => (isOpen = false)}
-	response={handleModalResponse}
-/>
+	response={handleDialogResponse}
+>
+	<svelte:fragment slot="body">
+		<input
+			type="text"
+			required
+			class=" w-full rounded border p-3 hover:border-sky-600 focus:border-blue-700 focus:outline-none"
+			placeholder="Enter Boulder Name"
+			bind:value={inputBoulderName}
+		/>
+	</svelte:fragment>
+	<svelte:fragment slot="footer">
+		<Button
+			class="inline-flex w-full justify-center rounded-md sm:w-auto"
+			on:click={handleDialogResponse}>Save</Button
+		>
+	</svelte:fragment>
+</Dialog>
 
 <table class="wall">
 	<thead>
@@ -124,7 +143,7 @@
 
 <style lang="postcss">
 	:global(table.wall) {
-		@apply mb-6 table-fixed border-separate text-xs sm:text-base;
+		@apply table-fixed border-separate text-xs sm:text-base;
 	}
 	:global(table.wall th) {
 		@apply h-7 w-7 rounded-sm text-center slashed-zero tabular-nums text-slate-400 sm:h-8 sm:w-8 dark:text-slate-400;
