@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import { Dialog, DialogOverlay, DialogTitle } from '@rgossiaux/svelte-headlessui';
-	import Icon from '../../icons/Icon.svelte';
 	import Button from './Button.svelte';
+	import Icon from '../../components/atoms/Icon.svelte';
 
 	export let isOpen: boolean;
 	export let type: 'basic' | 'prompt' = 'basic';
@@ -15,23 +15,34 @@
 	let inputName: string = '';
 
 	const dispatch = createEventDispatcher();
-	function closeModal() {
+	const closeModal = () => {
 		dispatch('close');
-	}
+	};
 
-	function submitResponse() {
+	const submitResponse = () => {
 		if (type === 'prompt') {
-			response(inputName); // Call the passed-in response function with the input value
-			closeModal();
+			response(inputName);
 		}
-	}
+	};
 
 	$: if (!isOpen) {
-		inputName = ''; // Reset input value when modal closes
+		inputName = '';
 	}
+
+	const handleKeyDown = (event: KeyboardEvent) => {
+		if (event.key === 'Enter') {
+			submitResponse();
+			setTimeout(closeModal, 0);
+		}
+	};
 </script>
 
-<Dialog open={isOpen} on:close={closeModal} class="fixed inset-0 z-10 overflow-y-auto">
+<Dialog
+	open={isOpen}
+	on:close={closeModal}
+	class="fixed inset-0 z-10 overflow-y-auto"
+	on:keydown={handleKeyDown}
+>
 	<DialogOverlay class="fixed inset-0 bg-black bg-opacity-50" />
 
 	<div class="flex min-h-screen items-center justify-center">
@@ -58,6 +69,7 @@
 						class="mt-1 w-full rounded border p-3 hover:border-sky-600 focus:border-blue-700 focus:outline-none"
 						placeholder="Enter Boulder Name"
 						bind:value={inputName}
+						on:keydown={handleKeyDown}
 					/>
 				{/if}
 				<div class="mt-4 flex justify-end space-x-2">
