@@ -66,7 +66,9 @@
 						</td>
 						<td>
 							{#if boulder.path}
-								{Array.from(boulder.path)}
+								{#each boulder.path as { id }}
+									<span>{id} </span>
+								{/each}
 							{/if}
 							<div>
 								{#if boulder.start}

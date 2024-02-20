@@ -134,11 +134,19 @@
 			}
 
 			const clickedCellKeys = Array.from(clickedCellsMap.keys());
+			const cells = clickedCellKeys.map((key) => {
+				// Example of colorBrightness
+				const colorBrightness = '255 0 0 / 50%';
+				return {
+					id: key,
+					colorBrightness: colorBrightness
+				};
+			});
 
 			const newBoulder = {
 				id: generateId(),
 				name: name,
-				path: clickedCellKeys,
+				path: cells,
 				start: selectorState.selectedStartCell,
 				top: selectorState.selectedTopCell,
 				createdAt: new Date().toISOString() //.toLocaleString()
