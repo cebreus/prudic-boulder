@@ -17,6 +17,7 @@
 	import type { Boulder, CellId } from '../utils/BoulderTypes';
 
 	let inputBoulderName: string;
+
 	export let selectedBoulder: Boulder;
 	export let isOpen: boolean = false;
 	export let variant: string = 'default';

@@ -19,6 +19,7 @@
 			...boulder,
 			createdAt: new Date(boulder.createdAt).toLocaleString()
 		}));
+		console.log('Boilders:', bouldersFromLS);
 	});
 
 	onDestroy(unsubscribe);
@@ -33,6 +34,10 @@
 </script>
 
 {#if bouldersFromLS?.length > 0}
+	<div>YEs</div>
+{/if}
+
+{#if bouldersFromLS?.length > 0}
 	<div id="table-container" class="my-8 overflow-x-auto">
 		<table id="dataTable">
 			<thead>
@@ -43,13 +48,13 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#each bouldersFromLS as boulder (boulder.id)}
+				{#each bouldersFromLS as boulder (boulder?.id)}
 					<tr>
 						<td>
 							<button
 								on:click={() => openDialog(boulder)}
 								id={boulder.id}
-								data-created={boulder.createdAt}
+								data-created={boulder?.createdAt}
 							>
 								{boulder.name || boulder.id}
 							</button>
@@ -59,8 +64,12 @@
 								{Array.from(boulder.path)}
 							{/if}
 							<div>
-								{#if boulder.start}Start: {boulder.start}{/if}
-								{#if boulder.top}Top: {boulder.top}{/if}
+								{#if boulder.start}
+									Start: {boulder.start}
+								{/if}
+								{#if boulder.top}
+									Top: {boulder.top}
+								{/if}
 							</div>
 						</td>
 						<td>
