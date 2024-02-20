@@ -6,6 +6,12 @@ export type Cell = {
 	colorBrightness: string;
 };
 
+export type Selector = {
+	selectedMode: string | null;
+	selectedStartCell: string | null;
+	selectedTopCell: string | null;
+};
+
 export type Boulder = {
 	id: BoulderId;
 	createdAt: number;

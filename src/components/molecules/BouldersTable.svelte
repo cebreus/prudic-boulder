@@ -4,7 +4,7 @@
 	import Alert from '../atoms/Alert.svelte';
 	import BoulderComponent from './Boulder.svelte';
 	import Icon from '../../components/atoms/Icon.svelte';
-	import Modal from '../atoms/Modal.svelte';
+	import Dialog from './Dialog.svelte';
 	import Toast from '../atoms/Toast.svelte';
 
 	// Define TypeScript types
@@ -23,12 +23,13 @@
 	});
 
 	onDestroy(unsubscribe);
-	const openModal = (boulder: Boulder) => {
+
+	function openDialog(boulder: Boulder) {
 		console.log('boulder:', boulder);
 		selectedBoulder = boulder;
 		console.log('selectedBoulder', selectedBoulder);
 		isOpen = true;
-	};
+	}
 
 	const handleRemoveBoulder = (boulderId: BoulderId) => {
 		boulders.removeBoulder(boulderId);
@@ -56,7 +57,7 @@
 					<tr>
 						<td>
 							<button
-								on:click={() => openModal(boulder)}
+								on:click={() => openDialog(boulder)}
 								id={boulder.id}
 								data-created={boulder?.createdAt}
 							>
@@ -97,14 +98,14 @@
 
 <Toast />
 
-<<<<<<< HEAD
-<Modal {isOpen} on:close={() => (isOpen = false)} type="basic" title={selectedBoulder.name}>
-	<Boulder {selectedBoulder} />
-=======
-<Modal {isOpen} on:close={() => (isOpen = false)} type="basic">
-	<BoulderComponent {selectedBoulder} variant="preview" />
->>>>>>> e1b0134960132907c89bd5933c4df6d2dec4f412
-</Modal>
+<Dialog {isOpen} on:close={() => (isOpen = false)}>
+	<svelte:fragment slot="DialogTitle">{selectedBoulder.name || selectedBoulder.id}</svelte:fragment>
+	<svelte:fragment slot="DialogContent">
+		<div>
+			<BoulderComponent {selectedBoulder} variant="preview" />
+		</div>
+	</svelte:fragment>
+</Dialog>
 
 <style lang="postcss">
 	table {
