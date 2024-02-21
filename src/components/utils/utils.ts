@@ -109,9 +109,3 @@ export const calculateTimeout = (title: string = '', description: string = ''): 
 
 	return baseTimeoutMilliseconds + additionalTimeout;
 };
-
-interface DialogKeyboardEventDetail {
-	keyboardEvent: KeyboardEvent;
-}
-
-export interface DialogKeyboardEvent extends CustomEvent<DialogKeyboardEventDetail> {}

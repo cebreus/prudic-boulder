@@ -1,8 +1,5 @@
-export type CellId = string;
-export type BoulderId = string;
-
 export type Cell = {
-	id: CellId;
+	id: string;
 	colorBrightness: string;
 };
 
@@ -13,12 +10,10 @@ export type Selector = {
 };
 
 export type Boulder = {
-	id: BoulderId;
+	id: string;
 	createdAt: number;
 	name?: string;
 	start?: string;
 	top?: string;
 	path: Cell[];
 };
-
-export type BouldersArray = Boulder[];

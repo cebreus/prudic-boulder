@@ -13,7 +13,7 @@
 	import log from '../utils/logger';
 	import Dialog from './Dialog.svelte';
 
-	import type { Boulder, CellId } from '../utils/BoulderTypes';
+	import type { Boulder } from '../utils/BoulderTypes';
 
 	let inputBoulderName: string;
 
@@ -29,7 +29,7 @@
 		inputBoulderName = '';
 	}
 
-	const toggleCellAndUpdateSelector = (cellId: CellId) => {
+	const toggleCellAndUpdateSelector = (cellId: string) => {
 		if (isSkippedCell(cellId)) {
 			log.debug(`Toggling cell: ${cellId} SKIPPED with mode: ${selectedMode}`);
 			return;

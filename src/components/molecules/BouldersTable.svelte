@@ -8,10 +8,10 @@
 	import Toast from '../atoms/Toast.svelte';
 
 	// Define TypeScript types
-	import type { Boulder, BouldersArray, BoulderId } from '../utils/BoulderTypes';
+	import type { Boulder } from '../utils/BoulderTypes';
 	import log from 'loglevel';
 
-	let bouldersFromLS: BouldersArray = [];
+	let bouldersFromLS: Boulder[] = [];
 	let selectedBoulder: Boulder = { id: '', createdAt: 0, path: [] };
 	export let isOpen = false;
 
@@ -31,7 +31,7 @@
 		isOpen = true;
 	}
 
-	const handleRemoveBoulder = (boulderId: BoulderId) => {
+	const handleRemoveBoulder = (boulderId: string) => {
 		boulders.removeBoulder(boulderId);
 	};
 </script>
