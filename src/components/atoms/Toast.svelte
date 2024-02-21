@@ -1,44 +1,18 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
 	import { onMount, onDestroy } from 'svelte';
-	import { toasts, dismissToast } from '../utils/ToastService.ts';
+	import { toasts, dismissToast } from '../utils/ToastService';
 	import { twMerge } from 'tailwind-merge';
-	import Icon from '../../icons/Icon.svelte';
+	import Icon from '../../components/atoms/Icon.svelte';
 
 	// Define TypeScript types for variants and configuration
-	import type { Toast } from '../utils/ToastTypes.ts';
-	type Variant = 'success' | 'error' | 'warning' | 'info';
-	type ToastConfig = Record<
-		Variant,
-		{
-			classes: string;
-			classesDesc: string;
-			icon: string;
-			iconClasses: string;
-			progressClasses: string;
-			role: 'status' | 'alert';
-			ariaLive: 'assertive' | 'polite' | 'off';
-		}
-	>;
+	import type { ToastVariant, Toast, ToastConfig } from '../utils/ToastTypes';
 
-	let toastsArray: Toast[] = [];
+	// Exported props for external configuration
+	export let variant: ToastVariant = 'info';
 
-	const unsubscribe = toasts.subscribe(($toasts: Toast[]) => {
-		toastsArray = $toasts;
-	});
-
-	onMount(() => {
-		return () => {
-			unsubscribe();
-		};
-	});
-
-	onDestroy(unsubscribe);
-
-	let classNames = '';
+	// Default classes
 	const defaultClass: string = `flex gap-3 jus overflow-clip leading-tight relative mb-3 w-60 max-w-sm items-start rounded-lg bg-white p-4 text-sm shadow-lg md:w-80 dark:bg-slate-800`;
-
-	export let variant: 'success' | 'error' | 'warning' | 'info' = 'info';
 
 	// Configuration and classes based on variant
 	const toastConfig: ToastConfig = {
@@ -84,7 +58,21 @@
 	let toastSettings = toastConfig[variant] || toastConfig['info'];
 
 	// Final class construction using reactive statement for Svelte
-	$: toastClass = twMerge(defaultClass, toastSettings.classes, classNames);
+	$: toastClass = twMerge(defaultClass, toastSettings.classes);
+
+	let toastsArray: Toast[] = [];
+
+	const unsubscribe = toasts.subscribe(($toasts: Toast[]) => {
+		toastsArray = $toasts;
+	});
+
+	onMount(() => {
+		return () => {
+			unsubscribe();
+		};
+	});
+
+	onDestroy(unsubscribe);
 </script>
 
 {#if toastsArray.length > 0}

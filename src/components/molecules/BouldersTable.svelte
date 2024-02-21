@@ -1,29 +1,39 @@
-<script>
+<script lang="ts">
 	import { boulders } from '../../stores/BoulderStore.svelte';
-	import { Modal } from 'flowbite-svelte';
-	import Alert from '../atoms/Alert.svelte';
-	import Icon from '../../icons/Icon.svelte';
-	import Toast from '../atoms/Toast.svelte';
-	import Boulder from './Boulder.svelte';
 	import { onDestroy } from 'svelte';
+	import Alert from '../atoms/Alert.svelte';
+	import BoulderComponent from './Boulder.svelte';
+	import Icon from '../../components/atoms/Icon.svelte';
+	import Dialog from './Dialog.svelte';
+	import Toast from '../atoms/Toast.svelte';
 
-	let bouldersFromLS = [];
-	let selectedBoulder = [];
-	let clickOutsideModal = false;
+	// Define TypeScript types
+	import type { Boulder, BouldersArray, BoulderId } from '../utils/BoulderTypes';
+	import log from 'loglevel';
+
+	let bouldersFromLS: BouldersArray = [];
+	let selectedBoulder: Boulder = { id: '', createdAt: 0, path: [] };
+	export let isOpen = false;
 
 	const unsubscribe = boulders.subscribe((value) => {
-		bouldersFromLS = value;
+		bouldersFromLS = value.map((boulder: Boulder) => ({
+			...boulder,
+			createdAt: new Date(boulder.createdAt).toLocaleString()
+		}));
+		log.info('Boilders:', bouldersFromLS);
 	});
 
 	onDestroy(unsubscribe);
-	function openModal(boulder) {
+
+	function openDialog(boulder: Boulder) {
 		selectedBoulder = boulder;
-		clickOutsideModal = true;
+		log.info('selectedBoulder', selectedBoulder);
+		isOpen = true;
 	}
 
-	function handleRemoveBoulder(boulderId) {
+	const handleRemoveBoulder = (boulderId: BoulderId) => {
 		boulders.removeBoulder(boulderId);
-	}
+	};
 </script>
 
 {#if bouldersFromLS?.length > 0}
@@ -31,19 +41,38 @@
 		<table id="dataTable">
 			<thead>
 				<tr>
-					<th>ID</th>
-					<th colspan="2">Cells</th>
+					<th>Name/ID</th>
+					<th>Cells</th>
+					<th colspan="3"></th>
 				</tr>
 			</thead>
 			<tbody>
 				{#each bouldersFromLS as boulder (boulder.id)}
 					<tr>
 						<td>
-							<button on:click={() => openModal(boulder)}>
-								{boulder.id}
+							<button
+								on:click={() => openDialog(boulder)}
+								id={boulder.id}
+								data-created={boulder.createdAt}
+							>
+								{boulder.name ? boulder.name : boulder.id}
 							</button>
 						</td>
-						<td>{Array.from(boulder.clickedCells)}</td>
+						<td>
+							{#if boulder.path}
+								{#each boulder.path as { id }}
+									{id}
+								{/each}
+							{/if}
+							<div>
+								{#if boulder.start}
+									Start: {boulder.start}
+								{/if}
+								{#if boulder.top}
+									Top: {boulder.top}
+								{/if}
+							</div>
+						</td>
 						<td>
 							<button on:click={() => handleRemoveBoulder(boulder.id)}>
 								<Icon iconName="mdiDelete" class="h-5 w-5 text-red-500" />
@@ -65,11 +94,12 @@
 
 <Toast />
 
-{#if clickOutsideModal && selectedBoulder}
-	<Modal title="Boulder preview" bind:open={clickOutsideModal} autoclose outsideclose>
-		<Boulder {selectedBoulder} />
-	</Modal>
-{/if}
+<Dialog {isOpen} on:close={() => (isOpen = false)}>
+	<svelte:fragment slot="DialogTitle">{selectedBoulder.name || selectedBoulder.id}</svelte:fragment>
+	<svelte:fragment slot="DialogContent">
+		<BoulderComponent {selectedBoulder} variant="preview" />
+	</svelte:fragment>
+</Dialog>
 
 <style lang="postcss">
 	table {

@@ -9,6 +9,8 @@ _site/
 .pnpm-store
 .turbo/
 .vercel
+.vs/
+.vscode/
 *.env
 *.log
 *.tsbuildinfo

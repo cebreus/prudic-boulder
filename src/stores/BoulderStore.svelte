@@ -1,37 +1,69 @@
-<script context="module">
-	import { addToast } from '../components/utils/ToastService.ts';
-	import { generateId } from '../components/utils/utils.mjs';
+<script context="module" lang="ts">
+	import { addToast } from '../components/utils/ToastService';
+	import { generateId, clickedClass, startClass, topClass } from '../components/utils/utils';
 	import { writable } from 'svelte/store';
 	import log from '../components/utils/logger.ts';
+
+	// Define TypeScript types
+	import type { CellId, BoulderId, Boulder, Selector } from '../components/utils/BoulderTypes';
 
 	// check for browser environment
 	const isBrowser = typeof window !== 'undefined';
 
 	// Custom Store for ClickedCells
-	function createClickedCellsStore() {
-		const { subscribe, set, update } = writable(new Set());
+	const createClickedCellsStore = () => {
+		const { subscribe, set, update } = writable(new Map());
 
 		return {
 			subscribe,
-			toggle: (cellId) => {
-				log.info('cellId:', cellId);
+			toggle: (cellId: CellId, selectedMode: string | null) => {
+				log.info('  createClickedCellsStore.toggle');
+				log.info('    Toggle:   ', cellId, 'with mode:', selectedMode);
 				update((cells) => {
-					const updated = new Set(cells);
-					if (updated.has(cellId)) {
-						updated.delete(cellId);
+					const updated = new Map(cells);
+
+					let cellClass = '';
+					if (selectedMode === 'Start') cellClass = startClass;
+					else if (selectedMode === 'Top') cellClass = topClass;
+					else cellClass = clickedClass;
+
+					if (selectedMode !== 'Start' && selectedMode !== 'Top') {
+						if (updated.has(cellId)) {
+							log.info('    Removing: ', cellId);
+							updated.delete(cellId);
+						} else {
+							log.info('    Adding:   ', cellId);
+							updated.set(cellId, { class: cellClass });
+						}
 					} else {
-						updated.add(cellId);
+						log.info('    Adding:   ', cellId);
+						updated.set(cellId, { class: cellClass });
 					}
 					return updated;
 				});
 			},
-			clear: () => set(new Set())
+
+			removeCellById: (cellId: CellId) => {
+				log.info('createClickedCellsStore.removeCellById');
+				update((cells) => {
+					const updated = new Map(cells);
+					if (updated.has(cellId)) {
+						log.info('    Removing: ', cellId);
+						updated.delete(cellId);
+					}
+					return updated;
+				});
+			},
+			clear: () => {
+				log.info('createClickedCellsStore.clear');
+				set(new Map());
+			}
 		};
-	}
+	};
 
 	// Custom Store for Selector
-	function createSelectorStore() {
-		const { subscribe, set, update } = writable({
+	const createSelectorStore = () => {
+		const { subscribe, set, update } = writable<Selector>({
 			selectedMode: null,
 			selectedStartCell: null,
 			selectedTopCell: null
@@ -39,86 +71,113 @@
 
 		return {
 			subscribe,
-			setMode: (mode) => update((s) => ({ ...s, selectedMode: mode })),
-			updateSelector: (cellId) =>
-				update((prev) => {
-					if (cellId === prev.selectedStartCell || cellId === prev.selectedTopCell) {
-						const updatedSelector = { ...prev, selectedMode: null };
-						if (cellId === prev.selectedStartCell) {
-							updatedSelector.selectedStartCell = null; // Удалить из начальной, если она уже выбрана
-						} else if (cellId === prev.selectedTopCell) {
-							updatedSelector.selectedTopCell = null; // Удалить из конечной, если она уже выбрана
-						}
-						return updatedSelector;
-					} else {
-						const updatedSelector = { ...prev, selectedMode: null };
-						if (prev.selectedMode === 'Start') updatedSelector.selectedStartCell = cellId;
-						else if (prev.selectedMode === 'Top') updatedSelector.selectedTopCell = cellId;
-						return updatedSelector;
-					}
-				}),
+			setMode: (mode: string) => {
+				log.debug('createSelectorStore.setMode with:', mode);
+				update((s) => ({ ...s, selectedMode: mode }));
+			},
 
-			clear: () =>
+			updateSelector: (cellId: CellId, selectedMode: string | null) => {
+				log.debug('  createSelectorStore.updateSelector');
+				update((prev) => {
+					let updatedSelector = { ...prev };
+
+					if (selectedMode === 'Start') {
+						if (prev.selectedStartCell) {
+							clickedCells.removeCellById(prev.selectedStartCell);
+						}
+						if (cellId === prev.selectedTopCell) {
+							updatedSelector.selectedTopCell = null;
+						}
+						updatedSelector.selectedStartCell = cellId;
+					} else if (selectedMode === 'Top') {
+						if (prev.selectedTopCell) {
+							clickedCells.removeCellById(prev.selectedTopCell);
+						}
+						if (cellId === prev.selectedStartCell) {
+							updatedSelector.selectedStartCell = null;
+						}
+						updatedSelector.selectedTopCell = cellId;
+					}
+					updatedSelector.selectedMode = null;
+
+					return updatedSelector;
+				});
+			},
+
+			clear: () => {
+				log.info('createSelectorStore.clear');
 				set({
 					selectedMode: null,
 					selectedStartCell: null,
 					selectedTopCell: null
-				})
+				});
+			}
 		};
-	}
+	};
 
 	// Custom Store for Boulders
-	function createBouldersStore() {
+	const createBouldersStore = () => {
+		// TODO: @artem: proc initialValue a existingBoulders?
 		const initialValue = isBrowser ? JSON.parse(localStorage.getItem('boulders') || '[]') : [];
 		const { subscribe, update } = writable(initialValue);
 
-		const addBoulder = (clickedCellsSet, selectorState) => {
-			if (!clickedCellsSet.size) {
-				addToast('info', 'Vyberte alespoň jednu buňku!');
+		const addBoulder = (
+			clickedCellsMap: Map<CellId, { class: string }>,
+			selectorState: Selector,
+			name: string | null
+		) => {
+			log.debug('createBouldersStore.addBoulder');
+			if (!clickedCellsMap.size) {
+				log.trace('Pick at least one cell');
+				addToast('Vyberte alespoň jednu buňku!');
 				return;
 			}
 
+			const clickedCellKeys = Array.from(clickedCellsMap.keys());
+			const cells = clickedCellKeys.map((key) => {
+				// Example of colorBrightness
+				const colorBrightness = '255 0 0 / 50%';
+				return {
+					id: key,
+					colorBrightness: colorBrightness
+				};
+			});
+
 			const newBoulder = {
 				id: generateId(),
-				clickedCells: Array.from(clickedCellsSet),
-				pathStart: selectorState.selectedStartCell,
-				pathEnd: selectorState.selectedTopCell,
-				timestamp: new Date().toLocaleString()
+				name: name,
+				path: cells,
+				start: selectorState.selectedStartCell,
+				top: selectorState.selectedTopCell,
+				createdAt: new Date().toISOString() //.toLocaleString()
 			};
 
+			log.debug('  newBoulder:', newBoulder);
+
 			update((boulders) => [...boulders, newBoulder]);
-
-			// Update localStorage
-			const existingBoulders = JSON.parse(localStorage.getItem('boulders')) || [];
+			const existingBoulders = JSON.parse(localStorage.getItem('boulders') || '[]');
 			localStorage.setItem('boulders', JSON.stringify([...existingBoulders, newBoulder]));
-
 			addToast(
-				'success',
 				'Prudič byl vytvořen',
+				'success',
 				'Přejděte na <a href="/">hlavní stránku</a> pro zobrazení.'
 			);
 		};
 
-		const removeBoulder = (boulderId) => {
+		const removeBoulder = (boulderId: BoulderId) => {
+			log.debug('createBouldersStore.removeBoulder');
 			update((boulders) => {
-				const newBoulders = boulders.filter((boulder) => boulder.id !== boulderId);
-
-				// Update localStorage
+				const newBoulders = boulders.filter((boulder: Boulder) => boulder.id !== boulderId);
 				localStorage.setItem('boulders', JSON.stringify(newBoulders));
-
-				addToast('info', 'Prudič byl odstraněn');
-
+				addToast('Prudič byl odstraněn');
 				return newBoulders;
 			});
 		};
 
-		return {
-			subscribe,
-			addBoulder,
-			removeBoulder
-		};
-	}
+		return { subscribe, addBoulder, removeBoulder };
+	};
 
+	// TODO: @artem: proc nesjou funkce exportovany primo
 	export const clickedCells = createClickedCellsStore();
 	export const selector = createSelectorStore();
 	export const boulders = createBouldersStore();

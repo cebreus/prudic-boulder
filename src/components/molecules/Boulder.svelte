@@ -1,30 +1,98 @@
-<script>
-	import { clickedCells, selector } from '../../stores/BoulderStore.svelte';
+<script lang="ts">
+	import { clickedCells, selector, boulders } from '../../stores/BoulderStore.svelte';
 	import {
 		isSkippedCell,
-		clickedClass,
+		cols,
+		rows,
+		skippedClass,
 		startClass,
 		topClass,
-		skippedClass,
-		cols,
-		rows
-	} from '../utils/utils.mjs';
-	export let selectedBoulder;
+		clickedClass
+	} from '../utils/utils';
+	import Button from '../atoms/Button.svelte';
+	import log from '../utils/logger';
+	import Dialog from './Dialog.svelte';
+
+	import type { Boulder, CellId } from '../utils/BoulderTypes';
+
+	let inputBoulderName: string;
+
+	export let selectedBoulder: Boulder;
+	export let isOpen: boolean = false;
+	export let variant: string = 'default';
 
 	$: tableRows = Array.from({ length: rows }, (_, i) => String.fromCharCode(65 + i));
 	$: tableCols = Array.from({ length: cols }, (_, i) => i);
+	$: selectedMode = $selector.selectedMode;
 
-	$: selectedStartCell = $selector.selectedStartCell;
-	$: selectedTopCell = $selector.selectedTopCell;
-
-	function toggleCellAndUpdateSelector(cellId) {
-		if (isSkippedCell(cellId)) return;
-
-		selector.updateSelector(cellId);
-
-		clickedCells.toggle(cellId);
+	$: if (!isOpen) {
+		inputBoulderName = '';
 	}
+
+	const toggleCellAndUpdateSelector = (cellId: CellId) => {
+		if (isSkippedCell(cellId)) {
+			log.debug(`Toggling cell: ${cellId} SKIPPED with mode: ${selectedMode}`);
+			return;
+		}
+		log.debug(`Toggling cell: ${cellId} with mode: ${selectedMode}`);
+		selector.updateSelector(cellId, selectedMode);
+		clickedCells.toggle(cellId, selectedMode);
+	};
+
+	const handleSaveBoulder = () => {
+		log.debug('handleSaveBoulder()');
+		if ($clickedCells.size > 0) {
+			isOpen = true;
+			log.info('    isOpen = true');
+		}
+	};
+
+	const handleDialogResponse = () => {
+		log.debug('handleDialogResponse()');
+		isOpen = false;
+		boulders.addBoulder($clickedCells, $selector, inputBoulderName);
+	};
+
+	const getClassFromBoulder = (cellId: string) => {
+		if (!selectedBoulder) return '';
+		if (selectedBoulder.start === cellId) {
+			return startClass;
+		} else if (selectedBoulder.top === cellId) {
+			return topClass;
+		} else if (selectedBoulder.path?.some((cell) => cell.id === cellId)) {
+			return clickedClass;
+		}
+		return '';
+	};
+
+	const handleKeyDown = (event: KeyboardEvent): void => {
+		if (event.isComposing || event.key === 'Enter') {
+			handleDialogResponse();
+			isOpen = false;
+			event.preventDefault();
+			event.stopPropagation();
+		}
+	};
 </script>
+
+<Dialog {isOpen} on:close={() => (isOpen = false)} onKeydown={handleKeyDown}>
+	<svelte:fragment slot="DialogTitle">Název boulderu</svelte:fragment>
+	<svelte:fragment slot="DialogContent">
+		<input
+			type="text"
+			required
+			class="w-full rounded border p-3 hover:border-sky-600 focus:border-blue-700 focus:outline-none"
+			placeholder="Enter Boulder Name"
+			bind:value={inputBoulderName}
+		/>
+	</svelte:fragment>
+	<svelte:fragment slot="DialogFooter">
+		<Button
+			class="inline-flex w-full justify-center rounded-md sm:w-auto"
+			on:click={handleDialogResponse}>Save</Button
+		>
+	</svelte:fragment>
+</Dialog>
 
 <table class="wall">
 	<thead>
@@ -42,12 +110,12 @@
 				{#each tableCols as col}
 					{@const cellId = `${row}${col}`}
 					<td
+						class={isSkippedCell(cellId)
+							? skippedClass
+							: selectedBoulder
+								? getClassFromBoulder(cellId)
+								: $clickedCells.get(cellId)?.class ?? ''}
 						on:click={selectedBoulder ? null : () => toggleCellAndUpdateSelector(cellId)}
-						class={`${selectedBoulder ? 'pointer-events-none' : ''}
-          ${selectedStartCell === cellId && $clickedCells.has(cellId) ? startClass : ''}
-          ${selectedTopCell === cellId && $clickedCells.has(cellId) ? topClass : ''}
-          ${$clickedCells.has(cellId) ? clickedClass : ''}
-          ${isSkippedCell(cellId) ? skippedClass : ''}`}
 					>
 						{isSkippedCell(cellId) ? '' : cellId}
 					</td>
@@ -57,9 +125,27 @@
 	</tbody>
 </table>
 
+{#if variant === 'default'}
+	<div class="grid w-[20.8em] grid-flow-col justify-stretch gap-4 pl-9 pr-1 pt-4 sm:w-[23.5em]">
+		<Button variant="outline" on:click={() => selector.setMode('Start')}>Start</Button>
+		<Button variant="outline" on:click={() => selector.setMode('Top')}>Top</Button>
+		<Button emoji="💾" variant="outlineGreen" aria-label="Save" on:click={handleSaveBoulder}
+		></Button>
+		<Button
+			emoji="🗑️"
+			variant="outlineYellow"
+			aria-label="Clear"
+			on:click={() => {
+				clickedCells.clear();
+				selector.clear();
+			}}
+		></Button>
+	</div>
+{/if}
+
 <style lang="postcss">
 	:global(table.wall) {
-		@apply mb-6 table-fixed border-separate text-xs sm:text-base;
+		@apply table-fixed border-separate text-xs sm:text-base;
 	}
 	:global(table.wall th) {
 		@apply h-7 w-7 rounded-sm text-center slashed-zero tabular-nums text-slate-400 sm:h-8 sm:w-8 dark:text-slate-400;
