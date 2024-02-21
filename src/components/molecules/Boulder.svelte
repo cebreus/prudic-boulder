@@ -13,7 +13,6 @@
 	import log from '../utils/logger';
 	import Dialog from './Dialog.svelte';
 
-	// Define TypeScript types
 	import type { Boulder, CellId } from '../utils/BoulderTypes';
 
 	let inputBoulderName: string;
@@ -54,7 +53,6 @@
 		boulders.addBoulder($clickedCells, $selector, inputBoulderName);
 	};
 
-	//fix type ==>
 	const getClassFromBoulder = (cellId: string) => {
 		if (!selectedBoulder) return '';
 		if (selectedBoulder.start === cellId) {
@@ -78,11 +76,12 @@
 </script>
 
 <Dialog {isOpen} on:close={() => (isOpen = false)} onKeydown={handleKeyDown}>
+	<svelte:fragment slot="DialogTitle">Název boulderu</svelte:fragment>
 	<svelte:fragment slot="DialogContent">
 		<input
 			type="text"
 			required
-			class=" w-full rounded border p-3 hover:border-sky-600 focus:border-blue-700 focus:outline-none"
+			class="w-full rounded border p-3 hover:border-sky-600 focus:border-blue-700 focus:outline-none"
 			placeholder="Enter Boulder Name"
 			bind:value={inputBoulderName}
 		/>

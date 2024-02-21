@@ -35,7 +35,7 @@
 		>
 			<div class="modal-body">
 				<div
-					class={`modal-header flex items-start justify-between gap-x-6 p-4 sm:p-4 ${onlyTitle ? '' : ' pb-0 sm:pb-0'}`}
+					class={`modal-header flex items-start justify-between gap-x-6 p-4 sm:p-4 ${onlyTitle ? '' : 'pb-0 sm:pb-0'}`}
 				>
 					<DialogTitle as="h6" class="text-xl font-semibold">
 						<slot name="DialogTitle" />
@@ -46,9 +46,11 @@
 				</div>
 				{#if $$slots.DialogDescription || $$slots.DialogContent}
 					<div class="modal-content mb-4 mt-2 flex flex-col gap-y-4 px-4 sm:px-6">
-						<DialogDescription as="div">
-							<slot name="DialogDescription" />
-						</DialogDescription>
+						{#if $$slots.DialogDescription}
+							<DialogDescription as="div">
+								<slot name="DialogDescription" />
+							</DialogDescription>
+						{/if}
 						<slot name="DialogContent" />
 					</div>
 				{/if}
