@@ -13,7 +13,7 @@
 	};
 
 	const resetSvgAnimation = (): void => {
-		if (!svgElement) return; // Check if svgElement is not null
+		if (!svgElement) return;
 		const newSvgElement: Node = svgElement.cloneNode(true);
 		svgElement.parentNode!.replaceChild(newSvgElement, svgElement);
 		svgElement = newSvgElement as SVGElement; // Cast cloned node back to SVGElement
