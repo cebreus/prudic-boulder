@@ -21,8 +21,8 @@
 	export let isOpen: boolean = false;
 	export let variant: string = 'default';
 
-	$: tableRows = Array.from({ length: rows }, (_, i) => String.fromCharCode(65 + i));
-	$: tableCols = Array.from({ length: cols }, (_, i) => i);
+	let tableRows = Array.from({ length: rows }, (_, i) => String.fromCharCode(65 + i));
+	let tableCols = Array.from({ length: cols }, (_, i) => i);
 	$: selectedMode = $selector.selectedMode;
 
 	$: if (!isOpen) {
@@ -36,6 +36,10 @@
 		}
 		log.debug(`Toggling cell: ${cellId} with mode: ${selectedMode}`);
 		selector.updateSelector(cellId, selectedMode);
+
+		log.info('$selector.selectedMode;======>:', $selector.selectedMode);
+		log.info('selectedMode ======>:', selectedMode);
+
 		clickedCells.toggle(cellId, selectedMode);
 	};
 
