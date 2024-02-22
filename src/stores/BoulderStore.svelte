@@ -5,7 +5,7 @@
 	import log from '../components/utils/logger.ts';
 
 	// Define TypeScript types
-	import type { Boulder, Selector } from '../components/utils/BoulderTypes';
+	import type { Boulder, Mode, Selector } from '../components/utils/BoulderTypes';
 
 	// check for browser environment
 	const isBrowser = typeof window !== 'undefined';
@@ -16,7 +16,7 @@
 
 		return {
 			subscribe,
-			toggle: (cellId: string, selectedMode: string | null) => {
+			toggle: (cellId: string, selectedMode: Mode | null) => {
 				log.info('  createClickedCellsStore.toggle');
 				log.info('    Toggle:   ', cellId, 'with mode:', selectedMode);
 				update((cells) => {
@@ -71,12 +71,12 @@
 
 		return {
 			subscribe,
-			setMode: (mode: string) => {
+			setMode: (mode: Mode) => {
 				log.debug('createSelectorStore.setMode with:', mode);
 				update((s) => ({ ...s, selectedMode: mode }));
 			},
 
-			updateSelector: (cellId: string, selectedMode: string | null) => {
+			updateSelector: (cellId: string, selectedMode: Mode | null) => {
 				log.debug('  createSelectorStore.updateSelector');
 				update((prev) => {
 					let updatedSelector = { ...prev };
@@ -124,7 +124,7 @@
 		const addBoulder = (
 			clickedCellsMap: Map<string, { class: string }>,
 			selectorState: Selector,
-			name: string | null
+			name: string | undefined
 		) => {
 			log.debug('createBouldersStore.addBoulder');
 			if (!clickedCellsMap.size) {

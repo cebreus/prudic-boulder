@@ -1,10 +1,12 @@
+export type Mode = 'Top' | 'Start';
+
 export type Cell = {
 	id: string;
 	colorBrightness: string;
 };
 
 export type Selector = {
-	selectedMode: string | null;
+	selectedMode: Mode | null;
 	selectedStartCell: string | null;
 	selectedTopCell: string | null;
 };
