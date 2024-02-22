@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	export let size = '1em';
 	export let width = size;
 	export let height = size;
@@ -8,12 +8,18 @@
 	export let fill = 'transparent';
 	export let ariaLabel = 'ikona';
 	export let ariaHidden = false;
-	export let title = null;
-	export let desc = null;
-	export let id = null;
+	export let title: string = '';
+	export let desc: string = '';
+	export let id: string = '';
+	export { className as class };
+	export let exposeSvg: (node: SVGElement) => void;
 
 	let className = '';
-	export { className as class };
+	let svgElement: SVGElement;
+
+	$: if (exposeSvg && svgElement) {
+		exposeSvg(svgElement);
+	}
 </script>
 
 <svg
@@ -29,6 +35,7 @@
 	aria-label={ariaLabel}
 	aria-hidden={ariaHidden ? 'true' : 'false'}
 	xmlns="http://www.w3.org/2000/svg"
+	bind:this={svgElement}
 >
 	{#if title}
 		<title>{title}</title>
