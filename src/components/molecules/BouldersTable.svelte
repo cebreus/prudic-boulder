@@ -25,11 +25,11 @@
 
 	onDestroy(unsubscribe);
 
-	function openDialog(boulder: Boulder) {
+	const openDialog = (boulder: Boulder) => {
 		selectedBoulder = boulder;
 		log.info('selectedBoulder', selectedBoulder);
 		isOpen = true;
-	}
+	};
 
 	const handleRemoveBoulder = (boulderId: string) => {
 		boulders.removeBoulder(boulderId);
