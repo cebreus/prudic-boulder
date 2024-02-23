@@ -99,7 +99,7 @@
 				</div>
 				<Icon
 					iconName={toastConfig[toast.variant].icon}
-					class="h-6 w-6 {toastConfig[toast.variant].iconClasses}"
+					class="size-6 {toastConfig[toast.variant].iconClasses}"
 				/>
 				<div class="mt-0.5 leading-tight">
 					{#if toast.title?.length}
@@ -116,7 +116,7 @@
 						class="ml-auto rounded-full text-slate-400 hover:text-slate-600 focus:outline-none dark:hover:text-slate-200"
 						on:click={() => dismissToast(toast.id)}
 					>
-						<Icon iconName="mdiClose" class="h-5 w-5" />
+						<Icon iconName="mdiClose" class="size-5" />
 					</button>
 				{/if}
 			</div>

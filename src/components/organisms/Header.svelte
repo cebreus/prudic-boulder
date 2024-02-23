@@ -53,7 +53,7 @@
 					aria-expanded={menuOpen}
 					on:click={toggleMenu}
 				>
-					<MenuToggler class="block h-7 w-7 cursor-pointer" id="menu-toggler" />
+					<MenuToggler class="block size-7 cursor-pointer" id="menu-toggler" />
 					<span class="sr-only">Otevřít hlavní menu</span>
 				</button>
 			</div>

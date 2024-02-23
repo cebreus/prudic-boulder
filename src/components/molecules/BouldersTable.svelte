@@ -75,7 +75,7 @@
 						</td>
 						<td>
 							<button on:click={() => handleRemoveBoulder(boulder.id)}>
-								<Icon iconName="mdiDelete" class="h-5 w-5 text-red-500" />
+								<Icon iconName="mdiDelete" class="size-5 text-red-500" />
 							</button>
 						</td>
 					</tr>
