@@ -14,7 +14,7 @@
 	import Dialog from './Dialog.svelte';
 
 	import type { Boulder } from '../utils/BoulderTypes';
-	import FadeIn from '../atoms/FadeIn.svelte';
+	import { fade } from 'svelte/transition';
 
 	let inputBoulderName: string;
 
@@ -95,7 +95,7 @@
 	</svelte:fragment>
 </Dialog>
 
-<FadeIn>
+<div in:fade={{ duration: 300 }}>
 	<table class="wall">
 		<thead>
 			<tr>
@@ -112,11 +112,11 @@
 					{#each tableCols as col}
 						{@const cellId = `${row}${col}`}
 						<td
-							class={isSkippedCell(cellId)
+							class="{isSkippedCell(cellId)
 								? skippedClass
 								: selectedBoulder
 									? getClassFromBoulder(cellId)
-									: $clickedCells.get(cellId)?.class ?? ''}
+									: $clickedCells.get(cellId)?.class ?? ''} transition-colors duration-300"
 							on:click={selectedBoulder ? null : () => toggleCellAndUpdateSelector(cellId)}
 						>
 							{isSkippedCell(cellId) ? '' : cellId}
@@ -144,7 +144,7 @@
 			></Button>
 		</div>
 	{/if}
-</FadeIn>
+</div>
 
 <style lang="postcss">
 	:global(table.wall) {

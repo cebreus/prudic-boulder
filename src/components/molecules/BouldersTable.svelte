@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { boulders } from '../../stores/BoulderStore.svelte';
-	import { onDestroy, onMount } from 'svelte';
+	import { onDestroy } from 'svelte';
 	import Alert from '../atoms/Alert.svelte';
 	import BoulderComponent from './Boulder.svelte';
 	import Icon from '../../components/atoms/Icon.svelte';
@@ -11,7 +11,6 @@
 	// Define TypeScript types
 	import type { Boulder } from '../utils/BoulderTypes';
 	import log from 'loglevel';
-	import FadeIn from '../atoms/FadeIn.svelte';
 
 	let bouldersFromLS: Boulder[] = [];
 	let selectedBoulder: Boulder = { id: '', createdAt: 0, path: [] };
@@ -38,7 +37,7 @@
 	};
 </script>
 
-<FadeIn>
+<div in:fade={{ duration: 300 }} out:fade={{ duration: 100 }}>
 	{#if bouldersFromLS?.length > 0}
 		<div id="table-container" class="my-8 overflow-x-auto">
 			<table id="dataTable">
@@ -94,7 +93,7 @@
 			> na lezecké stěně.
 		</Alert>
 	{/if}
-</FadeIn>
+</div>
 
 <Toast />
 
