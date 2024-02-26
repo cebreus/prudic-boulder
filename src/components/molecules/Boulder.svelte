@@ -14,6 +14,7 @@
 	import Dialog from './Dialog.svelte';
 
 	import type { Boulder, CellId } from '../utils/BoulderTypes';
+	import FadeIn from '../atoms/FadeIn.svelte';
 
 	let inputBoulderName: string;
 
@@ -94,54 +95,56 @@
 	</svelte:fragment>
 </Dialog>
 
-<table class="wall">
-	<thead>
-		<tr>
-			<th></th>
-			{#each tableCols as col (col)}
-				<th>{col}</th>
-			{/each}
-		</tr>
-	</thead>
-	<tbody>
-		{#each tableRows as row, rowIndex}
+<FadeIn>
+	<table class="wall">
+		<thead>
 			<tr>
-				<th>{String.fromCharCode(65 + rowIndex)}</th>
-				{#each tableCols as col}
-					{@const cellId = `${row}${col}`}
-					<td
-						class={isSkippedCell(cellId)
-							? skippedClass
-							: selectedBoulder
-								? getClassFromBoulder(cellId)
-								: $clickedCells.get(cellId)?.class ?? ''}
-						on:click={selectedBoulder ? null : () => toggleCellAndUpdateSelector(cellId)}
-					>
-						{isSkippedCell(cellId) ? '' : cellId}
-					</td>
+				<th></th>
+				{#each tableCols as col (col)}
+					<th>{col}</th>
 				{/each}
 			</tr>
-		{/each}
-	</tbody>
-</table>
+		</thead>
+		<tbody>
+			{#each tableRows as row, rowIndex}
+				<tr>
+					<th>{String.fromCharCode(65 + rowIndex)}</th>
+					{#each tableCols as col}
+						{@const cellId = `${row}${col}`}
+						<td
+							class={isSkippedCell(cellId)
+								? skippedClass
+								: selectedBoulder
+									? getClassFromBoulder(cellId)
+									: $clickedCells.get(cellId)?.class ?? ''}
+							on:click={selectedBoulder ? null : () => toggleCellAndUpdateSelector(cellId)}
+						>
+							{isSkippedCell(cellId) ? '' : cellId}
+						</td>
+					{/each}
+				</tr>
+			{/each}
+		</tbody>
+	</table>
 
-{#if variant === 'default'}
-	<div class="grid w-[20.8em] grid-flow-col justify-stretch gap-4 pl-9 pr-1 pt-4 sm:w-[23.5em]">
-		<Button variant="outline" on:click={() => selector.setMode('Start')}>Start</Button>
-		<Button variant="outline" on:click={() => selector.setMode('Top')}>Top</Button>
-		<Button emoji="💾" variant="outlineGreen" aria-label="Save" on:click={handleSaveBoulder}
-		></Button>
-		<Button
-			emoji="🗑️"
-			variant="outlineYellow"
-			aria-label="Clear"
-			on:click={() => {
-				clickedCells.clear();
-				selector.clear();
-			}}
-		></Button>
-	</div>
-{/if}
+	{#if variant === 'default'}
+		<div class="grid w-[20.8em] grid-flow-col justify-stretch gap-4 pl-9 pr-1 pt-4 sm:w-[23.5em]">
+			<Button variant="outline" on:click={() => selector.setMode('Start')}>Start</Button>
+			<Button variant="outline" on:click={() => selector.setMode('Top')}>Top</Button>
+			<Button emoji="💾" variant="outlineGreen" aria-label="Save" on:click={handleSaveBoulder}
+			></Button>
+			<Button
+				emoji="🗑️"
+				variant="outlineYellow"
+				aria-label="Clear"
+				on:click={() => {
+					clickedCells.clear();
+					selector.clear();
+				}}
+			></Button>
+		</div>
+	{/if}
+</FadeIn>
 
 <style lang="postcss">
 	:global(table.wall) {

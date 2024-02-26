@@ -1,15 +1,17 @@
 <script lang="ts">
 	import { boulders } from '../../stores/BoulderStore.svelte';
-	import { onDestroy } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import Alert from '../atoms/Alert.svelte';
 	import BoulderComponent from './Boulder.svelte';
 	import Icon from '../../components/atoms/Icon.svelte';
 	import Dialog from './Dialog.svelte';
 	import Toast from '../atoms/Toast.svelte';
+	import { fade } from 'svelte/transition';
 
 	// Define TypeScript types
 	import type { Boulder, BouldersArray, BoulderId } from '../utils/BoulderTypes';
 	import log from 'loglevel';
+	import FadeIn from '../atoms/FadeIn.svelte';
 
 	let bouldersFromLS: BouldersArray = [];
 	let selectedBoulder: Boulder = { id: '', createdAt: 0, path: [] };
@@ -36,61 +38,63 @@
 	};
 </script>
 
-{#if bouldersFromLS?.length > 0}
-	<div id="table-container" class="my-8 overflow-x-auto">
-		<table id="dataTable">
-			<thead>
-				<tr>
-					<th>Name/ID</th>
-					<th>Cells</th>
-					<th colspan="3"></th>
-				</tr>
-			</thead>
-			<tbody>
-				{#each bouldersFromLS as boulder (boulder.id)}
+<FadeIn>
+	{#if bouldersFromLS?.length > 0}
+		<div id="table-container" class="my-8 overflow-x-auto">
+			<table id="dataTable">
+				<thead>
 					<tr>
-						<td>
-							<button
-								on:click={() => openDialog(boulder)}
-								id={boulder.id}
-								data-created={boulder.createdAt}
-							>
-								{boulder.name ? boulder.name : boulder.id}
-							</button>
-						</td>
-						<td>
-							{#if boulder.path}
-								{#each boulder.path as { id }}
-									{id}
-								{/each}
-							{/if}
-							<div>
-								{#if boulder.start}
-									Start: {boulder.start}
-								{/if}
-								{#if boulder.top}
-									Top: {boulder.top}
-								{/if}
-							</div>
-						</td>
-						<td>
-							<button on:click={() => handleRemoveBoulder(boulder.id)}>
-								<Icon iconName="mdiDelete" class="h-5 w-5 text-red-500" />
-							</button>
-						</td>
+						<th>Name/ID</th>
+						<th>Cells</th>
+						<th colspan="3"></th>
 					</tr>
-				{/each}
-			</tbody>
-		</table>
-	</div>
-{:else}
-	<Alert showIcon>
-		Vytvořte si
-		<a href="/new-boulder" class="text-blue-600 underline hover:no-underline dark:text-blue-300"
-			>novou cestu</a
-		> na lezecké stěně.
-	</Alert>
-{/if}
+				</thead>
+				<tbody>
+					{#each bouldersFromLS as boulder (boulder.id)}
+						<tr>
+							<td>
+								<button
+									on:click={() => openDialog(boulder)}
+									id={boulder.id}
+									data-created={boulder.createdAt}
+								>
+									{boulder.name ? boulder.name : boulder.id}
+								</button>
+							</td>
+							<td>
+								{#if boulder.path}
+									{#each boulder.path as { id }}
+										{id}
+									{/each}
+								{/if}
+								<div>
+									{#if boulder.start}
+										Start: {boulder.start}
+									{/if}
+									{#if boulder.top}
+										Top: {boulder.top}
+									{/if}
+								</div>
+							</td>
+							<td>
+								<button on:click={() => handleRemoveBoulder(boulder.id)}>
+									<Icon iconName="mdiDelete" class="h-5 w-5 text-red-500" />
+								</button>
+							</td>
+						</tr>
+					{/each}
+				</tbody>
+			</table>
+		</div>
+	{:else}
+		<Alert showIcon>
+			Vytvořte si
+			<a href="/new-boulder" class="text-blue-600 underline hover:no-underline dark:text-blue-300"
+				>novou cestu</a
+			> na lezecké stěně.
+		</Alert>
+	{/if}
+</FadeIn>
 
 <Toast />
 

@@ -38,6 +38,7 @@
 		"prettier-plugin-tailwindcss": "^0.5.11",
 		"svelte": "^4.2.10",
 		"svelte-reactive-preprocessor": "^0.8.3",
+		"svelte-spa-router": "^4.0.1",
 		"tailwind-merge": "^2.2.1",
 		"tailwindcss": "^3.4.1",
 		"typescript": "^5.3.3"
