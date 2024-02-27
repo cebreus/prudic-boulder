@@ -1,4 +1,4 @@
-export const cellsToSkip: Set<string> = new Set([
+export const cellsToSkip: ReadonlySet<string> = new Set([
 	'B0',
 	'B3',
 	'B6',
@@ -84,28 +84,35 @@ export const cellsToSkip: Set<string> = new Set([
 	'R8'
 ]);
 
+/**
+ * Checks if a given cell ID should be skipped.
+ * @param cellId The ID of the cell to check.
+ * @returns `true` if the cell should be skipped, `false` otherwise.
+ */
+
 export const isSkippedCell = (cellId: string): boolean => {
 	return cellsToSkip.has(cellId);
 };
+
 export const rows: number = 18;
 export const cols: number = 10;
 
-export const skippedClass: string = 'skipped';
-export const clickedClass: string = 'holds';
-export const startClass: string = 'start';
-export const topClass: string = 'top';
+type CssClassName = 'skipped' | 'holds' | 'start' | 'top';
 
-export const generateId = (name?: string): string => {
-	const prefix = name ? `${name}-` : '';
-	return `${prefix}${Date.now()}-${Math.random().toString(16).slice(2, 5)}`;
+export const skippedClass: CssClassName = 'skipped';
+export const clickedClass: CssClassName = 'holds';
+export const startClass: CssClassName = 'start';
+export const topClass: CssClassName = 'top';
+
+export const generateId = (name: string = ''): string => {
+	return `${name}${Date.now().toString(16)}-${Math.random().toString(16).slice(2, 8)}`;
 };
 
+const BASE_TIMEOUT_MILLISECONDS = 2000;
+const MILLISECONDS_PER_CHARACTER = 30;
+
 export const calculateTimeout = (title: string = '', description: string = ''): number => {
-	const baseTimeoutMilliseconds = 2000;
-	const millisecondsPerCharacter = 30;
-
 	const totalInputLength = title.length + description.length;
-	const additionalTimeout = totalInputLength * millisecondsPerCharacter;
-
-	return baseTimeoutMilliseconds + additionalTimeout;
+	const additionalTimeout = totalInputLength * MILLISECONDS_PER_CHARACTER;
+	return BASE_TIMEOUT_MILLISECONDS + additionalTimeout;
 };

@@ -5,12 +5,19 @@ import log from '../utils/logger';
 
 export const toasts = writable<Toast[]>([]);
 
+// Utility function for logging and validation
+const validateNonEmptyString = (value: string, context: string): boolean => {
+	if (value.trim() === '') {
+		log.error(`Invalid or empty string provided to ${context}`);
+		return false;
+	}
+	return true;
+};
+
 // Dismiss a toast by ID
 export const dismissToast = (id: string): void => {
-	if (typeof id !== 'string' || id.trim() === '') {
-		log.error('Invalid or empty ID provided to dismissToast');
-		return;
-	}
+	if (!validateNonEmptyString(id, 'dismissToast')) return;
+
 	toasts.update((allToasts) => allToasts.filter((toast) => toast.id !== id));
 };
 
@@ -20,15 +27,7 @@ export const addToast = (
 	variant: ToastVariant = 'info',
 	description: string = ''
 ): void => {
-	if (typeof title !== 'string' || title.trim() === '') {
-		log.error('Title must be a non-empty string in addToast');
-		return;
-	}
-
-	if (typeof description !== 'string') {
-		log.error('Description must be a string in addToast');
-		return;
-	}
+	if (!validateNonEmptyString(title, 'addToast')) return;
 
 	const id = generateId('toast');
 	const timeout = calculateTimeout(title, description);
@@ -51,13 +50,9 @@ export const addToast = (
 // Handle the progress bar update logic separately for clarity
 const updateToastProgress = (id: string, timeout: number): void => {
 	// Kontrola platnosti vstupních dat
-	if (typeof id !== 'string' || id.trim() === '') {
-		log.error('Invalid id provided to updateToastProgress');
-		return;
-	}
-	if (typeof timeout !== 'number' || timeout <= 0) {
+	if (!validateNonEmptyString(id, 'updateToastProgress') || timeout <= 0) {
 		log.error(
-			'Invalid timeout provided to updateToastProgress. Timeout must be a positive number.'
+			`Invalid timeout (${timeout}) provided to updateToastProgress. Timeout must be a positive number.`
 		);
 		return;
 	}

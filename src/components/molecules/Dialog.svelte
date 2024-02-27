@@ -9,11 +9,13 @@
 	import Icon from '../../components/atoms/Icon.svelte';
 
 	export let isOpen: boolean = false;
-	export let onKeydown: (event: CustomEvent<KeyboardEvent>) => void;
 
 	let onlyTitle: boolean = (!$$slots.DialogDescription && !$$slots.DialogContent) ?? true;
 
 	const dispatch = createEventDispatcher();
+	function handleKeydown(event: CustomEvent) {
+		dispatch('keydown', event);
+	}
 
 	const closeDialog = () => {
 		isOpen = false;
@@ -25,7 +27,7 @@
 	open={isOpen}
 	on:close={closeDialog}
 	class="fixed inset-0 z-10 overflow-y-auto"
-	on:keydown={onKeydown}
+	on:keydown={handleKeydown}
 >
 	<DialogOverlay class="fixed inset-0 bg-black bg-opacity-50" />
 
