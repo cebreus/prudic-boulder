@@ -117,7 +117,6 @@
 
 	// Custom Store for Boulders
 	const createBouldersStore = () => {
-		// TODO: @artem: proc initialValue a existingBoulders?
 		const initialValue = isBrowser ? JSON.parse(localStorage.getItem('boulders') || '[]') : [];
 		const { subscribe, update } = writable(initialValue);
 
@@ -177,7 +176,6 @@
 		return { subscribe, addBoulder, removeBoulder };
 	};
 
-	// TODO: @artem: proc nesjou funkce exportovany primo
 	export const clickedCells = createClickedCellsStore();
 	export const selector = createSelectorStore();
 	export const boulders = createBouldersStore();
