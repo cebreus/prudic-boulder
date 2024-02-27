@@ -66,8 +66,8 @@
 								href={path}
 								use:link
 								class="block rounded-md px-3 py-1.5 text-sm font-medium {currentPath === path
-									? ' text-sky-900 ring-1 ring-slate-200 dark:text-slate-500 dark:ring-slate-500'
-									: ' text-sky-500 hover:bg-sky-100 hover:text-sky-600 hover:ring-1 hover:ring-sky-200 dark:hover:bg-transparent dark:hover:text-sky-400 dark:hover:ring-sky-400'}"
+									? ' duration-900 text-sky-500 ring-1 ring-slate-200 ease-in-out hover:text-sky-900 hover:transition  dark:text-slate-500 dark:ring-slate-500'
+									: ' text-sky-500 duration-500 ease-in-out hover:bg-sky-100 hover:text-sky-600 hover:ring-1 hover:ring-sky-200 hover:transition dark:hover:bg-transparent dark:hover:text-sky-400 dark:hover:ring-sky-400'}"
 								aria-current={currentPath === path ? 'page' : undefined}
 							>
 								{name}
