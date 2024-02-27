@@ -7,9 +7,9 @@ export type Cell = {
 };
 
 export type Selector = {
-	selectedMode: string | null;
-	selectedStartCell: string | null;
-	selectedTopCell: string | null;
+	selectedMode: string | undefined;
+	selectedStartCell: string | undefined;
+	selectedTopCell: string | undefined;
 };
 
 export type Boulder = {

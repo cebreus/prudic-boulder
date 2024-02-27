@@ -16,7 +16,7 @@
 
 		return {
 			subscribe,
-			toggle: (cellId: CellId, selectedMode: string | null) => {
+			toggle: (cellId: CellId, selectedMode: string | undefined) => {
 				log.info('  createClickedCellsStore.toggle');
 				log.info('    Toggle:   ', cellId, 'with mode:', selectedMode);
 				update((cells) => {
@@ -64,9 +64,9 @@
 	// Custom Store for Selector
 	const createSelectorStore = () => {
 		const { subscribe, set, update } = writable<Selector>({
-			selectedMode: null,
-			selectedStartCell: null,
-			selectedTopCell: null
+			selectedMode: undefined,
+			selectedStartCell: undefined,
+			selectedTopCell: undefined
 		});
 
 		return {
@@ -76,7 +76,7 @@
 				update((s) => ({ ...s, selectedMode: mode }));
 			},
 
-			updateSelector: (cellId: CellId, selectedMode: string | null) => {
+			updateSelector: (cellId: CellId, selectedMode: string | undefined) => {
 				log.debug('  createSelectorStore.updateSelector');
 				update((prev) => {
 					let updatedSelector = { ...prev };
@@ -86,7 +86,7 @@
 							clickedCells.removeCellById(prev.selectedStartCell);
 						}
 						if (cellId === prev.selectedTopCell) {
-							updatedSelector.selectedTopCell = null;
+							updatedSelector.selectedTopCell = undefined;
 						}
 						updatedSelector.selectedStartCell = cellId;
 					} else if (selectedMode === 'Top') {
@@ -94,11 +94,11 @@
 							clickedCells.removeCellById(prev.selectedTopCell);
 						}
 						if (cellId === prev.selectedStartCell) {
-							updatedSelector.selectedStartCell = null;
+							updatedSelector.selectedStartCell = undefined;
 						}
 						updatedSelector.selectedTopCell = cellId;
 					}
-					updatedSelector.selectedMode = null;
+					updatedSelector.selectedMode = undefined;
 
 					return updatedSelector;
 				});
@@ -107,9 +107,9 @@
 			clear: () => {
 				log.info('createSelectorStore.clear');
 				set({
-					selectedMode: null,
-					selectedStartCell: null,
-					selectedTopCell: null
+					selectedMode: undefined,
+					selectedStartCell: undefined,
+					selectedTopCell: undefined
 				});
 			}
 		};
@@ -124,7 +124,7 @@
 		const addBoulder = (
 			clickedCellsMap: Map<CellId, { class: string }>,
 			selectorState: Selector,
-			name: string | null
+			name: string | undefined
 		) => {
 			log.debug('createBouldersStore.addBoulder');
 			if (!clickedCellsMap.size) {
