@@ -1,7 +1,5 @@
 <script lang="ts">
-	import * as mdi from '@mdi/js';
-
-	export let iconName: string;
+	export let path: string;
 	export let size: string = '1em';
 	export let width: string = size;
 	export let height: string = size;
@@ -16,8 +14,6 @@
 
 	let className = '';
 	export { className as class };
-
-	$: path = mdi[iconName as keyof typeof mdi] || '';
 </script>
 
 <svg

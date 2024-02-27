@@ -6,6 +6,7 @@
 	import Icon from '../../components/atoms/Icon.svelte';
 	import Dialog from './Dialog.svelte';
 	import Toast from '../atoms/Toast.svelte';
+	import { mdiDelete } from '@mdi/js';
 
 	// Define TypeScript types
 	import type { Boulder } from '../utils/BoulderTypes';
@@ -75,7 +76,7 @@
 						</td>
 						<td>
 							<button on:click={() => handleRemoveBoulder(boulder.id)}>
-								<Icon iconName="mdiDelete" class="h-5 w-5 text-red-500" />
+								<Icon path={mdiDelete} class="h-5 w-5 text-red-500" />
 							</button>
 						</td>
 					</tr>

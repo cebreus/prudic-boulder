@@ -7,6 +7,7 @@
 		DialogDescription
 	} from '@rgossiaux/svelte-headlessui';
 	import Icon from '../../components/atoms/Icon.svelte';
+	import { mdiDelete } from '@mdi/js';
 
 	export let isOpen: boolean = false;
 
@@ -43,7 +44,7 @@
 						<slot name="DialogTitle" />
 					</DialogTitle>
 					<button on:click={closeDialog} class="text-gray-400 hover:text-red-600">
-						<Icon iconName="mdiClose" class="mt-0.5 h-5 w-5" />
+						<Icon path={mdiDelete} class="mt-0.5 h-5 w-5" />
 					</button>
 				</div>
 				{#if $$slots.DialogDescription || $$slots.DialogContent}
