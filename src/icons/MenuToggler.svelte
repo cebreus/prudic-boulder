@@ -1,16 +1,16 @@
-<script>
-	export let size = '1em';
-	export let width = size;
-	export let height = size;
-	export let viewBox = '0 0 24 24';
-	export let color = 'currentColor';
-	export let strokeWidth = '1.5';
-	export let fill = 'transparent';
-	export let ariaLabel = 'ikona';
-	export let ariaHidden = false;
-	export let title = null;
-	export let desc = null;
-	export let id = null;
+<script lang="ts">
+	export let size: string = '1em';
+	export let width: string = size;
+	export let height: string = size;
+	export let viewBox: string = '0 0 24 24';
+	export let color: string = 'currentColor';
+	export let strokeWidth: string = '1.5';
+	export let fill: string = 'transparent';
+	export let ariaLabel: string = 'ikona';
+	export let ariaHidden: boolean = false;
+	export let title: string = '';
+	export let desc: string = '';
+	export let id: string = '';
 
 	let className = '';
 	export { className as class };
