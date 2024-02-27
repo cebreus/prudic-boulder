@@ -84,12 +84,6 @@ export const cellsToSkip: ReadonlySet<string> = new Set([
 	'R8'
 ]);
 
-/**
- * Checks if a given cell ID should be skipped.
- * @param cellId The ID of the cell to check.
- * @returns `true` if the cell should be skipped, `false` otherwise.
- */
-
 export const isSkippedCell = (cellId: string): boolean => {
 	return cellsToSkip.has(cellId);
 };
@@ -108,11 +102,11 @@ export const generateId = (name: string = ''): string => {
 	return `${name}${Date.now().toString(16)}-${Math.random().toString(16).slice(2, 8)}`;
 };
 
-const BASE_TIMEOUT_MILLISECONDS = 2000;
-const MILLISECONDS_PER_CHARACTER = 30;
+const BaseTimeoutMilliseconds = 2000;
+const MillisecondsPerCharacter = 30;
 
 export const calculateTimeout = (title: string = '', description: string = ''): number => {
 	const totalInputLength = title.length + description.length;
-	const additionalTimeout = totalInputLength * MILLISECONDS_PER_CHARACTER;
-	return BASE_TIMEOUT_MILLISECONDS + additionalTimeout;
+	const additionalTimeout = totalInputLength * MillisecondsPerCharacter;
+	return BaseTimeoutMilliseconds + additionalTimeout;
 };

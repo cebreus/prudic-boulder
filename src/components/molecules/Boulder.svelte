@@ -17,7 +17,7 @@
 
 	let inputBoulderName: string;
 
-	export let selectedBoulder: Boulder | undefined = undefined;
+	export let selectedBoulder: Boulder | undefined;
 	export let isOpen: boolean = false;
 	export let variant: string = 'default';
 
@@ -65,14 +65,14 @@
 		return '';
 	};
 
-	function handleKeyDown(event: CustomEvent) {
+	const handleKeyDown = (event: CustomEvent) => {
 		const keyboardEvent = event.detail as KeyboardEvent;
 		if (keyboardEvent.key === 'Enter') {
 			handleDialogResponse();
 			keyboardEvent.preventDefault();
 			keyboardEvent.stopPropagation();
 		}
-	}
+	};
 </script>
 
 <Dialog {isOpen} on:close={() => (isOpen = false)} on:keydown={handleKeyDown}>

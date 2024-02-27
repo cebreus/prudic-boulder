@@ -14,9 +14,9 @@
 	let onlyTitle: boolean = (!$$slots.DialogDescription && !$$slots.DialogContent) ?? true;
 
 	const dispatch = createEventDispatcher();
-	function handleKeydown(event: CustomEvent) {
+	const handleKeydown = (event: CustomEvent) => {
 		dispatch('keydown', event);
-	}
+	};
 
 	const closeDialog = () => {
 		isOpen = false;

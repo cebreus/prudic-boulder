@@ -7,11 +7,11 @@ export const toasts = writable<Toast[]>([]);
 
 // Utility function for logging and validation
 const validateNonEmptyString = (value: string, context: string): boolean => {
-	if (value.trim() === '') {
+	const isValid = value.trim() !== '';
+	if (!isValid) {
 		log.error(`Invalid or empty string provided to ${context}`);
-		return false;
 	}
-	return true;
+	return isValid;
 };
 
 // Dismiss a toast by ID

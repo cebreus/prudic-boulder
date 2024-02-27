@@ -1,6 +1,6 @@
 export type ToastVariant = 'success' | 'info' | 'warning' | 'error';
 
-export interface Toast {
+export type Toast = {
 	id: string;
 	variant: ToastVariant;
 	title: string;
@@ -8,9 +8,9 @@ export interface Toast {
 	dismissible: boolean;
 	progress: number;
 	timeout: number;
-}
+};
 
-interface ToastStyleConfig {
+export type ToastStyleConfig = {
 	classes: string;
 	classesDesc: string;
 	icon: string;
@@ -18,6 +18,6 @@ interface ToastStyleConfig {
 	progressClasses: string;
 	role: 'status' | 'alert';
 	ariaLive: 'assertive' | 'polite' | 'off';
-}
+};
 
 export type ToastConfig = Record<ToastVariant, ToastStyleConfig>;
