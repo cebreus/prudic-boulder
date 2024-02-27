@@ -12,14 +12,8 @@
 	export let desc: string = '';
 	export let id: string = '';
 	export { className as class };
-	export let exposeSvg: (node: SVGElement) => void;
 
 	let className = '';
-	let svgElement: SVGElement;
-
-	$: if (exposeSvg && svgElement) {
-		exposeSvg(svgElement);
-	}
 </script>
 
 <svg
@@ -35,7 +29,6 @@
 	aria-label={ariaLabel}
 	aria-hidden={ariaHidden ? 'true' : 'false'}
 	xmlns="http://www.w3.org/2000/svg"
-	bind:this={svgElement}
 >
 	{#if title}
 		<title>{title}</title>

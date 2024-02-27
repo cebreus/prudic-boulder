@@ -1,31 +1,14 @@
 <script lang="ts">
-	import { tick } from 'svelte';
 	import MenuToggler from '../../icons/MenuToggler.svelte';
 	import Logo from '../../icons/Logo.svelte';
+	import { link } from 'svelte-spa-router';
 
 	export let currentPath = '';
 
 	let menuOpen = false;
-	let svgElement: SVGElement | null = null;
-
-	const receiveSvgElement = (node: SVGElement) => {
-		svgElement = node;
-	};
-
-	const resetSvgAnimation = (): void => {
-		if (!svgElement) return;
-		const newSvgElement: Node = svgElement.cloneNode(true);
-		svgElement.parentNode!.replaceChild(newSvgElement, svgElement);
-		svgElement = newSvgElement as SVGElement; // Cast cloned node back to SVGElement
-	};
 
 	const toggleMenu = () => {
 		menuOpen = !menuOpen;
-		tick().then(() => {
-			if (!menuOpen) {
-				resetSvgAnimation();
-			}
-		});
 	};
 
 	let menuItems = [
@@ -53,11 +36,7 @@
 					aria-expanded={menuOpen}
 					on:click={toggleMenu}
 				>
-					<MenuToggler
-						exposeSvg={receiveSvgElement}
-						class="block h-7 w-7 cursor-pointer"
-						id="menu-toggler"
-					/>
+					<MenuToggler class="block h-7 w-7 cursor-pointer" id="menu-toggler" />
 					<span class="sr-only">Otevřít hlavní menu</span>
 				</button>
 			</div>
