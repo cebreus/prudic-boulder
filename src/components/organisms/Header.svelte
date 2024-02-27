@@ -1,7 +1,6 @@
 <script lang="ts">
 	import MenuToggler from '../../icons/MenuToggler.svelte';
 	import Logo from '../../icons/Logo.svelte';
-	import { link } from 'svelte-spa-router';
 
 	export let currentPath = '';
 
