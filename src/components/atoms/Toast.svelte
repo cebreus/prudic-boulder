@@ -123,8 +123,7 @@
 						class="ml-auto rounded-full text-slate-400 hover:text-slate-600 focus:outline-none dark:hover:text-slate-200"
 						on:click={() => dismissToast(toast.id)}
 					>
-						<Icon path={mdiClose} class="size-5"/>
-
+						<Icon path={mdiClose} class="size-5" />
 					</button>
 				{/if}
 			</div>
