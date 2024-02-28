@@ -2,12 +2,12 @@
 	import { clickedCells, selector, boulders } from '../../stores/BoulderStore.svelte';
 	import {
 		isSkippedCell,
-		cols,
-		rows,
 		skippedClass,
 		startClass,
 		topClass,
-		clickedClass
+		clickedClass,
+		rows,
+		cols
 	} from '../utils/utils';
 	import Button from '../atoms/Button.svelte';
 	import log from '../utils/logger';
@@ -23,8 +23,9 @@
 	export let isOpen: boolean = false;
 	export let variant: string = 'default';
 
-	$: tableRows = Array.from({ length: rows }, (_, i) => String.fromCharCode(65 + i));
-	$: tableCols = Array.from({ length: cols }, (_, i) => i);
+	export const tableRows = Array.from({ length: rows }, (_, i) => String.fromCharCode(65 + i));
+	export const tableCols = Array.from({ length: cols }, (_, i) => i);
+
 	$: selectedMode = $selector.selectedMode;
 
 	$: if (!isOpen) {
@@ -33,11 +34,12 @@
 
 	const toggleCellAndUpdateSelector = (cellId: string) => {
 		if (isSkippedCell(cellId)) {
-			log.debug(`Toggling cell: ${cellId} SKIPPED with mode: ${selectedMode}`);
+			log.debug(`Toggling cell: ${cellId} SKIPPED with mode: ${$selector.selectedMode}`);
 			return;
 		}
-		log.debug(`Toggling cell: ${cellId} with mode: ${selectedMode}`);
+		log.debug(`Toggling cell: ${cellId} with mode: ${$selector.selectedMode}`);
 		selector.updateSelector(cellId, selectedMode);
+
 		clickedCells.toggle(cellId, selectedMode);
 	};
 
@@ -152,10 +154,10 @@
 		@apply table-fixed border-separate text-xs sm:text-base;
 	}
 	:global(table.wall th) {
-		@apply h-7 w-7 rounded-sm text-center slashed-zero tabular-nums text-slate-400 sm:h-8 sm:w-8 dark:text-slate-400;
+		@apply size-7 rounded-sm text-center slashed-zero tabular-nums text-slate-400 sm:h-8 sm:w-8 dark:text-slate-400;
 	}
 	:global(table.wall td) {
-		@apply h-7 w-7 rounded-sm text-center slashed-zero tabular-nums sm:h-8 sm:w-8;
+		@apply size-7 rounded-sm text-center slashed-zero tabular-nums sm:h-8 sm:w-8;
 	}
 	:global(table.wall td:not(.skipped)) {
 		@apply cursor-pointer border border-sky-300 bg-sky-50 text-sky-600 hover:border-sky-400 hover:bg-sky-100 hover:text-sky-700 dark:border-sky-700 dark:bg-sky-950 dark:text-sky-200  dark:hover:bg-sky-900 dark:hover:text-white;
