@@ -5,7 +5,7 @@
 	import log from '../components/utils/logger.ts';
 
 	// Define TypeScript types
-	import type { CellId, BoulderId, Boulder, Selector } from '../components/utils/BoulderTypes';
+	import type { Boulder, Mode, Selector } from '../components/utils/BoulderTypes';
 
 	// check for browser environment
 	const isBrowser = typeof window !== 'undefined';
@@ -16,7 +16,7 @@
 
 		return {
 			subscribe,
-			toggle: (cellId: CellId, selectedMode: string | null) => {
+			toggle: (cellId: string, selectedMode: Mode | undefined) => {
 				log.info('  createClickedCellsStore.toggle');
 				log.info('    Toggle:   ', cellId, 'with mode:', selectedMode);
 				update((cells) => {
@@ -43,7 +43,7 @@
 				});
 			},
 
-			removeCellById: (cellId: CellId) => {
+			removeCellById: (cellId: string) => {
 				log.info('createClickedCellsStore.removeCellById');
 				update((cells) => {
 					const updated = new Map(cells);
@@ -64,19 +64,19 @@
 	// Custom Store for Selector
 	const createSelectorStore = () => {
 		const { subscribe, set, update } = writable<Selector>({
-			selectedMode: null,
-			selectedStartCell: null,
-			selectedTopCell: null
+			selectedMode: undefined,
+			selectedStartCell: undefined,
+			selectedTopCell: undefined
 		});
 
 		return {
 			subscribe,
-			setMode: (mode: string) => {
+			setMode: (mode: Mode) => {
 				log.debug('createSelectorStore.setMode with:', mode);
 				update((s) => ({ ...s, selectedMode: mode }));
 			},
 
-			updateSelector: (cellId: CellId, selectedMode: string | null) => {
+			updateSelector: (cellId: string, selectedMode: Mode | undefined) => {
 				log.debug('  createSelectorStore.updateSelector');
 				update((prev) => {
 					let updatedSelector = { ...prev };
@@ -86,7 +86,7 @@
 							clickedCells.removeCellById(prev.selectedStartCell);
 						}
 						if (cellId === prev.selectedTopCell) {
-							updatedSelector.selectedTopCell = null;
+							updatedSelector.selectedTopCell = undefined;
 						}
 						updatedSelector.selectedStartCell = cellId;
 					} else if (selectedMode === 'Top') {
@@ -94,11 +94,11 @@
 							clickedCells.removeCellById(prev.selectedTopCell);
 						}
 						if (cellId === prev.selectedStartCell) {
-							updatedSelector.selectedStartCell = null;
+							updatedSelector.selectedStartCell = undefined;
 						}
 						updatedSelector.selectedTopCell = cellId;
 					}
-					updatedSelector.selectedMode = null;
+					updatedSelector.selectedMode = undefined;
 
 					return updatedSelector;
 				});
@@ -107,9 +107,9 @@
 			clear: () => {
 				log.info('createSelectorStore.clear');
 				set({
-					selectedMode: null,
-					selectedStartCell: null,
-					selectedTopCell: null
+					selectedMode: undefined,
+					selectedStartCell: undefined,
+					selectedTopCell: undefined
 				});
 			}
 		};
@@ -121,9 +121,9 @@
 		const { subscribe, update } = writable(initialValue);
 
 		const addBoulder = (
-			clickedCellsMap: Map<CellId, { class: string }>,
+			clickedCellsMap: Map<string, { class: string }>,
 			selectorState: Selector,
-			name: string | null
+			name: string | undefined
 		) => {
 			log.debug('createBouldersStore.addBoulder');
 			if (!clickedCellsMap.size) {
@@ -163,7 +163,7 @@
 			);
 		};
 
-		const removeBoulder = (boulderId: BoulderId) => {
+		const removeBoulder = (boulderId: string) => {
 			log.debug('createBouldersStore.removeBoulder');
 			update((boulders) => {
 				const newBoulders = boulders.filter((boulder: Boulder) => boulder.id !== boulderId);

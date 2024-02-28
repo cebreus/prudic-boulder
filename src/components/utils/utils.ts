@@ -1,4 +1,4 @@
-export const cellsToSkip: Set<string> = new Set([
+export const cellsToSkip: ReadonlySet<string> = new Set([
 	'B0',
 	'B3',
 	'B6',
@@ -87,31 +87,26 @@ export const cellsToSkip: Set<string> = new Set([
 export const isSkippedCell = (cellId: string): boolean => {
 	return cellsToSkip.has(cellId);
 };
+
 export const rows: number = 18;
 export const cols: number = 10;
 
-export const skippedClass: string = 'skipped';
-export const clickedClass: string = 'holds';
-export const startClass: string = 'start';
-export const topClass: string = 'top';
+type CssClassName = 'skipped' | 'holds' | 'start' | 'top';
 
-export const generateId = (name?: string): string => {
-	const prefix = name ? `${name}-` : '';
-	return `${prefix}${Date.now()}-${Math.random().toString(16).slice(2, 5)}`;
+export const skippedClass: CssClassName = 'skipped';
+export const clickedClass: CssClassName = 'holds';
+export const startClass: CssClassName = 'start';
+export const topClass: CssClassName = 'top';
+
+export const generateId = (name: string = ''): string => {
+	return `${name}${Date.now().toString(16)}-${Math.random().toString(16).slice(2, 8)}`;
 };
+
+const BaseTimeoutMilliseconds = 2000;
+const MillisecondsPerCharacter = 30;
 
 export const calculateTimeout = (title: string = '', description: string = ''): number => {
-	const baseTimeoutMilliseconds = 2000;
-	const millisecondsPerCharacter = 30;
-
 	const totalInputLength = title.length + description.length;
-	const additionalTimeout = totalInputLength * millisecondsPerCharacter;
-
-	return baseTimeoutMilliseconds + additionalTimeout;
+	const additionalTimeout = totalInputLength * MillisecondsPerCharacter;
+	return BaseTimeoutMilliseconds + additionalTimeout;
 };
-
-interface DialogKeyboardEventDetail {
-	keyboardEvent: KeyboardEvent;
-}
-
-export interface DialogKeyboardEvent extends CustomEvent<DialogKeyboardEventDetail> {}
