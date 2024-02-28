@@ -14,6 +14,7 @@
 	import Dialog from './Dialog.svelte';
 
 	import type { Boulder } from '../utils/BoulderTypes';
+
 	import { fade } from 'svelte/transition';
 
 	let inputBoulderName: string;
@@ -95,7 +96,7 @@
 	</svelte:fragment>
 </Dialog>
 
-<div in:fade={{ duration: 300 }}>
+<div in:fade={{ duration: 500 }}>
 	<table class="wall">
 		<thead>
 			<tr>

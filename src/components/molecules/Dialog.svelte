@@ -31,6 +31,7 @@
 		open={isOpen}
 		on:close={closeDialog}
 		class="fixed inset-0 z-10 overflow-y-auto"
+		on:keydown={handleKeydown}
 	>
 		<TransitionChild
 			as="div"

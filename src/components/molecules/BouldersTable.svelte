@@ -7,6 +7,7 @@
 	import Dialog from './Dialog.svelte';
 	import Toast from '../atoms/Toast.svelte';
 	import { mdiDelete } from '@mdi/js';
+	import { fade } from 'svelte/transition';
 
 	// Define TypeScript types
 	import type { Boulder } from '../utils/BoulderTypes';
@@ -37,51 +38,51 @@
 	};
 </script>
 
-<div in:fade={{ duration: 300 }} out:fade={{ duration: 100 }}>
+<div in:fade={{ duration: 500 }}>
 	{#if bouldersFromLS?.length > 0}
 		<div id="table-container" class="my-8 overflow-x-auto">
 			<table id="dataTable">
 				<thead>
-				<tr>
-					<th>Name/ID</th>
-					<th>Cells</th>
-					<th colspan="3"></th>
-				</tr>
+					<tr>
+						<th>Name/ID</th>
+						<th>Cells</th>
+						<th colspan="3"></th>
+					</tr>
 				</thead>
 				<tbody>
-				{#each bouldersFromLS as boulder (boulder.id)}
-					<tr>
-						<td>
-							<button
+					{#each bouldersFromLS as boulder (boulder.id)}
+						<tr>
+							<td>
+								<button
 									on:click={() => openDialog(boulder)}
 									id={boulder.id}
 									data-created={boulder.createdAt}
-							>
-								{boulder.name ? boulder.name : boulder.id}
-							</button>
-						</td>
-						<td>
-							{#if boulder.path}
-								{#each boulder.path as { id }}
-									{id}
-								{/each}
-							{/if}
-							<div>
-								{#if boulder.start}
-									Start: {boulder.start}
+								>
+									{boulder.name ? boulder.name : boulder.id}
+								</button>
+							</td>
+							<td>
+								{#if boulder.path}
+									{#each boulder.path as { id }}
+										{id}
+									{/each}
 								{/if}
-								{#if boulder.top}
-									Top: {boulder.top}
-								{/if}
-							</div>
-						</td>
-						<td>
-							<button on:click={() => handleRemoveBoulder(boulder.id)}>
-								<Icon path={mdiDelete} class="size-5 text-red-500" />
-							</button>
-						</td>
-					</tr>
-				{/each}
+								<div>
+									{#if boulder.start}
+										Start: {boulder.start}
+									{/if}
+									{#if boulder.top}
+										Top: {boulder.top}
+									{/if}
+								</div>
+							</td>
+							<td>
+								<button on:click={() => handleRemoveBoulder(boulder.id)}>
+									<Icon path={mdiDelete} class="size-5 text-red-500" />
+								</button>
+							</td>
+						</tr>
+					{/each}
 				</tbody>
 			</table>
 		</div>
@@ -89,7 +90,7 @@
 		<Alert showIcon>
 			Vytvořte si
 			<a href="/new-boulder" class="text-blue-600 underline hover:no-underline dark:text-blue-300"
-			>novou cestu</a
+				>novou cestu</a
 			> na lezecké stěně.
 		</Alert>
 	{/if}
