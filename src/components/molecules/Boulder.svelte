@@ -1,18 +1,28 @@
 <script lang="ts">
 	import { clickedCells, selector, boulders } from '../../stores/BoulderStore.svelte';
-	import { isSkippedCell, skippedClass, startClass, topClass, clickedClass } from '../utils/utils';
+	import {
+		isSkippedCell,
+		skippedClass,
+		startClass,
+		topClass,
+		clickedClass,
+		rows,
+		cols
+	} from '../utils/utils';
 	import Button from '../atoms/Button.svelte';
 	import log from '../utils/logger';
 	import Dialog from './Dialog.svelte';
 
 	import type { Boulder } from '../utils/BoulderTypes';
-	import { tableCols, tableRows } from '../utils/utils.js';
 
 	let inputBoulderName: string;
 
 	export let selectedBoulder: Boulder | undefined;
 	export let isOpen: boolean = false;
 	export let variant: string = 'default';
+
+	export const tableRows = Array.from({ length: rows }, (_, i) => String.fromCharCode(65 + i));
+	export const tableCols = Array.from({ length: cols }, (_, i) => i);
 
 	$: selectedMode = $selector.selectedMode;
 

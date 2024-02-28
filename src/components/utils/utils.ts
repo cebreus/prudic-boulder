@@ -91,9 +91,6 @@ export const isSkippedCell = (cellId: string): boolean => {
 export const rows: number = 18;
 export const cols: number = 10;
 
-export const tableRows = Array.from({ length: rows }, (_, i) => String.fromCharCode(65 + i));
-export const tableCols = Array.from({ length: cols }, (_, i) => i);
-
 type CssClassName = 'skipped' | 'holds' | 'start' | 'top';
 
 export const skippedClass: CssClassName = 'skipped';
