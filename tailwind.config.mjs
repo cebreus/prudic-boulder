@@ -5,6 +5,7 @@ export default {
 		extend: {}
 	},
 <<<<<<< HEAD
+<<<<<<< HEAD
 	plugins: [require('@tailwindcss/typography')]
 =======
 	plugins: [
@@ -28,4 +29,7 @@ export default {
 		})
 	]
 >>>>>>> 8ad8278 (fix: formating)
+=======
+	plugins: [require('@tailwindcss/typography')]
+>>>>>>> e46e0c2 (fix: remove plugin fn)
 };
