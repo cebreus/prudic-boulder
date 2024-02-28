@@ -1,19 +1,12 @@
 <script lang="ts">
 	import { clickedCells, selector, boulders } from '../../stores/BoulderStore.svelte';
-	import {
-		isSkippedCell,
-		cols,
-		rows,
-		skippedClass,
-		startClass,
-		topClass,
-		clickedClass
-	} from '../utils/utils';
+	import { isSkippedCell, skippedClass, startClass, topClass, clickedClass } from '../utils/utils';
 	import Button from '../atoms/Button.svelte';
 	import log from '../utils/logger';
 	import Dialog from './Dialog.svelte';
 
 	import type { Boulder } from '../utils/BoulderTypes';
+	import { tableCols, tableRows } from '../utils/utils.js';
 
 	let inputBoulderName: string;
 
@@ -21,8 +14,6 @@
 	export let isOpen: boolean = false;
 	export let variant: string = 'default';
 
-	let tableRows = Array.from({ length: rows }, (_, i) => String.fromCharCode(65 + i));
-	let tableCols = Array.from({ length: cols }, (_, i) => i);
 	$: selectedMode = $selector.selectedMode;
 
 	$: if (!isOpen) {
@@ -31,14 +22,11 @@
 
 	const toggleCellAndUpdateSelector = (cellId: string) => {
 		if (isSkippedCell(cellId)) {
-			log.debug(`Toggling cell: ${cellId} SKIPPED with mode: ${selectedMode}`);
+			log.debug(`Toggling cell: ${cellId} SKIPPED with mode: ${$selector.selectedMode}`);
 			return;
 		}
-		log.debug(`Toggling cell: ${cellId} with mode: ${selectedMode}`);
+		log.debug(`Toggling cell: ${cellId} with mode: ${$selector.selectedMode}`);
 		selector.updateSelector(cellId, selectedMode);
-
-		log.info('$selector.selectedMode;======>:', $selector.selectedMode);
-		log.info('selectedMode ======>:', selectedMode);
 
 		clickedCells.toggle(cellId, selectedMode);
 	};
