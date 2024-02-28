@@ -18,6 +18,7 @@
 			subscribe,
 			toggle: (cellId: string, selectedMode: Mode | undefined) => {
 				log.info('  createClickedCellsStore.toggle');
+				log.info('selectedMode in store:', selectedMode);
 				log.info('    Toggle:   ', cellId, 'with mode:', selectedMode);
 				update((cells) => {
 					const updated = new Map(cells);
