@@ -4,32 +4,5 @@ export default {
 	theme: {
 		extend: {}
 	},
-<<<<<<< HEAD
-<<<<<<< HEAD
 	plugins: [require('@tailwindcss/typography')]
-=======
-	plugins: [
-		require('@tailwindcss/typography'),
-		plugin(function ({ addUtilities }) {
-			const newUtilities = {
-				'.size-5': {
-					width: '1.25rem',
-					height: '1.25rem'
-				},
-				'.size-6': {
-					width: '1.5rem',
-					height: '1.5rem'
-				},
-				'.size-7': {
-					width: '1.75rem',
-					height: '1.75rem'
-				}
-			};
-			addUtilities(newUtilities);
-		})
-	]
->>>>>>> 8ad8278 (fix: formating)
-=======
-	plugins: [require('@tailwindcss/typography')]
->>>>>>> e46e0c2 (fix: remove plugin fn)
 };
