@@ -131,8 +131,14 @@
 	</div>
 {/if}
 
-<style lang="postcss">
-	:global([data-cy='toast'] a) {
+<!--<style lang="postcss">-->
+<!--	:global([data-cy='toast'] a) {-->
+<!--		@apply underline hover:no-underline;-->
+<!--	}-->
+<!--</style>-->
+
+<style lang="postcss" global>
+	[data-cy='toast'] a {
 		@apply underline hover:no-underline;
 	}
 </style>

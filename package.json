@@ -52,5 +52,8 @@
 		"*.js": [
 			"eslint --fix"
 		]
+	},
+	"dependencies": {
+		"svelte-preprocess": "^5.1.3"
 	}
 }
