@@ -1,31 +1,13 @@
 <script lang="ts">
-	import { tick } from 'svelte';
-	import { onMount } from 'svelte';
 	import MenuToggler from '../../icons/MenuToggler.svelte';
 	import Logo from '../../icons/Logo.svelte';
 
 	export let currentPath = '';
 
 	let menuOpen = false;
-	let svgElement: HTMLElement;
-
-	onMount(() => {
-		svgElement = document.querySelector('#menu-toggler') as HTMLElement;
-	});
-
-	const resetSvgAnimation = () => {
-		const newSvgElement = svgElement.cloneNode(true) as HTMLElement;
-		svgElement.parentNode!.replaceChild(newSvgElement, svgElement);
-		svgElement = newSvgElement; // update svgElement to reference the new node
-	};
 
 	const toggleMenu = () => {
 		menuOpen = !menuOpen;
-		tick().then(() => {
-			if (!menuOpen) {
-				resetSvgAnimation();
-			}
-		});
 	};
 
 	let menuItems = [

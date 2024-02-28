@@ -9,10 +9,10 @@
 	import { mdiDelete } from '@mdi/js';
 
 	// Define TypeScript types
-	import type { Boulder, BouldersArray, BoulderId } from '../utils/BoulderTypes';
+	import type { Boulder } from '../utils/BoulderTypes';
 	import log from 'loglevel';
 
-	let bouldersFromLS: BouldersArray = [];
+	let bouldersFromLS: Boulder[] = [];
 	let selectedBoulder: Boulder = { id: '', createdAt: 0, path: [] };
 	export let isOpen = false;
 
@@ -26,13 +26,13 @@
 
 	onDestroy(unsubscribe);
 
-	function openDialog(boulder: Boulder) {
+	const openDialog = (boulder: Boulder) => {
 		selectedBoulder = boulder;
 		log.info('selectedBoulder', selectedBoulder);
 		isOpen = true;
-	}
+	};
 
-	const handleRemoveBoulder = (boulderId: BoulderId) => {
+	const handleRemoveBoulder = (boulderId: string) => {
 		boulders.removeBoulder(boulderId);
 	};
 </script>

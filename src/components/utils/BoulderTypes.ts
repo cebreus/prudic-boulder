@@ -1,24 +1,21 @@
-export type CellId = string;
-export type BoulderId = string;
+export type Mode = 'Top' | 'Start';
 
 export type Cell = {
-	id: CellId;
+	id: string;
 	colorBrightness: string;
 };
 
 export type Selector = {
-	selectedMode: string | null;
-	selectedStartCell: string | null;
-	selectedTopCell: string | null;
+	selectedMode: Mode | undefined;
+	selectedStartCell: string | undefined;
+	selectedTopCell: string | undefined;
 };
 
 export type Boulder = {
-	id: BoulderId;
+	id: string;
 	createdAt: number;
 	name?: string;
 	start?: string;
 	top?: string;
 	path: Cell[];
 };
-
-export type BouldersArray = Boulder[];

@@ -13,11 +13,11 @@
 	import log from '../utils/logger';
 	import Dialog from './Dialog.svelte';
 
-	import type { Boulder, CellId } from '../utils/BoulderTypes';
+	import type { Boulder } from '../utils/BoulderTypes';
 
 	let inputBoulderName: string;
 
-	export let selectedBoulder: Boulder;
+	export let selectedBoulder: Boulder | undefined;
 	export let isOpen: boolean = false;
 	export let variant: string = 'default';
 
@@ -29,7 +29,7 @@
 		inputBoulderName = '';
 	}
 
-	const toggleCellAndUpdateSelector = (cellId: CellId) => {
+	const toggleCellAndUpdateSelector = (cellId: string) => {
 		if (isSkippedCell(cellId)) {
 			log.debug(`Toggling cell: ${cellId} SKIPPED with mode: ${selectedMode}`);
 			return;
@@ -69,17 +69,17 @@
 		return '';
 	};
 
-	const handleKeyDown = (event: KeyboardEvent): void => {
-		if (event.isComposing || event.key === 'Enter') {
+	const handleKeyDown = (event: CustomEvent) => {
+		const keyboardEvent = event.detail as KeyboardEvent;
+		if (keyboardEvent.key === 'Enter') {
 			handleDialogResponse();
-			isOpen = false;
-			event.preventDefault();
-			event.stopPropagation();
+			keyboardEvent.preventDefault();
+			keyboardEvent.stopPropagation();
 		}
 	};
 </script>
 
-<Dialog {isOpen} on:close={() => (isOpen = false)} onKeydown={handleKeyDown}>
+<Dialog {isOpen} on:close={() => (isOpen = false)} on:keydown={handleKeyDown}>
 	<svelte:fragment slot="DialogTitle">Název boulderu</svelte:fragment>
 	<svelte:fragment slot="DialogContent">
 		<input
