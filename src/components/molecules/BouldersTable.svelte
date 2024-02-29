@@ -37,7 +37,7 @@
 	};
 </script>
 
-<div in:fade={{ duration: 300 }} out:fade={{ duration: 100 }}>
+<div in:fade={{ duration: 500 }} out:fade={{ duration: 100 }}>
 	{#if bouldersFromLS?.length > 0}
 		<div id="table-container" class="my-8 overflow-x-auto">
 			<table id="dataTable">
