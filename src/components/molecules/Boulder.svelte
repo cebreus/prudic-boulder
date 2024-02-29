@@ -49,9 +49,47 @@
 					</td>
 				{/each}
 			</tr>
-		{/each}
-	</tbody>
-</table>
+		</thead>
+		<tbody>
+			{#each tableRows as row, rowIndex}
+				<tr>
+					<th>{String.fromCharCode(65 + rowIndex)}</th>
+					{#each tableCols as col}
+						{@const cellId = `${row}${col}`}
+						<td
+							class={isSkippedCell(cellId)
+								? skippedClass
+								: selectedBoulder
+									? getClassFromBoulder(cellId)
+									: $clickedCells.get(cellId)?.class ?? ''}
+							on:click={selectedBoulder ? null : () => toggleCellAndUpdateSelector(cellId)}
+						>
+							{isSkippedCell(cellId) ? '' : cellId}
+						</td>
+					{/each}
+				</tr>
+			{/each}
+		</tbody>
+	</table>
+
+	{#if variant === 'default'}
+		<div class="grid w-[20.8em] grid-flow-col justify-stretch gap-4 pl-9 pr-1 pt-4 sm:w-[23.5em]">
+			<Button variant="outline" on:click={() => selector.setMode('Start')}>Start</Button>
+			<Button variant="outline" on:click={() => selector.setMode('Top')}>Top</Button>
+			<Button emoji="💾" variant="outlineGreen" aria-label="Save" on:click={handleSaveBoulder}
+			></Button>
+			<Button
+				emoji="🗑️"
+				variant="outlineYellow"
+				aria-label="Clear"
+				on:click={() => {
+					clickedCells.clear();
+					selector.clear();
+				}}
+			></Button>
+		</div>
+	{/if}
+</div>
 
 <style lang="postcss">
 	:global(table.wall) {
@@ -64,7 +102,7 @@
 		@apply size-7 rounded-sm text-center slashed-zero tabular-nums transition-colors sm:h-8 sm:w-8;
 	}
 	:global(table.wall td:not(.skipped)) {
-		@apply cursor-pointer border border-sky-300 bg-sky-50 text-sky-600 hover:border-sky-400 hover:bg-sky-100 hover:text-sky-700 dark:border-sky-700 dark:bg-sky-950 dark:text-sky-200  dark:hover:bg-sky-900 dark:hover:text-white;
+		@apply cursor-pointer border border-sky-300 bg-sky-50 text-sky-600 transition-colors hover:border-sky-400 hover:bg-sky-100 hover:text-sky-700 dark:border-sky-700 dark:bg-sky-950 dark:text-sky-200  dark:hover:bg-sky-900 dark:hover:text-white;
 	}
 	:global(table.wall td.holds) {
 		@apply border-amber-300 bg-amber-100 text-amber-600 hover:border-amber-400 hover:bg-amber-200 hover:text-amber-700 dark:border-amber-400 dark:bg-amber-600 dark:text-amber-200  dark:hover:border-amber-200 dark:hover:bg-amber-600 dark:hover:text-white;
