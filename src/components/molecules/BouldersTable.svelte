@@ -115,10 +115,10 @@
 		@apply border-b bg-slate-50 text-xs uppercase text-slate-500 dark:border-slate-700 dark:bg-slate-800;
 	}
 	table tbody tr {
-		@apply border-b bg-white dark:border-slate-700 dark:bg-slate-900;
+		@apply border-b bg-white transition-colors dark:border-slate-700 dark:bg-slate-900;
 	}
 	table tbody tr:hover {
-		@apply bg-gray-200 outline-dotted outline-1 outline-slate-400 transition duration-500 ease-in-out dark:bg-slate-700;
+		@apply bg-gray-200 outline-dotted outline-1 outline-slate-400 duration-500 ease-in-out dark:bg-slate-700;
 	}
 	table th {
 		@apply px-3 py-2 align-bottom dark:text-slate-300;

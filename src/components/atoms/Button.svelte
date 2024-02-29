@@ -25,7 +25,7 @@
 	export let submit: boolean = false;
 
 	const defaultClass: string =
-		'relative inline-flex justify-center rounded md:rounded-md px-2.5 py-1 text-sm md:text-base md:px-4 md:py-1.5 font-semibold leading-6 disabled:cursor-not-allowed disabled:pointer-events-none focus:ring focus:outline-none';
+		'relative inline-flex justify-center rounded md:rounded-md px-2.5 py-1 text-sm md:text-base md:px-4 md:py-1.5 font-semibold leading-6 disabled:cursor-not-allowed disabled:pointer-events-none focus:ring focus:outline-none transition-colors duration-500 ease-in-out';
 
 	const variantClasses: Record<string, string> = {
 		primary:
@@ -49,11 +49,11 @@
 		outline:
 			'bg-transparent text-sky-500 hover:text-white  ring-sky-500 hover:bg-gradient-to-r from-sky-500 to-sky-600 hover:ring-0 focus:ring-sky-300 dark:text-sky-600 dark:hover:text-white dark:hover:bg-sky-600 dark:focus:ring-sky-800',
 		outlineGreen:
-			'bg-transparent text-green-500 hover:text-white  ring-green-500 hover:bg-gradient-to-r from-green-500 to-green-600 hover:ring-0 focus:ring-green-300 dark:text-green-600 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800',
+			'bg-transparent text-green-500 hover:text-white  ring-green-500 hover:bg-green-500 hover:ring-0 focus:ring-green-300 dark:text-green-600 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800',
 		outlineRed:
-			'bg-transparent text-rose-500 hover:text-white ring-rose-500  hover:bg-gradient-to-r from-rose-500 to-rose-600 hover:ring-0 focus:ring-rose-300 dark:text-rose-600 dark:hover:text-white dark:hover:bg-rose-600 dark:focus:ring-rose-800',
+			'bg-transparent text-rose-500 hover:text-white ring-rose-500  hover:bg-rose-500 hover:ring-0 focus:ring-rose-300 dark:text-rose-600 dark:hover:text-white dark:hover:bg-rose-600 dark:focus:ring-rose-800',
 		outlineYellow:
-			'bg-transparent text-yellow-500 hover:text-white ring-yellow-500  hover:bg-gradient-to-r from-yellow-500 to-yellow-600 hover:ring-0 focus:ring-yellow-300 dark:text-yellow-600 dark:hover:text-white dark:hover:bg-yellow-600 dark:focus:ring-yellow-800'
+			'bg-transparent text-yellow-500 hover:text-white ring-yellow-500  hover:bg-yellow-500 hover:ring-0 focus:ring-yellow-300 dark:text-yellow-600 dark:hover:text-white dark:hover:bg-yellow-600 dark:focus:ring-yellow-800'
 	};
 
 	// Update the disabled prop if the color prop is set to 'disabled'
