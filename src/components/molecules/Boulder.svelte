@@ -99,7 +99,7 @@
 	</svelte:fragment>
 </Dialog>
 
-<div in:fade={{ duration: 500 }}>
+<div in:fade>
 	<table class="wall">
 		<thead>
 			<tr>
@@ -120,7 +120,7 @@
 								? skippedClass
 								: selectedBoulder
 									? getClassFromBoulder(cellId)
-									: $clickedCells.get(cellId)?.class ?? ''} transition-colors duration-300"
+									: $clickedCells.get(cellId)?.class ?? ''} transition-colors"
 							on:click={selectedBoulder ? null : () => toggleCellAndUpdateSelector(cellId)}
 						>
 							{isSkippedCell(cellId) ? '' : cellId}
