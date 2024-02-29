@@ -90,12 +90,13 @@
 	<svelte:fragment slot="DialogFooter">
 		<Button
 			class="inline-flex w-full justify-center rounded-md sm:w-auto"
-			on:click={handleDialogResponse}>Save</Button
+			on:click={handleDialogResponse}
+			variant="primary">Save</Button
 		>
 	</svelte:fragment>
 </Dialog>
 
-<div in:fade={{ duration: 300 }}>
+<div in:fade={{ duration: 500 }}>
 	<table class="wall">
 		<thead>
 			<tr>
