@@ -6,13 +6,14 @@
 	import Icon from '../../components/atoms/Icon.svelte';
 	import Dialog from './Dialog.svelte';
 	import Toast from '../atoms/Toast.svelte';
+	import { mdiDelete } from '@mdi/js';
 	import { fade } from 'svelte/transition';
 
 	// Define TypeScript types
-	import type { Boulder, BouldersArray, BoulderId } from '../utils/BoulderTypes';
+	import type { Boulder } from '../utils/BoulderTypes';
 	import log from 'loglevel';
 
-	let bouldersFromLS: BouldersArray = [];
+	let bouldersFromLS: Boulder[] = [];
 	let selectedBoulder: Boulder = { id: '', createdAt: 0, path: [] };
 	export let isOpen = false;
 
@@ -26,18 +27,18 @@
 
 	onDestroy(unsubscribe);
 
-	function openDialog(boulder: Boulder) {
+	const openDialog = (boulder: Boulder) => {
 		selectedBoulder = boulder;
 		log.info('selectedBoulder', selectedBoulder);
 		isOpen = true;
-	}
+	};
 
-	const handleRemoveBoulder = (boulderId: BoulderId) => {
+	const handleRemoveBoulder = (boulderId: string) => {
 		boulders.removeBoulder(boulderId);
 	};
 </script>
 
-<div in:fade={{ duration: 500 }} out:fade={{ duration: 100 }}>
+<div in:fade={{ duration: 500 }}>
 	{#if bouldersFromLS?.length > 0}
 		<div id="table-container" class="my-8 overflow-x-auto">
 			<table id="dataTable">
@@ -77,10 +78,7 @@
 							</td>
 							<td>
 								<button on:click={() => handleRemoveBoulder(boulder.id)}>
-									<Icon
-										iconName="mdiDelete"
-										class="h-5 w-5 text-red-500 transition duration-500 ease-in-out hover:text-red-800"
-									/>
+									<Icon path={mdiDelete} class="size-5 text-red-500" />
 								</button>
 							</td>
 						</tr>
