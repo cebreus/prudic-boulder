@@ -9,6 +9,7 @@
 	import { mdiDelete } from '@mdi/js';
 	import type { Boulder } from '../utils/BoulderTypes.ts';
 	import log from 'loglevel';
+	import { fade } from 'svelte/transition';
 
 	let bouldersFromLS: Boulder[] = [];
 	let selectedBoulder: Boulder = { id: '', createdAt: 0, path: [] };
@@ -35,61 +36,66 @@
 	};
 </script>
 
-{#if bouldersFromLS?.length > 0}
-	<div id="table-container" class="my-8 overflow-x-auto">
-		<table id="dataTable">
-			<thead>
-				<tr>
-					<th>Name/ID</th>
-					<th>Cells</th>
-					<th colspan="3"></th>
-				</tr>
-			</thead>
-			<tbody>
-				{#each bouldersFromLS as boulder (boulder.id)}
+<div in:fade>
+	{#if bouldersFromLS?.length > 0}
+		<div id="table-container" class="my-8 overflow-x-auto">
+			<table id="dataTable">
+				<thead>
 					<tr>
-						<td>
-							<button
-								on:click={() => openDialog(boulder)}
-								id={boulder.id}
-								data-created={boulder.createdAt}
-							>
-								{boulder.name ? boulder.name : boulder.id}
-							</button>
-						</td>
-						<td>
-							{#if boulder.path}
-								{#each boulder.path as { id }}
-									{id}
-								{/each}
-							{/if}
-							<div>
-								{#if boulder.start}
-									Start: {boulder.start}
-								{/if}
-								{#if boulder.top}
-									Top: {boulder.top}
-								{/if}
-							</div>
-						</td>
-						<td>
-							<button on:click={() => handleRemoveBoulder(boulder.id)}>
-								<Icon path={mdiDelete} class="size-5 text-red-500" />
-							</button>
-						</td>
+						<th>Name/ID</th>
+						<th>Cells</th>
+						<th colspan="3"></th>
 					</tr>
-				{/each}
-			</tbody>
-		</table>
-	</div>
-{:else}
-	<Alert showIcon>
-		Vytvořte si
-		<a href="/new-boulder" class="text-blue-600 underline hover:no-underline dark:text-blue-300"
-			>novou cestu</a
-		> na lezecké stěně.
-	</Alert>
-{/if}
+				</thead>
+				<tbody>
+					{#each bouldersFromLS as boulder (boulder.id)}
+						<tr>
+							<td>
+								<button
+									on:click={() => openDialog(boulder)}
+									id={boulder.id}
+									data-created={boulder.createdAt}
+								>
+									{boulder.name ? boulder.name : boulder.id}
+								</button>
+							</td>
+							<td>
+								{#if boulder.path}
+									{#each boulder.path as { id }}
+										{id}
+									{/each}
+								{/if}
+								<div>
+									{#if boulder.start}
+										Start: {boulder.start}
+									{/if}
+									{#if boulder.top}
+										Top: {boulder.top}
+									{/if}
+								</div>
+							</td>
+							<td>
+								<button on:click={() => handleRemoveBoulder(boulder.id)}>
+									<Icon
+										path={mdiDelete}
+										class="size-5 text-red-500 transition-colors ease-in-out hover:fill-red-600"
+									/>
+								</button>
+							</td>
+						</tr>
+					{/each}
+				</tbody>
+			</table>
+		</div>
+	{:else}
+		<Alert showIcon>
+			Vytvořte si
+			<a href="/new-boulder" class="text-blue-600 underline hover:no-underline dark:text-blue-300"
+				>novou cestu</a
+			> na lezecké stěně.
+		</Alert>
+	{/if}
+</div>
 
 <Toast />
 
@@ -108,10 +114,10 @@
 		@apply border-b bg-slate-50 text-xs uppercase text-slate-500 dark:border-slate-700 dark:bg-slate-800;
 	}
 	table tbody tr {
-		@apply border-b bg-white dark:border-slate-700 dark:bg-slate-900;
+		@apply border-b bg-white transition-colors dark:border-slate-700 dark:bg-slate-900;
 	}
 	table tbody tr:hover {
-		@apply outline-dotted outline-1 outline-slate-700 dark:outline-slate-500;
+		@apply bg-gray-200 outline-dotted outline-1 outline-slate-400 duration-500 ease-in-out dark:bg-slate-700;
 	}
 	table th {
 		@apply px-3 py-2 align-bottom dark:text-slate-300;
