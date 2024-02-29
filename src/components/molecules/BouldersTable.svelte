@@ -9,10 +9,11 @@
 	import { fade } from 'svelte/transition';
 
 	// Define TypeScript types
-	import type { Boulder, BouldersArray, BoulderId } from '../utils/BoulderTypes';
+	import type { Boulder } from '../utils/BoulderTypes';
 	import log from 'loglevel';
+	import { mdiDelete } from '@mdi/js';
 
-	let bouldersFromLS: BouldersArray = [];
+	let bouldersFromLS: Boulder[] = [];
 	let selectedBoulder: Boulder = { id: '', createdAt: 0, path: [] };
 	export let isOpen = false;
 
@@ -32,12 +33,12 @@
 		isOpen = true;
 	}
 
-	const handleRemoveBoulder = (boulderId: BoulderId) => {
+	const handleRemoveBoulder = (boulderId: string) => {
 		boulders.removeBoulder(boulderId);
 	};
 </script>
 
-<div in:fade={{ duration: 500 }} out:fade={{ duration: 100 }}>
+<div in:fade>
 	{#if bouldersFromLS?.length > 0}
 		<div id="table-container" class="my-8 overflow-x-auto">
 			<table id="dataTable">
@@ -78,8 +79,8 @@
 							<td>
 								<button on:click={() => handleRemoveBoulder(boulder.id)}>
 									<Icon
-										iconName="mdiDelete"
-										class="h-5 w-5 text-red-500 transition duration-500 ease-in-out hover:text-red-800"
+										path={mdiDelete}
+										class="size-5 text-red-500 transition-colors hover:fill-red-600"
 									/>
 								</button>
 							</td>
@@ -103,7 +104,7 @@
 <Dialog {isOpen} on:close={() => (isOpen = false)}>
 	<svelte:fragment slot="DialogTitle">{selectedBoulder.name || selectedBoulder.id}</svelte:fragment>
 	<svelte:fragment slot="DialogContent">
-		<BoulderComponent {selectedBoulder} variant="preview" />
+		<BoulderComponent selectedBoulderID={selectedBoulder.id} />
 	</svelte:fragment>
 </Dialog>
 

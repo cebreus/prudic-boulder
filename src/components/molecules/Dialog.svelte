@@ -9,9 +9,12 @@
 		TransitionChild
 	} from '@rgossiaux/svelte-headlessui';
 	import Icon from '../../components/atoms/Icon.svelte';
+	import { mdiClose } from '@mdi/js';
 
 	export let isOpen: boolean = false;
-	export let onKeydown: (event: CustomEvent<KeyboardEvent>) => void;
+	const handleKeydown = (event: CustomEvent) => {
+		dispatch('keydown', event);
+	};
 
 	let onlyTitle: boolean = (!$$slots.DialogDescription && !$$slots.DialogContent) ?? true;
 
@@ -28,7 +31,7 @@
 		open={isOpen}
 		on:close={closeDialog}
 		class="fixed inset-0 z-10 overflow-y-auto"
-		on:keydown={onKeydown}
+		on:keydown={handleKeydown}
 	>
 		<TransitionChild
 			as="div"
@@ -54,7 +57,7 @@
 								<slot name="DialogTitle" />
 							</DialogTitle>
 							<button on:click={closeDialog} class="text-gray-400 hover:text-red-600">
-								<Icon iconName="mdiClose" class="mt-0.5 h-5 w-5" />
+								<Icon path={mdiClose} class="mt-0.5 size-4" />
 							</button>
 						</div>
 						{#if $$slots.DialogDescription || $$slots.DialogContent}
