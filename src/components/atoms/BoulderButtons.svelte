@@ -1,9 +1,8 @@
 <script lang="ts">
 	import { clickedCells, selector } from '../../stores/BoulderStore.svelte';
 	import Button from './Button.svelte';
-	import type { Variant } from '../utils/BoulderTypes.ts';
 
-	export const variant: Variant = 'default';
+	export const variant: 'default' | 'play' = 'default';
 	export let handleSaveBoulder: () => void;
 </script>
 
