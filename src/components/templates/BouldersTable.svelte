@@ -2,14 +2,12 @@
 	import { boulders } from '../../stores/BoulderStore.svelte';
 	import { onDestroy } from 'svelte';
 	import Alert from '../atoms/Alert.svelte';
-	import BoulderComponent from './Boulder.svelte';
-	import Icon from '../../components/atoms/Icon.svelte';
-	import Dialog from './Dialog.svelte';
+	import BoulderComponent from '../atoms/Boulder.svelte';
+	import Icon from '../atoms/Icon.svelte';
+	import Dialog from '../molecules/Dialog.svelte';
 	import Toast from '../atoms/Toast.svelte';
 	import { mdiDelete } from '@mdi/js';
-
-	// Define TypeScript types
-	import type { Boulder } from '../utils/BoulderTypes';
+	import type { Boulder } from '../utils/BoulderTypes.ts';
 	import log from 'loglevel';
 
 	let bouldersFromLS: Boulder[] = [];
@@ -21,7 +19,7 @@
 			...boulder,
 			createdAt: new Date(boulder.createdAt).toLocaleString()
 		}));
-		log.info('Boilders:', bouldersFromLS);
+		log.info('Boulders:', bouldersFromLS);
 	});
 
 	onDestroy(unsubscribe);
@@ -98,7 +96,7 @@
 <Dialog {isOpen} on:close={() => (isOpen = false)}>
 	<svelte:fragment slot="DialogTitle">{selectedBoulder.name || selectedBoulder.id}</svelte:fragment>
 	<svelte:fragment slot="DialogContent">
-		<BoulderComponent {selectedBoulder} variant="preview" />
+		<BoulderComponent selectedBoulderID={selectedBoulder.id} />
 	</svelte:fragment>
 </Dialog>
 

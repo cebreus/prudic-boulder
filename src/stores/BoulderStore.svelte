@@ -174,7 +174,27 @@
 			});
 		};
 
-		return { subscribe, addBoulder, removeBoulder };
+		const getCellClass = (selectedBoulderId: string, cellId: string) => {
+			if (!selectedBoulderId) return 'lol';
+
+			const boulders: Boulder[] = JSON.parse(localStorage.getItem('boulders') || '[]');
+			const selectedBoulder = boulders.find((boulder) => boulder.id === selectedBoulderId);
+
+			if (!selectedBoulder) return '';
+
+			if (selectedBoulder.start === cellId) {
+				console.log('Start:', cellId);
+				return startClass;
+			} else if (selectedBoulder.top === cellId) {
+				console.log('TOP:', cellId);
+				return topClass;
+			} else if (selectedBoulder.path.some((cell) => cell.id === cellId)) {
+				return clickedClass;
+			}
+			return '';
+		};
+
+		return { subscribe, addBoulder, removeBoulder, getCellClass };
 	};
 
 	export const clickedCells = createClickedCellsStore();

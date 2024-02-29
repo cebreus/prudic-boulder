@@ -1,5 +1,7 @@
 export type Mode = 'Top' | 'Start';
 
+export type Variant = 'default' | 'play';
+
 export type Cell = {
 	id: string;
 	colorBrightness: string;
