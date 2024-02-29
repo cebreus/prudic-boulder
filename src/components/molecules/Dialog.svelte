@@ -9,7 +9,7 @@
 		TransitionChild
 	} from '@rgossiaux/svelte-headlessui';
 	import Icon from '../../components/atoms/Icon.svelte';
-	import { mdiDelete } from '@mdi/js';
+	import { mdiClose } from '@mdi/js';
 
 	export let isOpen: boolean = false;
 
@@ -56,7 +56,7 @@
 								<slot name="DialogTitle" />
 							</DialogTitle>
 							<button on:click={closeDialog} class="text-gray-400 hover:text-red-600">
-								<Icon path={mdiDelete} class="mt-0.5 size-5" />
+								<Icon path={mdiClose} class="mt-0.5 size-4" />
 							</button>
 						</div>
 						{#if $$slots.DialogDescription || $$slots.DialogContent}
