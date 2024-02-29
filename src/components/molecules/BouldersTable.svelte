@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { boulders } from '../../stores/BoulderStore.svelte';
+	import { mdiDelete } from '@mdi/js';
 	import { onDestroy } from 'svelte';
 	import Alert from '../atoms/Alert.svelte';
 	import BoulderComponent from './Boulder.svelte';
-	import Icon from '../../components/atoms/Icon.svelte';
 	import Dialog from './Dialog.svelte';
+	import Icon from '../../components/atoms/Icon.svelte';
 	import Toast from '../atoms/Toast.svelte';
-	import { mdiDelete } from '@mdi/js';
 
 	// Define TypeScript types
 	import type { Boulder } from '../utils/BoulderTypes';
