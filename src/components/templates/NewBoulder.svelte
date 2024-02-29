@@ -25,7 +25,8 @@
 	const handleDialogResponse = () => {
 		log.debug('handleDialogResponse()');
 		isOpen = false;
-		boulders.addBoulder($clickedCells, $selector, inputBoulderName);
+		const trimmedInputBoulderName = inputBoulderName.trim();
+		boulders.addBoulder($clickedCells, $selector, trimmedInputBoulderName);
 	};
 
 	const handleKeyDown = (event: CustomEvent) => {
