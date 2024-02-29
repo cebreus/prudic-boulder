@@ -22,7 +22,7 @@
 >
 	<div class="container mx-auto">
 		<div class="relative flex h-14 items-center justify-between px-4">
-			<a href="/" class="flex items-center"
+			<a href="/" use:link class="flex items-center"
 				><Logo
 					class="mb-0.5 mr-4 block h-6 w-auto text-sky-900 hover:text-sky-600 dark:text-sky-500 dark:hover:text-sky-400"
 				/></a

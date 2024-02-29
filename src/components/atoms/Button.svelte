@@ -47,7 +47,7 @@
 		linkYellow:
 			'text-yellow-500 underline underline-offset-2 hover:no-underline focus:no-underline hover:text-yellow-800 focus:ring-yellow-300 dark:text-yellow-600 dark:hover:text-yellow-600 dark:focus:ring-yellow-500 dark:focus:ring-opacity-50',
 		outline:
-			'bg-transparent text-sky-500 hover:text-white  ring-sky-500 hover:bg-gradient-to-r from-sky-500 to-sky-600 hover:ring-0 focus:ring-sky-300 dark:text-sky-600 dark:hover:text-white dark:hover:bg-sky-600 dark:focus:ring-sky-800',
+			'bg-transparent text-sky-500 hover:text-white  ring-sky-400 hover:ring-sky-500 hover:bg-gradient-to-r from-sky-500 to-sky-600 hover:ring-0 focus:ring-sky-300 dark:text-sky-600 dark:hover:text-white dark:hover:bg-sky-600 dark:focus:ring-sky-800',
 		outlineGreen:
 			'bg-transparent text-green-500 hover:text-white  ring-green-500 hover:bg-green-500 hover:ring-0 focus:ring-green-300 dark:text-green-600 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800',
 		outlineRed:
@@ -74,8 +74,6 @@
 		outlineRed: 'ring-rose-400 hover:ring-rose-500',
 		outlineYellow: 'ring-yellow-400 hover:ring-yellow-500'
 	};
-
-	$: ringClass = ringColorClasses[variant];
 </script>
 
 {#if href && !disabled}
@@ -107,7 +105,7 @@
 	>
 		{#if variant === 'outlineYellow' || 'outlineGreen' || 'outlineRed'}
 			<div
-				class={`absolute inset-0 z-0 h-full w-full rounded-md ${ringClass} ring-2 ring-opacity-60 hover:animate-pulse`}
+				class={`absolute inset-0 z-0 h-full w-full rounded-md ${ringColorClasses[variant]} ring-2 ring-opacity-60 hover:animate-pulse`}
 			></div>
 		{/if}
 		{#if emoji}
