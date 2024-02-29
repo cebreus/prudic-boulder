@@ -5,10 +5,6 @@
 
 	export let selectedBoulderID: string;
 
-	$: {
-		console.log('IDDD:', selectedBoulderID);
-	}
-
 	export const tableRows = Array.from({ length: rows }, (_, i) => String.fromCharCode(65 + i));
 	export const tableCols = Array.from({ length: cols }, (_, i) => i);
 

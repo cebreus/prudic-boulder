@@ -183,10 +183,8 @@
 			if (!selectedBoulder) return '';
 
 			if (selectedBoulder.start === cellId) {
-				console.log('Start:', cellId);
 				return startClass;
 			} else if (selectedBoulder.top === cellId) {
-				console.log('TOP:', cellId);
 				return topClass;
 			} else if (selectedBoulder.path.some((cell) => cell.id === cellId)) {
 				return clickedClass;
