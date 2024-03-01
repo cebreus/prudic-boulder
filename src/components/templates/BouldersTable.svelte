@@ -55,6 +55,7 @@
 									on:click={() => openDialog(boulder)}
 									id={boulder.id}
 									data-created={boulder.createdAt}
+									class="max-w-xs truncate"
 								>
 									{boulder.name ? boulder.name : boulder.id}
 								</button>
@@ -100,7 +101,11 @@
 <Toast />
 
 <Dialog {isOpen} on:close={() => (isOpen = false)}>
-	<svelte:fragment slot="DialogTitle">{selectedBoulder.name || selectedBoulder.id}</svelte:fragment>
+	<svelte:fragment slot="DialogTitle">
+		<div class="max-w-xs truncate">
+			{selectedBoulder.name || selectedBoulder.id}
+		</div>
+	</svelte:fragment>
 	<svelte:fragment slot="DialogContent">
 		<BoulderComponent selectedBoulderID={selectedBoulder.id} />
 	</svelte:fragment>
