@@ -7,6 +7,10 @@
 
 	let menuOpen = false;
 
+	$: {
+		console.log('menu open:', menuOpen);
+	}
+
 	const toggleMenu = () => {
 		menuOpen = !menuOpen;
 	};
@@ -22,7 +26,7 @@
 >
 	<div class="container mx-auto">
 		<div class="relative flex h-14 items-center justify-between px-4">
-			<a href="/" use:link class="flex items-center"
+			<a href="/" use:link class="flex items-center" on:click={() => (menuOpen = false)}
 				><Logo
 					class="mb-0.5 mr-4 block h-6 w-auto text-sky-900 hover:text-sky-600 dark:text-sky-500 dark:hover:text-sky-400"
 				/></a
@@ -64,14 +68,15 @@
 	<!-- Mobile menu, show/hide based on menu state. -->
 	<div
 		class={`${
-			menuOpen ? 'block' : 'hidden'
-		} absolute left-0 right-0 top-full max-h-80 origin-top-right transform overflow-y-auto bg-slate-800 transition-all sm:visible`}
+			menuOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
+		} absolute left-0 right-0 top-full max-h-80 origin-top-right overflow-y-auto bg-slate-800 transition-all duration-200 ease-in-out sm:visible`}
 		id="mobile-menu"
 	>
 		<div class="space-y-1 px-2 pb-3 pt-2">
 			{#each menuItems as { name, path } (path)}
 				<a
 					href={path}
+					use:link
 					class="block rounded-md px-3 py-2 text-base font-medium {currentPath === path
 						? 'bg-slate-900 text-white'
 						: 'text-slate-300 hover:bg-slate-700 hover:text-white'}"
