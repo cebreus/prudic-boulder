@@ -56,7 +56,7 @@
 								<slot name="DialogTitle" />
 							</DialogTitle>
 							<button on:click={closeDialog} class="text-gray-400 hover:text-red-600">
-								<Icon path={mdiClose} class="mt-0.5 size-4 transition-colors ease-in-out" />
+								<Icon path={mdiClose} class="mt-0.5 size-6 transition-colors ease-in-out" />
 							</button>
 						</div>
 						{#if $$slots.DialogDescription || $$slots.DialogContent}
