@@ -9,7 +9,7 @@
 	import { mdiDelete } from '@mdi/js';
 	import type { Boulder } from '../utils/BoulderTypes.ts';
 	import log from 'loglevel';
-	import { fade } from 'svelte/transition';
+	import { fade, fly } from 'svelte/transition';
 
 	let bouldersFromLS: Boulder[] = [];
 	let selectedBoulder: Boulder = { id: '', createdAt: 0, path: [] };
@@ -49,7 +49,7 @@
 				</thead>
 				<tbody>
 					{#each bouldersFromLS as boulder (boulder.id)}
-						<tr>
+						<tr in:fade out:fly={{ y: -5 }}>
 							<td>
 								<button
 									on:click={() => openDialog(boulder)}
