@@ -2,6 +2,8 @@
 	import MenuToggler from '../../icons/MenuToggler.svelte';
 	import Logo from '../../icons/Logo.svelte';
 	import { link } from 'svelte-spa-router';
+	import { twMerge } from 'tailwind-merge';
+	import { fade } from 'svelte/transition';
 
 	export let currentPath = '';
 
@@ -10,6 +12,27 @@
 	$: {
 		console.log('menu open:', menuOpen);
 	}
+
+	const defaultClass = 'block rounded-md px-3 py-1.5 text-sm font-medium';
+	const activeClass =
+		'duration-500 text-sky-700 ring-1 ring-slate-200 hover:text-sky-900 transition-colors ease-in-out dark:text-slate-500 dark:ring-slate-500';
+	const inactiveClass =
+		'text-sky-500 duration-500 hover:bg-sky-100 hover:text-sky-600 hover:ring-1 hover:ring-sky-200 transition-colors ease-in-out dark:hover:bg-transparent dark:hover:text-sky-400 dark:hover:ring-sky-400';
+
+	const mobileDefaultClass = 'block rounded-md px-3 py-2 text-base font-medium';
+	const mobileActiveClass = 'bg-slate-900 text-white';
+	const mobileInactiveClass = 'text-slate-300 hover:bg-slate-700 hover:text-white';
+
+	const menuItemsClass = (path: string) => {
+		return twMerge(defaultClass, currentPath === path ? activeClass : inactiveClass);
+	};
+
+	const mobileMenuItemsClass = (path: string) => {
+		return twMerge(
+			mobileDefaultClass,
+			currentPath === path ? mobileActiveClass : mobileInactiveClass
+		);
+	};
 
 	const toggleMenu = () => {
 		menuOpen = !menuOpen;
@@ -28,7 +51,7 @@
 		<div class="relative flex h-14 items-center justify-between px-4">
 			<a href="/" use:link class="flex items-center" on:click={() => (menuOpen = false)}
 				><Logo
-					class="mb-0.5 mr-4 block h-6 w-auto text-sky-900 hover:text-sky-600 dark:text-sky-500 dark:hover:text-sky-400"
+					class="mb-0.5 mr-4 block h-6 w-auto text-sky-900 transition-colors ease-in-out hover:text-sky-600 dark:text-sky-500 dark:hover:text-sky-400"
 				/></a
 			>
 			<div class="absolute inset-y-0 right-3 flex items-center sm:hidden">
@@ -51,9 +74,7 @@
 							<a
 								href={path}
 								use:link
-								class="block rounded-md px-3 py-1.5 text-sm font-medium {currentPath === path
-									? ' duration-900 text-sky-500 ring-1 ring-slate-200 ease-in-out hover:text-sky-900 hover:transition-colors dark:text-slate-500 dark:ring-slate-500'
-									: ' text-sky-500 duration-500 ease-in-out hover:bg-sky-100 hover:text-sky-600 hover:ring-1 hover:ring-sky-200 hover:transition-colors dark:hover:bg-transparent dark:hover:text-sky-400 dark:hover:ring-sky-400'}"
+								class={menuItemsClass(path)}
 								aria-current={currentPath === path ? 'page' : undefined}
 							>
 								{name}
@@ -66,26 +87,20 @@
 	</div>
 
 	<!-- Mobile menu, show/hide based on menu state. -->
-	<div
-		class={`${
-			menuOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
-		} absolute left-0 right-0 top-full max-h-80 origin-top-right overflow-y-auto bg-slate-800 transition-all duration-200 ease-in-out sm:visible`}
-		id="mobile-menu"
-	>
-		<div class="space-y-1 px-2 pb-3 pt-2">
-			{#each menuItems as { name, path } (path)}
-				<a
-					href={path}
-					use:link
-					class="block rounded-md px-3 py-2 text-base font-medium {currentPath === path
-						? 'bg-slate-900 text-white'
-						: 'text-slate-300 hover:bg-slate-700 hover:text-white'}"
-					aria-current={currentPath === path ? 'page' : undefined}
-					on:click={toggleMenu}
-				>
-					{name}
-				</a>
-			{/each}
+
+	{#if menuOpen}
+		<div
+			transition:fade
+			class="absolute left-0 right-0 top-full max-h-80 origin-top-right overflow-y-auto bg-slate-800 sm:hidden"
+			id="mobile-menu"
+		>
+			<div class="space-y-1 px-2 pb-3 pt-2">
+				{#each menuItems as { name, path } (path)}
+					<a href={path} use:link class={mobileMenuItemsClass(path)} on:click={toggleMenu}>
+						{name}
+					</a>
+				{/each}
+			</div>
 		</div>
-	</div>
+	{/if}
 </nav>
