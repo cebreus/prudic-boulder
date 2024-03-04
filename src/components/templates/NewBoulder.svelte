@@ -6,6 +6,7 @@
 	import Dialog from '../molecules/Dialog.svelte';
 	import Button from '../atoms/Button.svelte';
 	import BoulderButtons from '../atoms/BoulderButtons.svelte';
+	import { fade } from 'svelte/transition';
 
 	let isOpen: boolean = false;
 	let inputBoulderName: string;
@@ -41,9 +42,11 @@
 
 <Toast />
 
-<Boulder />
+<div in:fade>
+	<Boulder />
 
-<BoulderButtons {handleSaveBoulder} />
+	<BoulderButtons {handleSaveBoulder} />
+</div>
 
 <Dialog {isOpen} on:close={() => (isOpen = false)} on:keydown={handleKeyDown}>
 	<svelte:fragment slot="DialogTitle">Název boulderu</svelte:fragment>

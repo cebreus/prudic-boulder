@@ -23,38 +23,36 @@
 	};
 </script>
 
-<div in:fade>
-	<table class="wall">
-		<thead>
+<table class="wall">
+	<thead>
+		<tr>
+			<th></th>
+			{#each tableCols as col (col)}
+				<th>{col}</th>
+			{/each}
+		</tr>
+	</thead>
+	<tbody>
+		{#each tableRows as row, rowIndex}
 			<tr>
-				<th></th>
-				{#each tableCols as col (col)}
-					<th>{col}</th>
+				<th>{String.fromCharCode(65 + rowIndex)}</th>
+				{#each tableCols as col}
+					{@const cellId = `${row}${col}`}
+					<td
+						class={isSkippedCell(cellId)
+							? skippedClass
+							: selectedBoulderID
+								? boulders.getCellClass(selectedBoulderID, cellId)
+								: $clickedCells.get(cellId)?.class ?? ''}
+						on:click={selectedBoulderID ? null : () => toggleCellAndUpdateSelector(cellId)}
+					>
+						{isSkippedCell(cellId) ? '' : cellId}
+					</td>
 				{/each}
 			</tr>
-		</thead>
-		<tbody>
-			{#each tableRows as row, rowIndex}
-				<tr>
-					<th>{String.fromCharCode(65 + rowIndex)}</th>
-					{#each tableCols as col}
-						{@const cellId = `${row}${col}`}
-						<td
-							class={isSkippedCell(cellId)
-								? skippedClass
-								: selectedBoulderID
-									? boulders.getCellClass(selectedBoulderID, cellId)
-									: $clickedCells.get(cellId)?.class ?? ''}
-							on:click={selectedBoulderID ? null : () => toggleCellAndUpdateSelector(cellId)}
-						>
-							{isSkippedCell(cellId) ? '' : cellId}
-						</td>
-					{/each}
-				</tr>
-			{/each}
-		</tbody>
-	</table>
-</div>
+		{/each}
+	</tbody>
+</table>
 
 <style lang="postcss">
 	:global(table.wall) {
