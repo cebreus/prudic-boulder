@@ -100,8 +100,8 @@
 					class="absolute inset-x-0 top-0 h-1 overflow-clip rounded-t bg-slate-200 dark:bg-slate-600"
 				>
 					<div
-						class="h-full w-[{toast.progress}%] transition-[width] {toastConfig[toast.variant]
-							.progressClasses}"
+						class="h-full transition-[width] {toastConfig[toast.variant].progressClasses}"
+						style="width: {toast.progress}%"
 					></div>
 				</div>
 				<Icon

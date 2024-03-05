@@ -87,7 +87,6 @@
 	</div>
 
 	<!-- Mobile menu, show/hide based on menu state. -->
-
 	{#if menuOpen}
 		<div
 			transition:fade
