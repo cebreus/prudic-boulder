@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { clickedGrips, selector, boulders } from '../../stores/BoulderStore.svelte';
-	import { isSkippedGrip, skippedClass, rows, cols } from '../utils/utils.ts';
+	import { skippedClass, rows, cols } from '../utils/utils.ts';
 	import log from '../utils/logger.ts';
 
-	export let selectedBoulderID: string = '';
+	export let selectedBoulderID: string;
+	export let color: string;
 
 	export const tableRows = Array.from({ length: rows }, (_, i) => String.fromCharCode(65 + i));
 	export const tableCols = Array.from({ length: cols }, (_, i) => i);
@@ -13,11 +14,26 @@
 	const toggleGripAndUpdateSelector = (gripId: string) => {
 		if (isSkippedGrip(gripId)) {
 			log.debug(`Toggling grip: ${gripId} SKIPPED with mode: ${$selector.selectedMode}`);
+	$: {
+		console.log('CLICKED :', $clickedGrips);
+	}
+
+	// Добавленная функция для обновления цвета ячейки
+	function applyColorToCell(cellId: string) {
+		clickedGrips.setColorForCell(cellId, color); // Предполагается, что переменная color уже определена в вашем компоненте
+	}
+
+	// Измените обработчик клика, добавив вызов новой функции
+	const toggleCellAndUpdateSelector = (cellId: string) => {
+		if (isSkippedGrip(cellId)) {
+			log.debug(`Toggling cell: ${cellId} SKIPPED with mode: ${$selector.selectedMode}`);
 			return;
 		}
 		log.debug(`Toggling grip: ${gripId} with mode: ${$selector.selectedMode}`);
 		selector.updateSelector(gripId, selectedMode);
 
+		clickedGrips.toggle(cellId, selectedMode);
+		applyColorToCell(cellId); // Применяем выбранный цвет к ячейке
 		clickedGrips.toggle(gripId, selectedMode);
 	};
 </script>
@@ -43,7 +59,8 @@
 							: selectedBoulderID
 								? boulders.getGripClass(selectedBoulderID, gripId)
 								: $clickedGrips.get(gripId)?.class ?? ''}
-						on:click={selectedBoulderID ? null : () => toggleGripAndUpdateSelector(gripId)}
+						style="background-color: {$clickedGrips.get(gripId)?.color || ''};"
+						on:click={selectedBoulderID ? null : () => toggleCellAndUpdateSelector(gripId)}
 					>
 						{isSkippedGrip(gripId) ? '' : gripId}
 					</td>

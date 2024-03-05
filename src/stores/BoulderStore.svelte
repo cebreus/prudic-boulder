@@ -45,6 +45,17 @@
 				});
 			},
 
+			setColorForCell: (cellId: string, color: string) => {
+				console.log('My color:', color);
+				update((cells) => {
+					const updated = new Map(cells);
+					const cell = updated.get(cellId) || {};
+					cell.color = color; // Сохраняем цвет в объекте ячейки
+					updated.set(cellId, cell);
+					return updated;
+				});
+			},
+
 			removeGripById: (gripId: string) => {
 				log.info('createClickedGripsStore.removeGripById');
 				update((grips) => {
