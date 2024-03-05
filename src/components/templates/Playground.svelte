@@ -2,26 +2,24 @@
 	import BoulderButtons from '../atoms/BoulderButtons.svelte';
 	import Boulder from '../atoms/Boulder.svelte';
 
-	let color = '#ff0000'; // Default color red
-	let brightness = 100; // Default brightness level
+	let initialColor = '#FF0000'; // Изначальный цвет для внутреннего использования
+	let color = '#FF0000'; // Для связывания с input color picker
+	let brightness = 100; // Уровень яркости
 
-	// Function to convert hex color to RGB
 	interface RGB {
 		r: number;
 		g: number;
 		b: number;
 	}
 
-	// Function to convert hex color to RGB
 	function hexToRgb(hex: string): RGB {
-		hex = hex.replace(/^#/, ''); // Remove the hash at the start if it's there
+		hex = hex.replace(/^#/, ''); // Удаление # в начале, если есть
 		const r = parseInt(hex.slice(0, 2), 16);
-		const g = parseInt(hex.slice(2, 2), 16);
-		const b = parseInt(hex.slice(4, 2), 16);
+		const g = parseInt(hex.slice(2, 4), 16);
+		const b = parseInt(hex.slice(4, 6), 16);
 		return { r, g, b };
 	}
 
-	// Function to adjust visual color brightness (for display, not for server data)
 	function adjustVisualColorBrightness({ r, g, b }: RGB, brightness: number): string {
 		const factor = brightness / 100;
 		const adjust = (c: number): number => Math.round(c * factor);
@@ -31,26 +29,29 @@
 		return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`;
 	}
 
-	let adjustedColor: string = color; // Visual representation
-	let colorDataForServer: string; // Data format for server
+	let adjustedColor: string = color; // Представление цвета для визуализации
+	let colorDataForServer: string; // Формат данных цвета для сервера
 
-	// Reactive statements to adjust color and format data for the server
+	// Реактивное обновление при изменении color или brightness
 	$: {
-		const { r, g, b } = hexToRgb(color);
-		adjustedColor = adjustVisualColorBrightness({ r, g, b }, brightness);
+		const { r, g, b } = hexToRgb(initialColor);
+		// adjustedColor = adjustVisualColorBrightness({ r, g, b }, brightness);
+		color = adjustVisualColorBrightness({ r, g, b }, brightness); // Обновляем displayColor для input
 		colorDataForServer = `${r} ${g} ${b} / ${brightness}%`;
-		console.log('Visual Color:', adjustedColor);
-		console.log('Color Data for Server:', colorDataForServer);
+		console.log('server data:', colorDataForServer);
+	}
+
+	// Обновление initialColor при выборе нового цвета пользователем
+	function handleColorChange(newColor: string) {
+		initialColor = newColor;
 	}
 </script>
 
-<div class=" mt-5 flex-col">
-	<!-- Внешний контейнер для выравнивания -->
+<div class="mt-5 flex-col">
 	<Boulder />
 	<BoulderButtons />
 
 	<div class="max-w-sm rounded-lg bg-white p-6 shadow-lg">
-		<!-- Контейнер для color picker сохраняется без изменений -->
 		<div class="mb-4">
 			<label for="colorPicker" class="mb-2 block text-sm font-bold text-gray-700"
 				>Choose Color:</label
@@ -58,7 +59,8 @@
 			<input
 				type="color"
 				id="colorPicker"
-				bind:value={color}
+				value={color}
+				on:input={(e) => handleColorChange(e.currentTarget.value)}
 				class="h-10 w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
 			/>
 		</div>
@@ -75,17 +77,6 @@
 				bind:value={brightness}
 				class="h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-200"
 			/>
-		</div>
-
-		<div class="flex items-center justify-between space-x-5">
-			<span class="text-sm font-bold text-gray-700">Adjusted Color:</span>
-			<div class="flex items-center">
-				<div
-					class="h-10 w-10 rounded-md border border-gray-300 shadow-sm"
-					style="background: {adjustedColor};"
-				></div>
-				<span class="ml-2 font-mono text-sm">{adjustedColor}</span>
-			</div>
 		</div>
 	</div>
 </div>
