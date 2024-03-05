@@ -25,7 +25,7 @@
 	export let submit: boolean = false;
 
 	const defaultClass: string =
-		'relative inline-flex justify-center rounded md:rounded-md px-2.5 py-1 text-sm md:text-base md:px-4 md:py-1.5 font-semibold leading-6 disabled:cursor-not-allowed disabled:pointer-events-none focus:ring focus:outline-none transition-colors duration-500 ease-in-out';
+		'inline-flex justify-center rounded md:rounded-md px-2.5 py-1 text-sm md:text-base md:px-4 md:py-1.5 font-semibold leading-6 disabled:cursor-not-allowed disabled:pointer-events-none focus:ring focus:outline-none transition-colors';
 
 	const variantClasses: Record<string, string> = {
 		primary:
@@ -47,13 +47,13 @@
 		linkYellow:
 			'text-yellow-500 underline underline-offset-2 hover:no-underline focus:no-underline hover:text-yellow-800 focus:ring-yellow-300 dark:text-yellow-600 dark:hover:text-yellow-600 dark:focus:ring-yellow-500 dark:focus:ring-opacity-50',
 		outline:
-			'bg-transparent text-sky-500 hover:text-white  ring-sky-400 hover:ring-sky-500 hover:bg-gradient-to-r from-sky-500 to-sky-600 hover:ring-0 focus:ring-sky-300 dark:text-sky-600 dark:hover:text-white dark:hover:bg-sky-600 dark:focus:ring-sky-800',
+			'bg-transparent text-sky-500 hover:text-white ring-1 ring-sky-500 hover:bg-sky-500 hover:ring-0 focus:ring-sky-300 dark:text-sky-600 dark:hover:text-white dark:hover:bg-sky-600 dark:focus:ring-sky-800',
 		outlineGreen:
-			'bg-transparent text-green-500 hover:text-white  ring-green-500 hover:bg-green-500 hover:ring-0 focus:ring-green-300 dark:text-green-600 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800',
+			'bg-transparent text-green-500 hover:text-white ring-1 ring-green-500 hover:bg-green-500 hover:ring-0 focus:ring-green-300 dark:text-green-600 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800',
 		outlineRed:
-			'bg-transparent text-rose-500 hover:text-white ring-rose-500  hover:bg-rose-500 hover:ring-0 focus:ring-rose-300 dark:text-rose-600 dark:hover:text-white dark:hover:bg-rose-600 dark:focus:ring-rose-800',
+			'bg-transparent text-rose-500 hover:text-white ring-1 ring-rose-500 hover:bg-rose-500 hover:ring-0 focus:ring-rose-300 dark:text-rose-600 dark:hover:text-white dark:hover:bg-rose-600 dark:focus:ring-rose-800',
 		outlineYellow:
-			'bg-transparent text-yellow-500 hover:text-white ring-yellow-500  hover:bg-yellow-500 hover:ring-0 focus:ring-yellow-300 dark:text-yellow-600 dark:hover:text-white dark:hover:bg-yellow-600 dark:focus:ring-yellow-800'
+			'bg-transparent text-yellow-500 hover:text-white ring-1 ring-yellow-500 hover:bg-yellow-500 hover:ring-0 focus:ring-yellow-300 dark:text-yellow-600 dark:hover:text-white dark:hover:bg-yellow-600 dark:focus:ring-yellow-800'
 	};
 
 	// Update the disabled prop if the color prop is set to 'disabled'
@@ -67,13 +67,6 @@
 		variantClasses[disabled ? 'disabled' : variant],
 		classNames
 	);
-
-	const ringColorClasses: Record<string, string> = {
-		outline: 'ring-sky-400 hover:ring-sky-500',
-		outlineGreen: 'ring-green-400 hover:ring-green-500',
-		outlineRed: 'ring-rose-400 hover:ring-rose-500',
-		outlineYellow: 'ring-yellow-400 hover:ring-yellow-500'
-	};
 </script>
 
 {#if href && !disabled}
@@ -103,11 +96,6 @@
 		on:click
 		{...$$restProps}
 	>
-		{#if variant === 'outlineYellow' || 'outlineGreen' || 'outlineRed'}
-			<div
-				class={`absolute inset-0 z-0 h-full w-full rounded-md ${ringColorClasses[variant]} ring-2 ring-opacity-60 hover:animate-pulse`}
-			></div>
-		{/if}
 		{#if emoji}
 			<span role="presentation">{emoji}</span>
 		{/if}
