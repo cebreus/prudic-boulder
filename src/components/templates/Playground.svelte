@@ -70,6 +70,7 @@
 		log.debug('handleDialogResponse()');
 		isOpen = false;
 		const trimmedInputBoulderName = inputBoulderName.trim();
+		console.log($clickedCells);
 		boulders.addBoulder($clickedCells, $selector, trimmedInputBoulderName);
 	};
 

@@ -2,6 +2,7 @@
 	import { clickedGrips, selector, boulders } from '../../stores/BoulderStore.svelte';
 	import { skippedClass, rows, cols } from '../utils/utils.ts';
 	import log from '../utils/logger.ts';
+	import { get } from 'svelte/store';
 
 	export let selectedBoulderID: string;
 	export let color: string;
@@ -33,9 +34,27 @@
 		selector.updateSelector(gripId, selectedMode);
 
 		clickedGrips.toggle(cellId, selectedMode);
-		applyColorToCell(cellId); // Применяем выбранный цвет к ячейке
-		clickedGrips.toggle(gripId, selectedMode);
+
+		clickedGrips.setColorForCell(cellId, color);
 	};
+
+	const colorBrightnessToRGBA = (colorBrightness: string) => {
+		const [r, g, b, alpha] = colorBrightness.split(/[\s\/]+/);
+		const opacity = parseInt(alpha) / 100;
+		return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+	};
+
+	function getCellStyle(cellId: string) {
+		if (selectedBoulderID) {
+			const boulder = get(boulders).find((b) => b.id === selectedBoulderID);
+			const cell = boulder?.path.find((c) => c.id === cellId);
+			if (cell && cell.colorBrightness) {
+				console.log('here!!!!');
+				return `background-color: ${colorBrightnessToRGBA(cell.colorBrightness)};`;
+			}
+		}
+		return '';
+	}
 </script>
 
 <table class="wall">
@@ -89,7 +108,7 @@
 	:global(table.wall td.start) {
 		@apply border-green-300 bg-green-100 text-green-600 hover:border-green-400 hover:bg-green-100 hover:text-green-700 dark:border-green-400 dark:bg-green-600 dark:text-green-200  dark:hover:border-green-200 dark:hover:bg-green-600 dark:hover:text-white;
 	}
-	:global(table.wall td.finish) {
+	:global(table.wall td.top) {
 		@apply border-fuchsia-300 bg-fuchsia-50 text-fuchsia-600 hover:border-fuchsia-400 hover:bg-fuchsia-100 hover:text-fuchsia-700 dark:border-fuchsia-400 dark:bg-fuchsia-600 dark:text-fuchsia-200  dark:hover:border-fuchsia-200 dark:hover:bg-fuchsia-600 dark:hover:text-white;
 	}
 </style>
