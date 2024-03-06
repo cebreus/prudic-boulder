@@ -1,8 +1,8 @@
 import type { Boulder } from './BoulderTypes.ts';
-import logger from './logger.ts';
+import log from './logger.ts';
 
 const api = import.meta.env.VITE_API_URL as string;
-logger.debug('api', api);
+log.debug('api', api);
 const saveBoulder = `${api}/save-route`;
 const displayBoulder = `${api}/display-route`;
 
@@ -12,7 +12,7 @@ export const services = {
 	boulder: {
 		save: async (boulderData: BoulderData) => {
 			try {
-				logger.debug('Saving boulder data', boulderData);
+				log.debug('Saving boulder data', boulderData);
 				const response = await fetch(saveBoulder, {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
@@ -20,20 +20,20 @@ export const services = {
 				});
 				if (!response.ok) {
 					const message = `An error has occurred: ${response.status}`;
-					logger.error('Error saving boulder', { message, response });
+					log.error('Error saving boulder', { message, response });
 					throw new Error(message);
 				}
 				const responseData = await response.json();
-				logger.info('Boulder saved successfully', responseData);
+				log.info('Boulder saved successfully', responseData);
 				return responseData;
 			} catch (error) {
-				logger.error('Error in save function', error);
+				log.error('Error in save function', error);
 				throw error;
 			}
 		},
 		display: async (boulderData: BoulderData) => {
 			try {
-				logger.debug('Displaying boulder data', boulderData);
+				log.debug('Displaying boulder data', boulderData);
 				const response = await fetch(displayBoulder, {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
@@ -41,14 +41,14 @@ export const services = {
 				});
 				if (!response.ok) {
 					const message = `An error has occurred: ${response.status}`;
-					logger.error('Error displaying boulder', { message, response });
+					log.error('Error displaying boulder', { message, response });
 					throw new Error(message);
 				}
 				const responseData = await response.json();
-				logger.info('Boulder data displayed successfully', responseData);
+				log.info('Boulder data displayed successfully', responseData);
 				return responseData;
 			} catch (error) {
-				logger.error('Error in display function', error);
+				log.error('Error in display function', error);
 				throw error;
 			}
 		}
