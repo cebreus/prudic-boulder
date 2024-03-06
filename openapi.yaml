@@ -2,13 +2,100 @@ openapi: 3.0.0
 info:
   title: Boulder Route LED Control API
   description: API for managing climbing routes and controlling LEDs on a climbing wall using modern RGB format.
-  version: '1.0.0'
+  version: '1.2.0'
 servers:
   - description: SwaggerHub API Auto Mocking
     url: https://virtserver.swaggerhub.com/CEBREUS69/Boulder-Route-LED-Control-API/1.1.0
   - description: Make API
     url: https://hook.eu1.make.com/vvy6q2j2f1fderadyrals43jsbjv7m2l
 paths:
+  /:
+    get:
+      summary: Endpoint for retrieving information about the API
+      operationId: getApiInfo
+      responses:
+        '200':
+          description: Successfully retrieved the route data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Route'
+        '400':
+          description: Bad request, validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseError'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseError'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseDefault'
+    post:
+      summary: Endpoint for processing routes based on query parameters
+      operationId: processRouteQuery
+      tags:
+        - Routes
+      parameters:
+        - in: query
+          name: action
+          required: true
+          schema:
+            type: string
+            enum: [save-route, display-route]
+          description: The action to perform, specified as a query parameter.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Route'
+      responses:
+        '200':
+          description: Successfully saved the route data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseOK'
+        '400':
+          description: Bad request, validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseError'
+        '401':
+          description: Unauthorized, API key is missing or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseError'
+        '404':
+          description: Not found, the specified resource does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseError'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseError'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseDefault'
   /save-route:
     post:
       summary: Save route data without displaying on the climbing wall
@@ -27,18 +114,37 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  message:
-                    type: string
+                $ref: '#/components/schemas/ApiResponseOK'
         '400':
-          description: Bad request
+          description: Bad request, validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseError'
+        '401':
+          description: Unauthorized, API key is missing or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseError'
+        '404':
+          description: Not found, the specified resource does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseError'
         '500':
-          description: Server error
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseError'
         default:
           description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseDefault'
 
   /display-route:
     post:
@@ -59,18 +165,37 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  message:
-                    type: string
+                $ref: '#/components/schemas/ApiResponseOK'
         '400':
-          description: Bad request
+          description: Bad request, validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseError'
+        '401':
+          description: Unauthorized, API key is missing or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseError'
+        '404':
+          description: Not found, the specified resource does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseError'
         '500':
-          description: Server error
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseError'
         default:
           description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseDefault'
 
 components:
   schemas:
@@ -127,6 +252,72 @@ components:
           description: Color and brightness of the cell in modern RGB format, e.g., "255 0 0 / 50%"
           pattern: '^([0-9]{1,3}\s{1,2}){3}(?:\/\s{1,2})?([0-9]{1,3})%?$'
           example: '255 0 0 / 50%'
+
+    #
+    # API Responses
+    #
+
+    ApiResponseError:
+      type: object
+      additionalProperties: false
+      required:
+        - error
+      properties:
+        error:
+          type: string
+          description: A descriptive error message.
+          pattern: '^[a-zA-Z0-9 ,.!?''"-]+$'
+          maxLength: 255
+
+    ApiResponseDefault:
+      type: object
+      description: Default response
+      additionalProperties: false
+      required:
+        - status
+      properties:
+        status:
+          type: integer
+          description: The HTTP status code applicable to this error.
+          format: int32
+          example: 401
+        title:
+          type: string
+          description: A brief, general summary of the error.
+          pattern: '^[\u0020-\u007F\u00A0-\u00FF\u0370-\u03FF\u0400-\u04FF]+$'
+          maxLength: 128
+          example: Incorrect username or password.
+        detail:
+          type: string
+          description: A detailed description explaining the error.
+          maxLength: 512
+          pattern: '^([\u0000-\uFFFF\U00010000-\U0010FFFF]+)$'
+          example: Authentication failed due to incorrect username or password.
+
+    ApiResponseOK:
+      type: object
+      description: Default response
+      additionalProperties: false
+      required:
+        - status
+      properties:
+        status:
+          type: integer
+          description: The HTTP status code applicable to this error.
+          format: int32
+          example: 200
+        title:
+          type: string
+          description: A brief, general summary of the error.
+          pattern: '^[\u0020-\u007F\u00A0-\u00FF\u0370-\u03FF\u0400-\u04FF]+$'
+          maxLength: 128
+          example: Request accepted
+        detail:
+          type: string
+          description: A detailed description explaining the error.
+          maxLength: 512
+          pattern: '^([\u0000-\uFFFF\U00010000-\U0010FFFF]+)$'
+          example: Everything is all right.
 
   securitySchemes:
     ApiKeyAuth:
