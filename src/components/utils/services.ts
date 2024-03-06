@@ -1,7 +1,8 @@
 import type { Boulder } from './BoulderTypes.ts';
 import logger from './logger.ts';
 
-const api = 'https://virtserver.swaggerhub.com/CEBREUS69/Boulder-Route-LED-Control-API/1.1.0';
+const api = import.meta.env.VITE_API_URL as string;
+logger.debug('api', api);
 const saveBoulder = `${api}/save-route`;
 const displayBoulder = `${api}/display-route`;
 
