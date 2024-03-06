@@ -25,7 +25,7 @@
 	export let submit: boolean = false;
 
 	const defaultClass: string =
-		'inline-flex justify-center rounded md:rounded-md px-2.5 py-1 text-sm md:text-base md:px-4 md:py-1.5 font-semibold leading-6 disabled:cursor-not-allowed disabled:pointer-events-none focus:ring focus:outline-none';
+		'inline-flex justify-center rounded md:rounded-md px-2.5 py-1 text-sm md:text-base md:px-4 md:py-1.5 font-semibold leading-6 disabled:cursor-not-allowed disabled:pointer-events-none focus:ring focus:outline-none transition-colors';
 
 	const variantClasses: Record<string, string> = {
 		primary:
