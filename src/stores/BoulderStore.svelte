@@ -125,7 +125,8 @@
 		const addBoulder = async (
 			clickedCellsMap: Map<string, { class: string }>,
 			selectorState: Selector,
-			name: string | undefined
+			name: string | undefined,
+			action: 'save' | 'display'
 		) => {
 			log.debug('createBouldersStore.addBoulder');
 			if (!clickedCellsMap.size) {
@@ -163,12 +164,13 @@
 			const { createdAt, ...boulderWithoutCreatedAt } = newBoulder;
 
 			try {
-				const savedBoulder = await services.boulder.save(boulderWithoutCreatedAt);
-				log.info('Boulder saved successfully on server', savedBoulder);
+				const response = await services.boulder[action](boulderWithoutCreatedAt);
+
+				log.info('Boulder saved successfully on server', response);
 				addToast(
-					'Prudič byl vytvořen',
+					`Prudič byl  ${action === 'save' ? 'vytvořen' : 'zobrazen a uložen'}`,
 					'success',
-					'Přejděte na <a href="/">hlavní stránku</a> pro zobrazení.'
+					`${action === 'save' ? 'Přejděte na <a href="/">hlavní stránku</a> pro zobrazení' : ''}`
 				);
 			} catch (error) {
 				log.error('Error saving boulder on server', error);

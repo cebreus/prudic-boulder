@@ -4,6 +4,7 @@
 
 	export const variant: 'default' | 'play' = 'default';
 	export let handleSaveBoulder: () => void;
+	export let handleDisplayBoulder: () => void;
 </script>
 
 {#if variant === 'default'}
@@ -19,6 +20,14 @@
 			on:click={() => {
 				clickedCells.clear();
 				selector.clear();
+			}}
+		></Button>
+
+		<Button
+			emoji="▶"
+			variant="outline"
+			on:click={() => {
+				handleDisplayBoulder();
 			}}
 		></Button>
 	</div>

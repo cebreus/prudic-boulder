@@ -6,6 +6,7 @@
 	import Dialog from '../molecules/Dialog.svelte';
 	import Button from '../atoms/Button.svelte';
 	import BoulderButtons from '../atoms/BoulderButtons.svelte';
+	import { addToast } from '../utils/ToastService.ts';
 
 	let isOpen: boolean = false;
 	let inputBoulderName: string;
@@ -19,14 +20,21 @@
 		if ($clickedCells.size > 0) {
 			isOpen = true;
 			log.info('    isOpen = true');
+		} else {
+			addToast('Vyberte alespoň jednu buňku!');
 		}
+	};
+
+	const handleDisplayBoulder = () => {
+		log.debug('handleDisplayBoulder()');
+		boulders.addBoulder($clickedCells, $selector, undefined, 'display');
 	};
 
 	const handleDialogResponse = () => {
 		log.debug('handleDialogResponse()');
 		isOpen = false;
 		const trimmedInputBoulderName = inputBoulderName.trim();
-		boulders.addBoulder($clickedCells, $selector, trimmedInputBoulderName);
+		boulders.addBoulder($clickedCells, $selector, trimmedInputBoulderName, 'save');
 	};
 
 	const handleKeyDown = (event: CustomEvent) => {
@@ -41,11 +49,9 @@
 
 <Toast />
 
-<main class="container mx-auto px-4 py-12">
-	<h1 class="mb-4 text-2xl font-extrabold tracking-tight sm:text-3xl">Vytvoř si nový boulder</h1>
-	<Boulder />
-	<BoulderButtons {handleSaveBoulder} />
-</main>
+<Boulder />
+
+<BoulderButtons {handleSaveBoulder} {handleDisplayBoulder} />
 
 <Dialog {isOpen} on:close={() => (isOpen = false)} on:keydown={handleKeyDown}>
 	<svelte:fragment slot="DialogTitle">Název boulderu</svelte:fragment>
