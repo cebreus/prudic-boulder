@@ -13,7 +13,7 @@ export type Selector = {
 
 export type Boulder = {
 	id: string;
-	createdAt: number;
+	createdAt: string;
 	name?: string;
 	start?: string;
 	top?: string;

@@ -6,6 +6,7 @@
 
 	// Define TypeScript types
 	import type { Boulder, Mode, Selector } from '../components/utils/BoulderTypes';
+	import { services } from '../components/utils/services.ts';
 
 	// check for browser environment
 	const isBrowser = typeof window !== 'undefined';
@@ -121,7 +122,7 @@
 		const initialValue = isBrowser ? JSON.parse(localStorage.getItem('boulders') || '[]') : [];
 		const { subscribe, update } = writable(initialValue);
 
-		const addBoulder = (
+		const addBoulder = async (
 			clickedCellsMap: Map<string, { class: string }>,
 			selectorState: Selector,
 			name: string | undefined
@@ -143,7 +144,7 @@
 				};
 			});
 
-			const newBoulder = {
+			const newBoulder: Boulder = {
 				id: generateId(),
 				name: name,
 				path: cells,
@@ -157,11 +158,22 @@
 			update((boulders) => [...boulders, newBoulder]);
 			const existingBoulders = JSON.parse(localStorage.getItem('boulders') || '[]');
 			localStorage.setItem('boulders', JSON.stringify([...existingBoulders, newBoulder]));
-			addToast(
-				'Prudič byl vytvořen',
-				'success',
-				'Přejděte na <a href="/">hlavní stránku</a> pro zobrazení.'
-			);
+
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			const { createdAt, ...boulderWithoutCreatedAt } = newBoulder;
+
+			try {
+				const savedBoulder = await services.boulder.save(boulderWithoutCreatedAt);
+				log.info('Boulder saved successfully on server', savedBoulder);
+				addToast(
+					'Prudič byl vytvořen',
+					'success',
+					'Přejděte na <a href="/">hlavní stránku</a> pro zobrazení.'
+				);
+			} catch (error) {
+				log.error('Error saving boulder on server', error);
+				addToast('Chyba při ukládání boulderu na server', 'error');
+			}
 		};
 
 		const removeBoulder = (boulderId: string) => {
