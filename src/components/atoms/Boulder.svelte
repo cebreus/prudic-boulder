@@ -24,7 +24,6 @@
 		clickedGrips.setColorForCell(cellId, color); // Предполагается, что переменная color уже определена в вашем компоненте
 	}
 
-	// Измените обработчик клика, добавив вызов новой функции
 	const toggleCellAndUpdateSelector = (cellId: string) => {
 		if (isSkippedGrip(cellId)) {
 			log.debug(`Toggling cell: ${cellId} SKIPPED with mode: ${$selector.selectedMode}`);

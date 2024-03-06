@@ -11,7 +11,7 @@
 	let inputBoulderName: string;
 
 	let initialColor = '#FF0000';
-	let color = '#FF0000';
+	let color: string | undefined = '#FF0000';
 	let brightness = 100;
 
 	interface RGB {
@@ -42,7 +42,6 @@
 
 	$: {
 		const { r, g, b } = hexToRgb(initialColor);
-		// adjustedColor = adjustVisualColorBrightness({ r, g, b }, brightness);
 		color = adjustVisualColorBrightness({ r, g, b }, brightness);
 		colorDataForServer = `${r} ${g} ${b} / ${brightness}%`;
 		console.log('server data:', colorDataForServer);
@@ -71,7 +70,12 @@
 		isOpen = false;
 		const trimmedInputBoulderName = inputBoulderName.trim();
 		console.log($clickedCells);
-		boulders.addBoulder($clickedCells, $selector, trimmedInputBoulderName);
+		boulders.addBoulderColorPicker(
+			$clickedCells,
+			$selector,
+			trimmedInputBoulderName,
+			adjustedColor
+		);
 	};
 
 	const handleKeyDown = (event: CustomEvent) => {
@@ -82,10 +86,14 @@
 			keyboardEvent.stopPropagation();
 		}
 	};
+
+	function resetColorToInitial() {
+		color = undefined;
+	}
 </script>
 
 <div class="mt-5 flex-col">
-	<Boulder {color} />
+	<Boulder {color} {resetColorToInitial} />
 	<BoulderButtons {handleSaveBoulder} />
 
 	<div class="max-w-sm rounded-lg bg-white p-6 shadow-lg">

@@ -17,8 +17,8 @@
 
 		return {
 			subscribe,
-			toggle: (gripId: string, selectedMode: Mode | undefined) => {
-				log.info('  createClickedGripsStore.toggle');
+			toggle: (gripId: string, selectedMode: Mode | undefined, color: string | undefined) => {
+				log.info('  createClickedCellsStore.toggle');
 				log.info('selectedMode in store:', selectedMode);
 				log.info('    Toggle:   ', gripId, 'with mode:', selectedMode);
 				update((grips) => {
@@ -32,25 +32,26 @@
 					if (selectedMode !== 'Start' && selectedMode !== 'Finish') {
 						if (updated.has(gripId)) {
 							log.info('    Removing: ', gripId);
-							updated.delete(gripId);
+							updated.set(gripId, { class: gripClass, color: 'defaultColor' }); // Замените 'defaultColor' на ваш цвет по умолчанию
+
 						} else {
 							log.info('    Adding:   ', gripId);
-							updated.set(gripId, { class: gripClass });
+							updated.set(gripId, { class: gripClass, color: color  });
 						}
 					} else {
 						log.info('    Adding:   ', gripId);
-						updated.set(gripId, { class: gripClass });
+						updated.set(gripId, { class: gripClass, color: color});
 					}
 					return updated;
 				});
 			},
 
 			setColorForCell: (cellId: string, color: string) => {
-				console.log('My color:', color);
+				log.info('My color:', color);
 				update((cells) => {
 					const updated = new Map(cells);
 					const cell = updated.get(cellId) || {};
-					cell.color = color; // Сохраняем цвет в объекте ячейки
+					cell.color = color;
 					updated.set(cellId, cell);
 					return updated;
 				});
