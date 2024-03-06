@@ -9,7 +9,6 @@
 	import { mdiDelete } from '@mdi/js';
 	import type { Boulder } from '../utils/BoulderTypes.ts';
 	import log from 'loglevel';
-	import { fade, fly } from 'svelte/transition';
 
 	let bouldersFromLS: Boulder[] = [];
 	let selectedBoulder: Boulder = { id: '', createdAt: 0, path: [] };
@@ -36,7 +35,16 @@
 	};
 </script>
 
-<div in:fade>
+<main class="container mx-auto px-4 py-12">
+	<h1 class="mb-4 text-2xl font-extrabold tracking-tight sm:text-3xl">Vytvořené bouldery</h1>
+	{#if bouldersFromLS.length === 0}
+		<Alert showIcon>
+			Vytvořte si
+			<a href="/new-boulder" class="text-blue-600 underline hover:no-underline dark:text-blue-300"
+				>novou cestu</a
+			> na lezecké stěně.
+		</Alert>
+	{/if}
 	{#if bouldersFromLS?.length > 0}
 		<div id="table-container" class="my-8 overflow-x-auto">
 			<table id="dataTable">
@@ -49,7 +57,7 @@
 				</thead>
 				<tbody>
 					{#each bouldersFromLS as boulder (boulder.id)}
-						<tr in:fade out:fly={{ y: -5 }}>
+						<tr>
 							<td>
 								<button
 									on:click={() => openDialog(boulder)}
@@ -79,7 +87,7 @@
 								<button on:click={() => handleRemoveBoulder(boulder.id)}>
 									<Icon
 										path={mdiDelete}
-										class="size-5 text-red-500 transition-colors ease-in-out hover:fill-red-600"
+										class="size-5 text-red-500 transition-colors hover:fill-red-600"
 									/>
 								</button>
 							</td>
@@ -88,15 +96,8 @@
 				</tbody>
 			</table>
 		</div>
-	{:else}
-		<Alert showIcon>
-			Vytvořte si
-			<a href="/new-boulder" class="text-blue-600 underline hover:no-underline dark:text-blue-300"
-				>novou cestu</a
-			> na lezecké stěně.
-		</Alert>
 	{/if}
-</div>
+</main>
 
 <Toast />
 
@@ -122,7 +123,7 @@
 		@apply border-b bg-white transition-colors dark:border-slate-700 dark:bg-slate-900;
 	}
 	table tbody tr:hover {
-		@apply bg-gray-100 outline-dotted outline-1 outline-slate-400 dark:bg-slate-700;
+		@apply border-dotted border-sky-400 bg-sky-50 dark:bg-slate-700;
 	}
 	table th {
 		@apply px-3 py-2 align-bottom dark:text-slate-300;
@@ -132,6 +133,6 @@
 		@apply px-3 py-2 tabular-nums lg:pr-8;
 	}
 	table td button {
-		@apply text-sky-500 underline hover:no-underline dark:text-sky-500 dark:hover:text-sky-400;
+		@apply text-sky-500 underline hover:text-sky-600 hover:no-underline dark:text-sky-500 dark:hover:text-sky-400;
 	}
 </style>

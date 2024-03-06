@@ -1,11 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Router from '../Router.svelte';
+import BouldersTable from '../components/templates/BouldersTable.svelte';
 ---
 
 <Layout title="Vytvořené bouldery">
-	<main class="container mx-auto px-4 py-12">
-		<h1 class="mb-4 text-2xl font-extrabold tracking-tight sm:text-3xl">Vytvořené bouldery</h1>
-		<Router client:only />
-	</main>
+	<BouldersTable client:load />
 </Layout>

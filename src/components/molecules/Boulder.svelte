@@ -1,14 +1,36 @@
 <script lang="ts">
 	import { clickedCells, selector, boulders } from '../../stores/BoulderStore.svelte';
-	import { isSkippedCell, skippedClass, rows, cols } from '../utils/utils.ts';
-	import log from '../utils/logger.ts';
+	import {
+		isSkippedCell,
+		skippedClass,
+		startClass,
+		topClass,
+		clickedClass,
+		rows,
+		cols
+	} from '../utils/utils';
+	import Button from '../atoms/Button.svelte';
+	import log from '../utils/logger';
+	import Dialog from './Dialog.svelte';
 
-	export let selectedBoulderID: string;
+	import type { Boulder } from '../utils/BoulderTypes';
+
+	import { fade } from 'svelte/transition';
+
+	let inputBoulderName: string;
+
+	export let selectedBoulder: Boulder | undefined;
+	export let isOpen: boolean = false;
+	export let variant: string = 'default';
 
 	export const tableRows = Array.from({ length: rows }, (_, i) => String.fromCharCode(65 + i));
 	export const tableCols = Array.from({ length: cols }, (_, i) => i);
 
 	$: selectedMode = $selector.selectedMode;
+
+	$: if (!isOpen) {
+		inputBoulderName = '';
+	}
 
 	const toggleCellAndUpdateSelector = (cellId: string) => {
 		if (isSkippedCell(cellId)) {
@@ -20,33 +42,70 @@
 
 		clickedCells.toggle(cellId, selectedMode);
 	};
+
+	const handleSaveBoulder = () => {
+		log.debug('handleSaveBoulder()');
+		if ($clickedCells.size > 0) {
+			isOpen = true;
+			log.info('    isOpen = true');
+		}
+	};
+
+	const handleDialogResponse = () => {
+		log.debug('handleDialogResponse()');
+		isOpen = false;
+		boulders.addBoulder($clickedCells, $selector, inputBoulderName);
+	};
+
+	const getClassFromBoulder = (cellId: string) => {
+		if (!selectedBoulder) return '';
+		if (selectedBoulder.start === cellId) {
+			return startClass;
+		} else if (selectedBoulder.top === cellId) {
+			return topClass;
+		} else if (selectedBoulder.path?.some((cell) => cell.id === cellId)) {
+			return clickedClass;
+		}
+		return '';
+	};
+
+	const handleKeyDown = (event: CustomEvent) => {
+		const keyboardEvent = event.detail as KeyboardEvent;
+		if (keyboardEvent.key === 'Enter') {
+			handleDialogResponse();
+			keyboardEvent.preventDefault();
+			keyboardEvent.stopPropagation();
+		}
+	};
 </script>
 
-<table class="wall">
-	<thead>
-		<tr>
-			<th></th>
-			{#each tableCols as col (col)}
-				<th>{col}</th>
-			{/each}
-		</tr>
-	</thead>
-	<tbody>
-		{#each tableRows as row, rowIndex}
+<Dialog {isOpen} on:close={() => (isOpen = false)} on:keydown={handleKeyDown}>
+	<svelte:fragment slot="DialogTitle">Název boulderu</svelte:fragment>
+	<svelte:fragment slot="DialogContent">
+		<input
+			type="text"
+			required
+			class="w-full rounded border p-3 hover:border-sky-600 focus:border-blue-700 focus:outline-none"
+			placeholder="Enter Boulder Name"
+			bind:value={inputBoulderName}
+		/>
+	</svelte:fragment>
+	<svelte:fragment slot="DialogFooter">
+		<Button
+			class="inline-flex w-full justify-center rounded-md sm:w-auto"
+			on:click={handleDialogResponse}
+			variant="primary">Save</Button
+		>
+	</svelte:fragment>
+</Dialog>
+
+<div>
+	<table class="wall">
+		<thead>
 			<tr>
-				<th>{String.fromCharCode(65 + rowIndex)}</th>
-				{#each tableCols as col}
-					{@const cellId = `${row}${col}`}
-					<td
-						class={isSkippedCell(cellId)
-							? skippedClass
-							: selectedBoulderID
-								? boulders.getCellClass(selectedBoulderID, cellId)
-								: $clickedCells.get(cellId)?.class ?? ''}
-						on:click={selectedBoulderID ? null : () => toggleCellAndUpdateSelector(cellId)}
-					>
-						{isSkippedCell(cellId) ? '' : cellId}
-					</td>
+				<th></th>
+				{#each tableCols as col (col)}
+					<th>{col}</th>
 				{/each}
 			</tr>
 		</thead>
@@ -99,7 +158,7 @@
 		@apply size-7 rounded-sm text-center slashed-zero tabular-nums text-slate-400 sm:h-8 sm:w-8 dark:text-slate-400;
 	}
 	:global(table.wall td) {
-		@apply size-7 rounded-sm text-center slashed-zero tabular-nums transition-colors sm:h-8 sm:w-8;
+		@apply size-7 rounded-sm text-center slashed-zero tabular-nums sm:h-8 sm:w-8;
 	}
 	:global(table.wall td:not(.skipped)) {
 		@apply cursor-pointer border border-sky-300 bg-sky-50 text-sky-600 transition-colors hover:border-sky-400 hover:bg-sky-100 hover:text-sky-700 dark:border-sky-700 dark:bg-sky-950 dark:text-sky-200  dark:hover:bg-sky-900 dark:hover:text-white;
