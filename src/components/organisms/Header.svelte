@@ -1,9 +1,8 @@
 <script lang="ts">
 	import MenuToggler from '../../icons/MenuToggler.svelte';
 	import Logo from '../../icons/Logo.svelte';
-	import { link } from 'svelte-spa-router';
 	import { twMerge } from 'tailwind-merge';
-	import { fade } from 'svelte/transition';
+	import { slide } from 'svelte/transition';
 
 	export let currentPath = '';
 
@@ -13,13 +12,13 @@
 		console.log('menu open:', menuOpen);
 	}
 
-	const defaultClass = 'block rounded-md px-3 py-1.5 text-sm font-medium';
+	const defaultClass = 'block rounded-md px-3 py-1.5 text-sm font-medium transition-colors';
 	const activeClass =
-		'duration-500 text-sky-700 ring-1 ring-slate-200 hover:text-sky-900 transition-colors ease-in-out dark:text-slate-500 dark:ring-slate-500';
+		'text-sky-700 ring-1 ring-slate-200 hover:text-sky-900 dark:text-slate-500 dark:ring-slate-500';
 	const inactiveClass =
-		'text-sky-500 duration-500 hover:bg-sky-100 hover:text-sky-600 hover:ring-1 hover:ring-sky-200 transition-colors ease-in-out dark:hover:bg-transparent dark:hover:text-sky-400 dark:hover:ring-sky-400';
+		'text-sky-500 hover:bg-sky-100 hover:text-sky-600 hover:ring-1 hover:ring-sky-200 dark:hover:bg-transparent dark:hover:text-sky-400 dark:hover:ring-sky-400';
 
-	const mobileDefaultClass = 'block rounded-md px-3 py-2 text-base font-medium';
+	const mobileDefaultClass = `${defaultClass} py-2`;
 	const mobileActiveClass = 'bg-slate-900 text-white';
 	const mobileInactiveClass = 'text-slate-300 hover:bg-slate-700 hover:text-white';
 
@@ -49,16 +48,16 @@
 >
 	<div class="container mx-auto">
 		<div class="relative flex h-14 items-center justify-between px-4">
-			<a href="/" use:link class="flex items-center" on:click={() => (menuOpen = false)}
+			<a href="/" class="flex items-center" on:click={() => (menuOpen = false)}
 				><Logo
-					class="mb-0.5 mr-4 block h-6 w-auto text-sky-900 transition-colors ease-in-out hover:text-sky-600 dark:text-sky-500 dark:hover:text-sky-400"
+					class="mb-0.5 mr-4 block h-6 w-auto text-sky-900 transition-colors hover:text-sky-600 dark:text-sky-500 dark:hover:text-sky-400"
 				/></a
 			>
 			<div class="absolute inset-y-0 right-3 flex items-center sm:hidden">
 				<!-- Mobile menu button-->
 				<button
 					type="button"
-					class="inline-flex items-center justify-center rounded-md p-1 text-slate-400 hover:bg-slate-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+					class="inline-flex items-center justify-center rounded-md p-1 text-slate-400 transition-colors hover:bg-slate-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
 					aria-controls="mobile-menu"
 					aria-expanded={menuOpen}
 					on:click={toggleMenu}
@@ -73,7 +72,6 @@
 						{#each menuItems as { name, path } (path)}
 							<a
 								href={path}
-								use:link
 								class={menuItemsClass(path)}
 								aria-current={currentPath === path ? 'page' : undefined}
 							>
@@ -89,13 +87,13 @@
 	<!-- Mobile menu, show/hide based on menu state. -->
 	{#if menuOpen}
 		<div
-			transition:fade
+			transition:slide
 			class="absolute left-0 right-0 top-full max-h-80 origin-top-right overflow-y-auto bg-slate-800 sm:hidden"
 			id="mobile-menu"
 		>
-			<div class="space-y-1 px-2 pb-3 pt-2">
+			<div class="space-y-1 px-2 py-3">
 				{#each menuItems as { name, path } (path)}
-					<a href={path} use:link class={mobileMenuItemsClass(path)} on:click={toggleMenu}>
+					<a href={path} class={mobileMenuItemsClass(path)} on:click={toggleMenu}>
 						{name}
 					</a>
 				{/each}

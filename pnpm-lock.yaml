@@ -86,9 +86,6 @@ devDependencies:
   svelte-reactive-preprocessor:
     specifier: ^0.8.3
     version: 0.8.3
-  svelte-spa-router:
-    specifier: ^4.0.1
-    version: 4.0.1
   tailwind-merge:
     specifier: ^2.2.1
     version: 2.2.1
@@ -5472,11 +5469,6 @@ packages:
       set-function-name: 2.0.1
     dev: true
 
-  /regexparam@2.0.2:
-    resolution: {integrity: sha512-A1PeDEYMrkLrfyOwv2jwihXbo9qxdGD3atBYQA9JJgreAx8/7rC6IUkWOw2NQlOxLp2wL0ifQbh1HuidDfYA6w==}
-    engines: {node: '>=8'}
-    dev: true
-
   /rehype-parse@9.0.0:
     resolution: {integrity: sha512-WG7nfvmWWkCR++KEkZevZb/uw41E8TsH4DsY9UxsTbIXCVGbAs4S+r8FrQ+OtH5EEQAs+5UxKC42VinkmpA1Yw==}
     dependencies:
@@ -6249,12 +6241,6 @@ packages:
       json-stringify-safe: 5.0.1
       linenumber: 1.0.1
       periscopic: 2.0.3
-    dev: true
-
-  /svelte-spa-router@4.0.1:
-    resolution: {integrity: sha512-2JkmUQ2f9jRluijL58LtdQBIpynSbem2eBGp4zXdi7aDY1znbR6yjw0KsonD0aq2QLwf4Yx4tBJQjxIjgjXHKg==}
-    dependencies:
-      regexparam: 2.0.2
     dev: true
 
   /svelte2tsx@0.6.27(svelte@4.2.10)(typescript@5.3.3):

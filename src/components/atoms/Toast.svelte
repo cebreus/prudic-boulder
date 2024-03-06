@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { fade } from 'svelte/transition';
 	import { onMount, onDestroy } from 'svelte';
 	import { toasts, dismissToast } from '../utils/ToastService';
 	import { twMerge } from 'tailwind-merge';
@@ -86,7 +85,6 @@
 	<div
 		data-cy="toast-wrapper"
 		class="fixed right-0 top-0 z-50 max-h-screen overflow-auto pr-5 pt-5"
-		transition:fade
 	>
 		{#each toastsArray as toast (toast.id)}
 			<div
