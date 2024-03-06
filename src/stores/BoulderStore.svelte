@@ -141,6 +141,13 @@
 			action: 'save' | 'display'
 		) => {
 			log.debug('createBouldersStore.addBoulder');
+			if (!clickedCellsMap.size) {
+				log.trace('Pick at least one cell');
+				addToast('Vyberte alespoň jednu buňku!');
+				return;
+			}
+
+			console.log('Clicked cells ', clickedCellsMap);
 
 			const clickedGripKeys = Array.from(clickedGripsMap.keys());
 
