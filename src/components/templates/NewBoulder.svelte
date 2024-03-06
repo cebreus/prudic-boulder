@@ -41,9 +41,11 @@
 
 <Toast />
 
-<Boulder />
-
-<BoulderButtons {handleSaveBoulder} />
+<main class="container mx-auto px-4 py-12">
+	<h1 class="mb-4 text-2xl font-extrabold tracking-tight sm:text-3xl">Vytvoř si nový boulder</h1>
+	<Boulder />
+	<BoulderButtons {handleSaveBoulder} />
+</main>
 
 <Dialog {isOpen} on:close={() => (isOpen = false)} on:keydown={handleKeyDown}>
 	<svelte:fragment slot="DialogTitle">Název boulderu</svelte:fragment>

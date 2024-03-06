@@ -61,7 +61,7 @@
 		@apply size-7 rounded-sm text-center slashed-zero tabular-nums text-slate-400 sm:h-8 sm:w-8 dark:text-slate-400;
 	}
 	:global(table.wall td) {
-		@apply size-7 rounded-sm text-center slashed-zero tabular-nums sm:h-8 sm:w-8;
+		@apply size-7 rounded-sm text-center slashed-zero tabular-nums transition-colors sm:h-8 sm:w-8;
 	}
 	:global(table.wall td:not(.skipped)) {
 		@apply cursor-pointer border border-sky-300 bg-sky-50 text-sky-600 hover:border-sky-400 hover:bg-sky-100 hover:text-sky-700 dark:border-sky-700 dark:bg-sky-950 dark:text-sky-200  dark:hover:bg-sky-900 dark:hover:text-white;
