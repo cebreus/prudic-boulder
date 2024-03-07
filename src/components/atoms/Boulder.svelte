@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { clickedGrips, selector, boulders } from '../../stores/BoulderStore.svelte';
-	import { skippedClass, rows, cols } from '../utils/utils.ts';
+	import { skippedClass, rows, cols, isSkippedGrip } from '../utils/utils.ts';
 	import log from '../utils/logger.ts';
 	import { get } from 'svelte/store';
 
-	export let selectedBoulderID: string;
-	export let color: string;
+	export let selectedBoulderID: string | undefined = undefined;
+	export let color: string | undefined = undefined;
 
 	export const tableRows = Array.from({ length: rows }, (_, i) => String.fromCharCode(65 + i));
 	export const tableCols = Array.from({ length: cols }, (_, i) => i);
@@ -25,16 +25,18 @@
 	}
 
 	const toggleCellAndUpdateSelector = (cellId: string) => {
-		if (isSkippedGrip(cellId)) {
+		if (isSkippedCell(cellId)) {
 			log.debug(`Toggling cell: ${cellId} SKIPPED with mode: ${$selector.selectedMode}`);
 			return;
 		}
-		log.debug(`Toggling grip: ${gripId} with mode: ${$selector.selectedMode}`);
-		selector.updateSelector(gripId, selectedMode);
+		log.debug(`Toggling cell: ${cellId} with mode: ${$selector.selectedMode}`);
+		selector.updateSelector(cellId, selectedMode);
 
-		clickedGrips.toggle(cellId, selectedMode);
+		clickedCells.toggle(cellId, selectedMode, color);
 
-		clickedGrips.setColorForCell(cellId, color);
+		if (color) {
+			clickedCells.setColorForCell(cellId, color);
+		}
 	};
 </script>
 

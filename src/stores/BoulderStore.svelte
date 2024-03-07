@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
 	import { addToast } from '../components/utils/ToastService';
-	import { generateId, clickedClass, startClass, finishClass } from '../components/utils/utils';
+	import { generateId, clickedClass, startClass, topClass, finishClass } from '../components/utils/utils';
 	import { writable } from 'svelte/store';
 	import log from '../components/utils/logger.ts';
 
@@ -177,7 +177,9 @@
 
 			log.debug('  newBoulder:', newBoulder);
 
+			// Update the boulders store with the new boulder
 			update((boulders) => [...boulders, newBoulder]);
+			// Get existing boulders from localStorage, add the new boulder, and update localStorage
 			const existingBoulders = JSON.parse(localStorage.getItem('boulders') || '[]');
 			localStorage.setItem('boulders', JSON.stringify([...existingBoulders, newBoulder]));
 

@@ -6,6 +6,7 @@
 	import Button from '../atoms/Button.svelte';
 	import log from '../utils/logger.ts';
 	import { clickedCells, selector, boulders } from '../../stores/BoulderStore.svelte';
+	import { adjustColor } from '../utils/utils.ts';
 
 	let isOpen: boolean = false;
 	let inputBoulderName: string;
@@ -14,53 +15,20 @@
 	let color: string | undefined = '#FF0000';
 	let brightness = 100;
 
-	interface RGB {
-		r: number;
-		g: number;
-		b: number;
-	}
-
-	function hexToRgb(hex: string): RGB {
-		hex = hex.replace(/^#/, '');
-		const r = parseInt(hex.slice(0, 2), 16);
-		const g = parseInt(hex.slice(2, 4), 16);
-		const b = parseInt(hex.slice(4, 6), 16);
-		return { r, g, b };
-	}
-
-	function adjustVisualColorBrightness({ r, g, b }: RGB, brightness: number): string {
-		const factor = brightness / 100;
-		const adjust = (c: number): number => Math.round(c * factor);
-		r = adjust(r);
-		g = adjust(g);
-		b = adjust(b);
-		return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`;
-	}
-
-	let adjustedColor: string = color;
-	let colorDataForServer: string;
-
-	$: {
-		const { r, g, b } = hexToRgb(initialColor);
-		color = adjustVisualColorBrightness({ r, g, b }, brightness);
-		colorDataForServer = `${r} ${g} ${b} / ${brightness}%`;
-	}
-
-	function handleColorChange(newColor: string) {
-		initialColor = newColor;
-	}
-
-	//
-
+	$: color = adjustColor(initialColor, brightness);
 	$: if (!isOpen) {
 		inputBoulderName = '';
 	}
+
+	const handleColorChange = (newColor: string) => {
+		initialColor = newColor;
+	};
 
 	const handleSaveBoulder = () => {
 		log.debug('handleSaveBoulder()');
 		if ($clickedCells.size > 0) {
 			isOpen = true;
-			log.info('    isOpen = true');
+			log.info('Dialog opened');
 		}
 	};
 
@@ -68,7 +36,7 @@
 		log.debug('handleDialogResponse()');
 		isOpen = false;
 		const trimmedInputBoulderName = inputBoulderName.trim();
-		boulders.addBoulder($clickedCells, $selector, trimmedInputBoulderName, adjustedColor);
+		boulders.addBoulder($clickedCells, $selector, trimmedInputBoulderName);
 	};
 
 	const handleKeyDown = (event: CustomEvent) => {
@@ -86,13 +54,13 @@
 </script>
 
 <div class="mt-5 flex-col">
-	<Boulder {color} {resetColorToInitial} />
+	<Boulder {color} />
 	<BoulderButtons {handleSaveBoulder} />
 
 	<div class="max-w-sm rounded-lg bg-white p-6 shadow-lg">
 		<div class="mb-4">
 			<label for="colorPicker" class="mb-2 block text-sm font-bold text-gray-700"
-				>Choose Color:</label
+				>Choose Color and click on cell:</label
 			>
 			<input
 				type="color"
@@ -152,8 +120,8 @@ Buttons:
 - Clear" clears set data Boulder
 - Save" send data to server
 
-Colour picker: set colour, click on grip -> apply colour 
-from colour picker to clicked table grip, change 
+Colour picker: set colour, click on grip -> apply colour
+from colour picker to clicked table grip, change
 background colour to these grip.
 		</pre>
 	</div>
