@@ -20,10 +20,10 @@
 
 	const dispatch = createEventDispatcher();
 
-	function closeDialog() {
+	const closeDialog = () => {
 		isOpen = false;
 		dispatch('close');
-	}
+	};
 </script>
 
 <Transition show={isOpen}>

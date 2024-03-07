@@ -8,10 +8,6 @@
 
 	let menuOpen = false;
 
-	$: {
-		console.log('menu open:', menuOpen);
-	}
-
 	const defaultClass = 'block rounded-md px-3 py-1.5 text-sm font-medium transition-colors';
 	const activeClass =
 		'text-sky-700 ring-1 ring-slate-200 hover:text-sky-900 dark:text-slate-500 dark:ring-slate-500';
