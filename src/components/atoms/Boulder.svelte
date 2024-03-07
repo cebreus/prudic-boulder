@@ -34,9 +34,9 @@
 
 		clickedCells.toggle(cellId, selectedMode, color);
 
-		if (color) {
-			clickedCells.setColorForCell(cellId, color);
-		}
+		// if (color) {
+		// 	clickedCells.setColorForCell(cellId, color);
+		// }
 	};
 </script>
 

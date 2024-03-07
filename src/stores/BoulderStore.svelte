@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
 	import { addToast } from '../components/utils/ToastService';
-	import { generateId, clickedClass, startClass, topClass, finishClass } from '../components/utils/utils';
+	import { generateId, clickedClass, startClass, finishClass } from '../components/utils/utils';
 	import { writable } from 'svelte/store';
 	import log from '../components/utils/logger.ts';
 
@@ -36,6 +36,8 @@
 
 						} else {
 							log.info('    Adding:   ', gripId);
+							log.info('    Class:   ', gripClass);
+							log.info('    color:   ', color);
 							updated.set(gripId, { class: gripClass, color: color  });
 						}
 					} else {
@@ -152,17 +154,22 @@
 			const clickedGripKeys = Array.from(clickedGripsMap.keys());
 
 			const grips = clickedGripKeys.map((key) => {
+				const gripData = clickedGripsMap.get(key);
 				// Example of colorBrightness
-				const colorBrightness = '255 0 0 / 50%';
+				let  colorBrightness = '255 0 0 / 50%';
+
+				colorBrightness = gripData?.color || colorBrightness;
+
+
 				let grip: Grip = {
 					id: key,
 					colorBrightness: colorBrightness
 				};
 
-				if (selectorState.selectedStartGrip === key) {
-					grip = { ...grip, start: selectorState.selectedStartGrip };
-				} else if (selectorState.selectedFinishGrip === key) {
-					grip = { ...grip, finish: selectorState.selectedFinishGrip };
+				if (selectorState.selectedStartGrip === key && !gripData?.color) {
+					grip = { ...grip, start: selectorState.selectedStartGrip, colorBrightness: '220 252 231 / 100%'};
+				} else if (selectorState.selectedFinishGrip === key && !gripData?.color) {
+					grip = { ...grip, finish: selectorState.selectedFinishGrip, colorBrightness: '253 244 255 / 100%'};
 				}
 
 				return grip;
