@@ -36,24 +36,6 @@
 
 		clickedGrips.setColorForCell(cellId, color);
 	};
-
-	const colorBrightnessToRGBA = (colorBrightness: string) => {
-		const [r, g, b, alpha] = colorBrightness.split(/[\s\/]+/);
-		const opacity = parseInt(alpha) / 100;
-		return `rgba(${r}, ${g}, ${b}, ${opacity})`;
-	};
-
-	function getCellStyle(cellId: string) {
-		if (selectedBoulderID) {
-			const boulder = get(boulders).find((b) => b.id === selectedBoulderID);
-			const cell = boulder?.path.find((c) => c.id === cellId);
-			if (cell && cell.colorBrightness) {
-				console.log('here!!!!');
-				return `background-color: ${colorBrightnessToRGBA(cell.colorBrightness)};`;
-			}
-		}
-		return '';
-	}
 </script>
 
 <table class="wall">

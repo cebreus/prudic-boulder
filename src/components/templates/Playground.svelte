@@ -44,7 +44,6 @@
 		const { r, g, b } = hexToRgb(initialColor);
 		color = adjustVisualColorBrightness({ r, g, b }, brightness);
 		colorDataForServer = `${r} ${g} ${b} / ${brightness}%`;
-		console.log('server data:', colorDataForServer);
 	}
 
 	function handleColorChange(newColor: string) {
@@ -69,13 +68,7 @@
 		log.debug('handleDialogResponse()');
 		isOpen = false;
 		const trimmedInputBoulderName = inputBoulderName.trim();
-		console.log($clickedCells);
-		boulders.addBoulderColorPicker(
-			$clickedCells,
-			$selector,
-			trimmedInputBoulderName,
-			adjustedColor
-		);
+		boulders.addBoulder($clickedCells, $selector, trimmedInputBoulderName, adjustedColor);
 	};
 
 	const handleKeyDown = (event: CustomEvent) => {

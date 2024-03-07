@@ -135,19 +135,19 @@
 		const { subscribe, update } = writable(initialValue);
 
 		const addBoulder = async (
-			clickedGripsMap: Map<string, { class: string }>,
+			clickedGripsMap: Map<string, { class: string, color: string }>,
 			selectorState: Selector,
 			name: string | undefined,
 			action: 'save' | 'display'
 		) => {
 			log.debug('createBouldersStore.addBoulder');
-			if (!clickedCellsMap.size) {
+			if (!clickedGripsMap.size) {
 				log.trace('Pick at least one cell');
 				addToast('Vyberte alespoň jednu buňku!');
 				return;
 			}
 
-			console.log('Clicked cells ', clickedCellsMap);
+			console.log('Clicked cells ', clickedGripsMap);
 
 			const clickedGripKeys = Array.from(clickedGripsMap.keys());
 
@@ -212,11 +212,20 @@
 
 			if (!selectedBoulder) return '';
 
-			if (selectedBoulder.start === gripId) return startClass;
-			if (selectedBoulder.finish === gripId) return finishClass;
-			if (selectedBoulder.path.some((grip) => grip.id === gripId)) return clickedClass;
+			// Find the cell within the path of the selected boulder that matches the provided cellId
+			const cell = selectedBoulder.path.find((cell) => cell.id === gripId);
+			// If the cell isn't part of the selected boulder's path, return default values
+			if (!cell) return { class: '', color: '' };
 
-			return '';
+
+			let gripClass = '';
+
+			if (selectedBoulder.start === gripId) gripClass =  startClass;
+			if (selectedBoulder.finish === gripId) gripClass =  finishClass;
+			if (selectedBoulder.path.some((grip) => grip.id === gripId)) gripClass = clickedClass;
+
+			return { class: gripClass, color: cell.colorBrightness || '' };
+
 		};
 
 		return { subscribe, addBoulder, removeBoulder, getGripClass: getGripClass };

@@ -19,7 +19,7 @@
 			...boulder,
 			createdAt: new Date(boulder.createdAt).toLocaleString()
 		}));
-		log.info('Boulders:', bouldersFromLS);
+		log.info('BouldersFrom LS:', bouldersFromLS);
 	});
 
 	onDestroy(unsubscribe);
