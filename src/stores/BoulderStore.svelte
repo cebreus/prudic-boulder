@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
 	import { addToast } from '../components/utils/ToastService';
-	import { generateId, clickedClass, startClass, topClass } from '../components/utils/utils';
+	import { generateId, clickedClass, startClass, topClass, omit } from '../components/utils/utils';
 	import { writable } from 'svelte/store';
 	import log from '../components/utils/logger.ts';
 
@@ -129,11 +129,6 @@
 			action: 'save' | 'display'
 		) => {
 			log.debug('createBouldersStore.addBoulder');
-			if (!clickedCellsMap.size) {
-				log.trace('Pick at least one cell');
-				addToast('Vyberte alespoň jednu buňku!');
-				return;
-			}
 
 			const clickedCellKeys = Array.from(clickedCellsMap.keys());
 			const cells = clickedCellKeys.map((key) => {
@@ -160,15 +155,14 @@
 			const existingBoulders = JSON.parse(localStorage.getItem('boulders') || '[]');
 			localStorage.setItem('boulders', JSON.stringify([...existingBoulders, newBoulder]));
 
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			const { createdAt, ...boulderWithoutCreatedAt } = newBoulder;
+			const boulderWithoutCreatedAt = omit(newBoulder, 'createdAt');
 
 			try {
 				const response = await services.boulder[action](boulderWithoutCreatedAt);
 
 				log.info('Boulder saved successfully on server', response);
 				addToast(
-					`Prudič byl  ${action === 'save' ? 'vytvořen' : 'zobrazen a uložen'}`,
+					`Prudič byl  ${action === 'save' ? 'uložen' : 'zobrazen a uložen'}`,
 					'success',
 					`${action === 'save' ? 'Přejděte na <a href="/">hlavní stránku</a> pro zobrazení' : ''}`
 				);

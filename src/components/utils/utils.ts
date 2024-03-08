@@ -1,3 +1,6 @@
+import log from 'loglevel';
+import type { ApiResponse } from './BoulderTypes.ts';
+
 export const cellsToSkip: ReadonlySet<string> = new Set([
 	'B0',
 	'B3',
@@ -109,4 +112,34 @@ export const calculateTimeout = (title: string = '', description: string = ''): 
 	const totalInputLength = title.length + description.length;
 	const additionalTimeout = totalInputLength * MillisecondsPerCharacter;
 	return BaseTimeoutMilliseconds + additionalTimeout;
+};
+
+export const omit = <T extends object, K extends keyof T>(obj: T, ...props: K[]): Omit<T, K> => {
+	const result = { ...obj };
+	for (const prop of props) {
+		delete result[prop];
+	}
+	return result;
+};
+
+export const sendPostRequest = async <T>(url: string, data: T): Promise<ApiResponse> => {
+	try {
+		log.debug('Sending POST request', { url, data });
+		const response = await fetch(url, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(data)
+		});
+
+		if (!response.ok) {
+			const message = `An error has occurred: ${response.status}`;
+			log.error('Error during POST request', { message, response });
+			throw new Error(message);
+		}
+
+		return await response.json();
+	} catch (error) {
+		log.error('Error in sendPostRequest function', error);
+		throw error;
+	}
 };

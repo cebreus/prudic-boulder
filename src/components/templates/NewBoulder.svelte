@@ -11,6 +11,8 @@
 	let isOpen: boolean = false;
 	let inputBoulderName: string;
 
+	let currentAction: 'save' | 'display' | undefined = undefined;
+
 	$: if (!isOpen) {
 		inputBoulderName = '';
 	}
@@ -19,22 +21,32 @@
 		log.debug('handleSaveBoulder()');
 		if ($clickedCells.size > 0) {
 			isOpen = true;
-			log.info('    isOpen = true');
+			currentAction = 'save';
+			log.info('isOpen = true, action = save');
 		} else {
 			addToast('Vyberte alespoň jednu buňku!');
 		}
 	};
 
 	const handleDisplayBoulder = () => {
-		log.debug('handleDisplayBoulder()');
-		boulders.addBoulder($clickedCells, $selector, undefined, 'display');
+		if ($clickedCells.size > 0) {
+			isOpen = true;
+			currentAction = 'display';
+			log.debug('isOpen = true, action = display');
+		} else {
+			addToast('Vyberte alespoň jednu buňku!');
+		}
 	};
-
 	const handleDialogResponse = () => {
 		log.debug('handleDialogResponse()');
 		isOpen = false;
 		const trimmedInputBoulderName = inputBoulderName.trim();
-		boulders.addBoulder($clickedCells, $selector, trimmedInputBoulderName, 'save');
+		if (currentAction === 'save') {
+			boulders.addBoulder($clickedCells, $selector, trimmedInputBoulderName, 'save');
+		} else if (currentAction === 'display') {
+			boulders.addBoulder($clickedCells, $selector, trimmedInputBoulderName, 'display');
+		}
+		currentAction = undefined;
 	};
 
 	const handleKeyDown = (event: CustomEvent) => {

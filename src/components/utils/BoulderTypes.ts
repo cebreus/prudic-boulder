@@ -19,3 +19,9 @@ export type Boulder = {
 	top?: string;
 	path: Cell[];
 };
+
+export type ApiResponse = {
+	status: number;
+	title: string;
+	detail: string;
+};
