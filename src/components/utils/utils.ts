@@ -1,3 +1,8 @@
+import * as t from 'io-ts';
+import { isRight } from 'fp-ts/Either';
+import { PathReporter } from 'io-ts/PathReporter';
+import type { Boulder } from './BoulderTypes.ts';
+
 export const cellsToSkip: ReadonlySet<string> = new Set([
 	'B0',
 	'B3',
@@ -109,4 +114,54 @@ export const calculateTimeout = (title: string = '', description: string = ''): 
 	const totalInputLength = title.length + description.length;
 	const additionalTimeout = totalInputLength * MillisecondsPerCharacter;
 	return BaseTimeoutMilliseconds + additionalTimeout;
+};
+
+export const readFileAsText = (file: File): Promise<string> => {
+	return new Promise((resolve, reject) => {
+		const reader = new FileReader();
+		reader.onload = () => resolve(reader.result as string);
+		reader.onerror = () => reject(reader.error);
+		reader.readAsText(file);
+	});
+};
+const CellCodec = t.type({
+	id: t.string,
+	colorBrightness: t.string
+});
+
+const BoulderCodec = t.type({
+	id: t.string,
+	name: t.union([t.string, t.undefined]),
+	path: t.array(CellCodec),
+	start: t.union([t.string, t.undefined]),
+	top: t.union([t.string, t.undefined]),
+	createdAt: t.union([t.string, t.undefined])
+});
+
+export const BouldersCodec = t.array(BoulderCodec);
+
+export const readFileContent = async (file: File): Promise<string> => {
+	return new Promise((resolve, reject) => {
+		const reader = new FileReader();
+		reader.onload = () => resolve(reader.result as string);
+		reader.onerror = (error) => reject(error);
+		reader.readAsText(file);
+	});
+};
+
+export const validateAndTransformData = (fileContent: string): Boulder[] => {
+	const parsedData = JSON.parse(fileContent);
+	const validationResult = BouldersCodec.decode(parsedData);
+
+	if (isRight(validationResult)) {
+		return validationResult.right.map(
+			(boulder): Boulder => ({
+				...boulder,
+				createdAt: boulder.createdAt || new Date().toISOString()
+			})
+		);
+	} else {
+		const errors = PathReporter.report(validationResult);
+		throw new Error(`Invalid data format: ${errors.join(', ')}`);
+	}
 };

@@ -1,11 +1,17 @@
 <script context="module" lang="ts">
 	import { addToast } from '../components/utils/ToastService';
-	import { generateId, clickedClass, startClass, topClass } from '../components/utils/utils';
+	import {
+		generateId,
+		clickedClass,
+		startClass,
+		topClass,
+		validateAndTransformData
+	} from '../components/utils/utils';
 	import { writable } from 'svelte/store';
 	import log from '../components/utils/logger.ts';
 
 	// Define TypeScript types
-	import type { Boulder, Mode, Selector } from '../components/utils/BoulderTypes';
+	import { type Boulder, type Mode, type Selector } from '../components/utils/BoulderTypes';
 
 	// check for browser environment
 	const isBrowser = typeof window !== 'undefined';
@@ -174,6 +180,31 @@
 			});
 		};
 
+		const updateStore = (bouldersToImport: Boulder[], action: string) => {
+			update((currentBoulders: Boulder[]) => {
+				let newBoulders: Boulder[];
+				if (action === 'add') {
+					newBoulders = [...currentBoulders, ...bouldersToImport];
+				} else {
+					newBoulders = [...bouldersToImport];
+				}
+
+				localStorage.setItem('boulders', JSON.stringify(newBoulders));
+				addToast(`Boldery byly ${action === 'add' ? 'přidáný' : 'nahrazený'}`, 'success');
+				return newBoulders;
+			});
+		};
+
+		const importBoulder = async (fileContent: string, action: string) => {
+			try {
+				const bouldersToImport = validateAndTransformData(fileContent);
+				updateStore(bouldersToImport, action);
+			} catch (error) {
+				log.error('Error importing boulders:', error);
+				addToast('Chyba při importu bolderů', 'error');
+			}
+		};
+
 		const getCellClass = (selectedBoulderId: string, cellId: string) => {
 			if (!selectedBoulderId) return 'lol';
 
@@ -192,7 +223,7 @@
 			return '';
 		};
 
-		return { subscribe, addBoulder, removeBoulder, getCellClass };
+		return { subscribe, addBoulder, removeBoulder, getCellClass, importBoulder };
 	};
 
 	export const clickedCells = createClickedCellsStore();

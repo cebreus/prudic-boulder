@@ -6,13 +6,15 @@
 	import Icon from '../atoms/Icon.svelte';
 	import Dialog from '../molecules/Dialog.svelte';
 	import Toast from '../atoms/Toast.svelte';
-	import { mdiDelete } from '@mdi/js';
+	import { mdiDelete, mdiFileImportOutline, mdiFileExportOutline } from '@mdi/js';
 	import type { Boulder } from '../utils/BoulderTypes.ts';
 	import log from 'loglevel';
+	import Import from '../atoms/Import.svelte';
 
 	let bouldersFromLS: Boulder[] = [];
-	let selectedBoulder: Boulder = { id: '', createdAt: 0, path: [] };
+	let selectedBoulder: Boulder = { id: '', createdAt: '', path: [] };
 	export let isOpen = false;
+	export let isOpenImport = false;
 
 	const unsubscribe = boulders.subscribe((value) => {
 		bouldersFromLS = value.map((boulder: Boulder) => ({
@@ -33,10 +35,28 @@
 	const handleRemoveBoulder = (boulderId: string) => {
 		boulders.removeBoulder(boulderId);
 	};
+
+	const handleCloseDialog = () => {
+		isOpenImport = false;
+	};
 </script>
 
 <main class="container mx-auto px-4 py-12">
 	<h1 class="mb-4 text-2xl font-extrabold tracking-tight sm:text-3xl">Vytvořené bouldery</h1>
+
+	<button
+		on:click={() => {
+			isOpenImport = true;
+		}}
+		class="focus:shadow-outline flex items-center justify-center rounded bg-sky-500 px-4 py-2 font-bold text-white transition duration-200 ease-in hover:bg-sky-600 focus:outline-none"
+	>
+		<Icon
+			path={mdiFileImportOutline}
+			class="text-white-100 hover:text-white-300 -ml-1 mr-2 h-4 w-4 transition-colors"
+		/>
+		Importovat
+	</button>
+
 	{#if bouldersFromLS.length === 0}
 		<Alert showIcon>
 			Vytvořte si
@@ -52,7 +72,7 @@
 					<tr>
 						<th>Name/ID</th>
 						<th>Cells</th>
-						<th colspan="3"></th>
+						<th colspan="4"></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -84,6 +104,12 @@
 								</div>
 							</td>
 							<td>
+								<Icon
+									path={mdiFileExportOutline}
+									class="text-white-100 hover:text-white-300 -ml-1 mr-2 h-4 w-4 transition-colors"
+								/>
+							</td>
+							<td>
 								<button on:click={() => handleRemoveBoulder(boulder.id)}>
 									<Icon
 										path={mdiDelete}
@@ -109,6 +135,15 @@
 	</svelte:fragment>
 	<svelte:fragment slot="DialogContent">
 		<BoulderComponent selectedBoulderID={selectedBoulder.id} />
+	</svelte:fragment>
+</Dialog>
+
+<Dialog isOpen={isOpenImport} on:close={() => (isOpenImport = false)}>
+	<svelte:fragment slot="DialogTitle">
+		<div class="max-w-xs truncate">Vlozte file ve formatu json</div>
+	</svelte:fragment>
+	<svelte:fragment slot="DialogContent">
+		<Import {handleCloseDialog} />
 	</svelte:fragment>
 </Dialog>
 
