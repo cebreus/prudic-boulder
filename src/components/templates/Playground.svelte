@@ -63,7 +63,7 @@
 	<Boulder {color} />
 	<BoulderButtons {handleSaveBoulder} />
 
-	<div class="max-w-sm rounded-lg bg-white p-6 shadow-lg">
+	<div class="mt-5 grid w-[20.8em] justify-stretch gap-4 pl-9 pr-1 pt-4 sm:w-[23.5em]">
 		<div class="mb-4">
 			<ColorPicker {color} onColorChange={handleColorChange} {handleRefreshButton} />
 		</div>
@@ -75,6 +75,7 @@
 </div>
 
 <Toast />
+
 <Dialog {isOpen} on:close={() => (isOpen = false)} on:keydown={handleKeyDown}>
 	<svelte:fragment slot="DialogTitle">Název boulderu</svelte:fragment>
 	<svelte:fragment slot="DialogContent">

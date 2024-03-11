@@ -11,7 +11,6 @@
 	$: bindColor = rgbaToHex(color);
 </script>
 
-<div>
 	<label for="colorPicker" class="mb-2 block text-sm font-bold text-gray-700">
 		Choose Color:
 	</label>
@@ -27,4 +26,3 @@
 			<Icon path={mdiRefresh} class="size-4" />
 		</Button>
 	</div>
-</div>
