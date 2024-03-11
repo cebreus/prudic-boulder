@@ -37,6 +37,7 @@
 		currentAction = 'display';
 		log.debug('isOpen = true, action = display');
 	};
+
 	const handleDialogResponse = () => {
 		log.debug('handleDialogResponse()');
 		isOpen = false;

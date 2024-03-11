@@ -5,10 +5,10 @@
 	import Dialog from '../molecules/Dialog.svelte';
 	import Button from '../atoms/Button.svelte';
 	import log from '../utils/logger.ts';
-	import { clickedGrips, selector, boulders } from '../../stores/BoulderStore.svelte';
-	import { adjustColor } from '../utils/utils.ts';
-	import ColorPicker from '../atoms/ColorPicker.svelte';
-	import BrightnessSlider from '../atoms/BrightnessSlider.svelte';
+	import { clickedCells, selector, boulders } from '../../stores/BoulderStore.svelte';
+	import { hexToRgba } from '../utils/utils.ts';
+	import ColorPicker from '../molecules/ColorPicker.svelte';
+	import BrightnessSlider from '../molecules/BrightnessSlider.svelte';
 
 	let isOpen: boolean = false;
 	let inputBoulderName: string;
@@ -17,7 +17,7 @@
 	let color: string = '';
 	let brightness = 100;
 
-	$: color = adjustColor(initialColor, brightness);
+	$: color = hexToRgba(initialColor, brightness);
 	$: if (!isOpen) {
 		inputBoulderName = '';
 	}
