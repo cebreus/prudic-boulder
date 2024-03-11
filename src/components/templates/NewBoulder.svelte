@@ -2,13 +2,16 @@
 	import Boulder from '../atoms/Boulder.svelte';
 	import Toast from '../atoms/Toast.svelte';
 	import log from '../utils/logger.ts';
-	import { clickedCells, selector, boulders } from '../../stores/BoulderStore.svelte';
+	import { clickedGrips, selector, boulders } from '../../stores/BoulderStore.svelte';
 	import Dialog from '../molecules/Dialog.svelte';
 	import Button from '../atoms/Button.svelte';
 	import BoulderButtons from '../atoms/BoulderButtons.svelte';
+	import { addToast } from '../utils/ToastService.ts';
 
 	let isOpen: boolean = false;
 	let inputBoulderName: string;
+
+	let currentAction: 'save' | 'display' | undefined;
 
 	$: if (!isOpen) {
 		inputBoulderName = '';
@@ -16,17 +19,35 @@
 
 	const handleSaveBoulder = () => {
 		log.debug('handleSaveBoulder()');
-		if ($clickedCells.size > 0) {
-			isOpen = true;
-			log.info('    isOpen = true');
+		if ($clickedGrips.size === 0) {
+			addToast('Vyberte alespoň jednu buňku!');
+			return;
 		}
+		isOpen = true;
+		currentAction = 'save';
+		log.info('isOpen = true, action = save');
 	};
 
+	const handleDisplayBoulder = () => {
+		if ($clickedGrips.size === 0) {
+			addToast('Vyberte alespoň jednu buňku!');
+			return;
+		}
+		isOpen = true;
+		currentAction = 'display';
+		log.debug('isOpen = true, action = display');
+	};
 	const handleDialogResponse = () => {
 		log.debug('handleDialogResponse()');
 		isOpen = false;
 		const trimmedInputBoulderName = inputBoulderName.trim();
-		boulders.addBoulder($clickedCells, $selector, trimmedInputBoulderName);
+
+		if (currentAction === 'save') {
+			boulders.addBoulder($clickedGrips, $selector, trimmedInputBoulderName, 'save');
+		} else if (currentAction === 'display') {
+			boulders.addBoulder($clickedGrips, $selector, trimmedInputBoulderName, 'display');
+		}
+		currentAction = undefined;
 	};
 
 	const handleKeyDown = (event: CustomEvent) => {
@@ -41,11 +62,9 @@
 
 <Toast />
 
-<main class="container mx-auto px-4 py-12">
-	<h1 class="mb-4 text-2xl font-extrabold tracking-tight sm:text-3xl">Vytvoř si nový boulder</h1>
-	<Boulder />
-	<BoulderButtons {handleSaveBoulder} />
-</main>
+<Boulder />
+
+<BoulderButtons {handleSaveBoulder} {handleDisplayBoulder} />
 
 <Dialog {isOpen} on:close={() => (isOpen = false)} on:keydown={handleKeyDown}>
 	<svelte:fragment slot="DialogTitle">Název boulderu</svelte:fragment>

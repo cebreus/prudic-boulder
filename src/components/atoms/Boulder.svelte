@@ -1,24 +1,24 @@
 <script lang="ts">
-	import { clickedCells, selector, boulders } from '../../stores/BoulderStore.svelte';
-	import { isSkippedCell, skippedClass, rows, cols } from '../utils/utils.ts';
+	import { clickedGrips, selector, boulders } from '../../stores/BoulderStore.svelte';
+	import { isSkippedGrip, skippedClass, rows, cols } from '../utils/utils.ts';
 	import log from '../utils/logger.ts';
 
-	export let selectedBoulderID: string;
+	export let selectedBoulderID: string = '';
 
 	export const tableRows = Array.from({ length: rows }, (_, i) => String.fromCharCode(65 + i));
 	export const tableCols = Array.from({ length: cols }, (_, i) => i);
 
 	$: selectedMode = $selector.selectedMode;
 
-	const toggleCellAndUpdateSelector = (cellId: string) => {
-		if (isSkippedCell(cellId)) {
-			log.debug(`Toggling cell: ${cellId} SKIPPED with mode: ${$selector.selectedMode}`);
+	const toggleGripAndUpdateSelector = (gripId: string) => {
+		if (isSkippedGrip(gripId)) {
+			log.debug(`Toggling grip: ${gripId} SKIPPED with mode: ${$selector.selectedMode}`);
 			return;
 		}
-		log.debug(`Toggling cell: ${cellId} with mode: ${$selector.selectedMode}`);
-		selector.updateSelector(cellId, selectedMode);
+		log.debug(`Toggling grip: ${gripId} with mode: ${$selector.selectedMode}`);
+		selector.updateSelector(gripId, selectedMode);
 
-		clickedCells.toggle(cellId, selectedMode);
+		clickedGrips.toggle(gripId, selectedMode);
 	};
 </script>
 
@@ -36,16 +36,16 @@
 			<tr>
 				<th>{String.fromCharCode(65 + rowIndex)}</th>
 				{#each tableCols as col}
-					{@const cellId = `${row}${col}`}
+					{@const gripId = `${row}${col}`}
 					<td
-						class={isSkippedCell(cellId)
+						class={isSkippedGrip(gripId)
 							? skippedClass
 							: selectedBoulderID
-								? boulders.getCellClass(selectedBoulderID, cellId)
-								: $clickedCells.get(cellId)?.class ?? ''}
-						on:click={selectedBoulderID ? null : () => toggleCellAndUpdateSelector(cellId)}
+								? boulders.getGripClass(selectedBoulderID, gripId)
+								: $clickedGrips.get(gripId)?.class ?? ''}
+						on:click={selectedBoulderID ? null : () => toggleGripAndUpdateSelector(gripId)}
 					>
-						{isSkippedCell(cellId) ? '' : cellId}
+						{isSkippedGrip(gripId) ? '' : gripId}
 					</td>
 				{/each}
 			</tr>
@@ -72,7 +72,7 @@
 	:global(table.wall td.start) {
 		@apply border-green-300 bg-green-100 text-green-600 hover:border-green-400 hover:bg-green-100 hover:text-green-700 dark:border-green-400 dark:bg-green-600 dark:text-green-200  dark:hover:border-green-200 dark:hover:bg-green-600 dark:hover:text-white;
 	}
-	:global(table.wall td.top) {
+	:global(table.wall td.finish) {
 		@apply border-fuchsia-300 bg-fuchsia-50 text-fuchsia-600 hover:border-fuchsia-400 hover:bg-fuchsia-100 hover:text-fuchsia-700 dark:border-fuchsia-400 dark:bg-fuchsia-600 dark:text-fuchsia-200  dark:hover:border-fuchsia-200 dark:hover:bg-fuchsia-600 dark:hover:text-white;
 	}
 </style>

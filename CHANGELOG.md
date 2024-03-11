@@ -29,7 +29,7 @@
 
 ### Fixes
 
-- Fixed modal and toggle cells behaviour to ensure UI components work as intended.
+- Fixed modal and toggle grip behaviour to ensure UI components work as intended.
 - Added the missing `@typescript-eslint/recommended` to improve TypeScript linting and maintain code standards.
 - Resolved toast notification logic issues and removed console.logs to clean up the codebase.
 - Corrected pre-commit hook configurations and addressed various bugs including merge conflicts, button behaviour, and list rendering issues.

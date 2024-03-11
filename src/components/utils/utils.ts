@@ -1,4 +1,8 @@
-export const cellsToSkip: ReadonlySet<string> = new Set([
+import log from 'loglevel';
+import type { ApiResponse } from './BoulderTypes.ts';
+import { apiKey } from './services.ts';
+
+export const gripsToSkip: ReadonlySet<string> = new Set([
 	'B0',
 	'B3',
 	'B6',
@@ -84,8 +88,8 @@ export const cellsToSkip: ReadonlySet<string> = new Set([
 	'R8'
 ]);
 
-export const isSkippedCell = (cellId: string): boolean => {
-	return cellsToSkip.has(cellId);
+export const isSkippedGrip = (gripId: string): boolean => {
+	return gripsToSkip.has(gripId);
 };
 
 export const rows: number = 18;
@@ -96,7 +100,7 @@ type CssClassName = 'skipped' | 'holds' | 'start' | 'top';
 export const skippedClass: CssClassName = 'skipped';
 export const clickedClass: CssClassName = 'holds';
 export const startClass: CssClassName = 'start';
-export const topClass: CssClassName = 'top';
+export const finishClass: string = 'finish';
 
 export const generateId = (name: string = ''): string => {
 	return `${name}${Date.now().toString(16)}-${Math.random().toString(16).slice(2, 8)}`;
@@ -109,4 +113,26 @@ export const calculateTimeout = (title: string = '', description: string = ''): 
 	const totalInputLength = title.length + description.length;
 	const additionalTimeout = totalInputLength * MillisecondsPerCharacter;
 	return BaseTimeoutMilliseconds + additionalTimeout;
+};
+
+export const sendPostRequest = async <T>(url: string, data: T): Promise<ApiResponse> => {
+	try {
+		log.debug('Sending POST request', { url, data });
+		const response = await fetch(url, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json', 'X-API-KEY': apiKey },
+			body: JSON.stringify(data)
+		});
+
+		if (!response.ok) {
+			const message = `An error has occurred: ${response.status}`;
+			log.error('Error during POST request', { message, response });
+			throw new Error(message);
+		}
+
+		return await response.json();
+	} catch (error) {
+		log.error('Error in sendPostRequest function', error);
+		throw error;
+	}
 };
