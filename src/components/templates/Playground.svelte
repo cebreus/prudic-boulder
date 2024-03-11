@@ -14,7 +14,7 @@
 	let inputBoulderName: string;
 
 	let initialColor = '#FF0000';
-	let color: string | undefined = '#FF0000';
+	let color: { rgb: string; rgba: string };
 	let brightness = 100;
 
 	$: color = adjustColor(initialColor, brightness);
@@ -22,7 +22,22 @@
 		inputBoulderName = '';
 	}
 
+	let colorRGB = '';
+	let colorRGBA = '';
+
+	$: {
+		colorRGB = color?.rgb;
+		colorRGBA = color?.rgba;
+	}
+
+	$: {
+		console.log('RGB:', colorRGB);
+		console.log('RGBa:', colorRGBA);
+		console.log('initil color:', initialColor);
+	}
+
 	const handleColorChange = (newColor: string) => {
+		console.log('newColor', newColor);
 		initialColor = newColor;
 	};
 
@@ -56,12 +71,12 @@
 </script>
 
 <div class="mt-5 flex-col">
-	<Boulder {color} />
+	<Boulder color={colorRGBA} />
 	<BoulderButtons {handleSaveBoulder} />
 
 	<div class="max-w-sm rounded-lg bg-white p-6 shadow-lg">
 		<div class="mb-4">
-			<ColorPicker {color} onColorChange={handleColorChange} />
+			<ColorPicker color={colorRGB} onColorChange={handleColorChange} />
 		</div>
 
 		<div class="mb-6">

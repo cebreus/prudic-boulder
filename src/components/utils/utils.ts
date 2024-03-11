@@ -169,5 +169,5 @@ export const hexToRgba = (hex: string, alpha?: number): string => {
 		throw new Error('Invalid hex color format');
 	}
 
-	return `rgba(${r}, ${g}, ${b}, ${a})`;
+	return `rgb(${r} ${g} ${b} / ${a})`;
 };

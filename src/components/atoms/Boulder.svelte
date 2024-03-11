@@ -7,6 +7,10 @@
 	export let selectedBoulderID: string | undefined = undefined;
 	export let color: string | undefined = undefined;
 
+	$: {
+		console.log('color v boulderu===========>:', color);
+	}
+
 	export const tableRows = Array.from({ length: rows }, (_, i) => String.fromCharCode(65 + i));
 	export const tableCols = Array.from({ length: cols }, (_, i) => i);
 

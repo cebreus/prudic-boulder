@@ -1,6 +1,10 @@
 <script lang="ts">
 	export let color: string | undefined = undefined;
 	export let onColorChange: (newColor: string) => void;
+
+	$: {
+		console.log('color in picker: ', color);
+	}
 </script>
 
 <div>
