@@ -27,12 +27,3 @@ export type ApiResponse = {
 	title: string;
 	detail: string;
 };
-
-// export type BoulderForApi = {
-// 	id: string;
-// 	createdAt: string;
-// 	name?: string;
-// 	start?: string;
-// 	finish?: string;
-// 	path: Grip[];
-// };

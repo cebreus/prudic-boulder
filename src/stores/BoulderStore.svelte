@@ -188,20 +188,15 @@
 		};
 
 		const getGripClass = (selectedBoulderId: string, gripId: string) => {
-			if (!selectedBoulderId) return 'lol';
-
 			const boulders: Boulder[] = JSON.parse(localStorage.getItem('boulders') || '[]');
 			const selectedBoulder = boulders.find((boulder) => boulder.id === selectedBoulderId);
 
 			if (!selectedBoulder) return '';
 
-			if (selectedBoulder.start === gripId) {
-				return startClass;
-			} else if (selectedBoulder.finish === gripId) {
-				return finishClass;
-			} else if (selectedBoulder.path.some((grip) => grip.id === gripId)) {
-				return clickedClass;
-			}
+			if (selectedBoulder.start === gripId) return startClass;
+			if (selectedBoulder.finish === gripId) return finishClass;
+			if (selectedBoulder.path.some((grip) => grip.id === gripId)) return clickedClass;
+
 			return '';
 		};
 
