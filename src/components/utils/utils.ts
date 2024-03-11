@@ -1,5 +1,6 @@
 import log from 'loglevel';
 import type { ApiResponse } from './BoulderTypes.ts';
+import { apiKey } from './services.ts';
 
 export const gripsToSkip: ReadonlySet<string> = new Set([
 	'B0',
@@ -99,7 +100,7 @@ type CssClassName = 'skipped' | 'holds' | 'start' | 'top';
 export const skippedClass: CssClassName = 'skipped';
 export const clickedClass: CssClassName = 'holds';
 export const startClass: CssClassName = 'start';
-export const finishClass: CssClassName = 'top';
+export const finishClass: string = 'finish';
 
 export const generateId = (name: string = ''): string => {
 	return `${name}${Date.now().toString(16)}-${Math.random().toString(16).slice(2, 8)}`;
@@ -114,20 +115,12 @@ export const calculateTimeout = (title: string = '', description: string = ''): 
 	return BaseTimeoutMilliseconds + additionalTimeout;
 };
 
-export const omit = <T extends object, K extends keyof T>(obj: T, ...props: K[]): Omit<T, K> => {
-	const result = { ...obj };
-	for (const prop of props) {
-		delete result[prop];
-	}
-	return result;
-};
-
 export const sendPostRequest = async <T>(url: string, data: T): Promise<ApiResponse> => {
 	try {
 		log.debug('Sending POST request', { url, data });
 		const response = await fetch(url, {
 			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
+			headers: { 'Content-Type': 'application/json', 'X-API-KEY': apiKey },
 			body: JSON.stringify(data)
 		});
 

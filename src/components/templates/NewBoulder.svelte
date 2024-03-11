@@ -11,7 +11,7 @@
 	let isOpen: boolean = false;
 	let inputBoulderName: string;
 
-	let currentAction: 'save' | 'display' | undefined = undefined;
+	let currentAction: 'save' | 'display' | undefined;
 
 	$: if (!isOpen) {
 		inputBoulderName = '';

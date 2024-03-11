@@ -2,7 +2,8 @@ import type { ApiResponse, Boulder } from './BoulderTypes.ts';
 import log from './logger.ts';
 import { sendPostRequest } from './utils.ts';
 
-const api = import.meta.env.VITE_API_URL as string;
+export const apiKey = import.meta.env.VITE_API_KEY as string;
+const api = import.meta.env.VITE_BASE_URL as string;
 
 log.debug('api', api);
 const saveBoulder = `${api}/save-route`;

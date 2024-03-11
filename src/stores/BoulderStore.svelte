@@ -1,17 +1,11 @@
 <script context="module" lang="ts">
 	import { addToast } from '../components/utils/ToastService';
-	import {
-		generateId,
-		clickedClass,
-		startClass,
-		finishClass,
-		omit
-	} from '../components/utils/utils';
+	import { generateId, clickedClass, startClass, finishClass } from '../components/utils/utils';
 	import { writable } from 'svelte/store';
 	import log from '../components/utils/logger.ts';
 
 	// Define TypeScript types
-	import type { Boulder, Mode, Selector } from '../components/utils/BoulderTypes';
+	import type { Boulder, Grip, Mode, Selector } from '../components/utils/BoulderTypes';
 	import { services } from '../components/utils/services.ts';
 
 	// check for browser environment
@@ -137,21 +131,28 @@
 			log.debug('createBouldersStore.addBoulder');
 
 			const clickedGripKeys = Array.from(clickedGripsMap.keys());
+
 			const grips = clickedGripKeys.map((key) => {
 				// Example of colorBrightness
 				const colorBrightness = '255 0 0 / 50%';
-				return {
+				let grip: Grip = {
 					id: key,
 					colorBrightness: colorBrightness
 				};
+
+				if (selectorState.selectedStartGrip === key) {
+					grip = { ...grip, start: selectorState.selectedStartGrip };
+				} else if (selectorState.selectedFinishGrip === key) {
+					grip = { ...grip, finish: selectorState.selectedFinishGrip };
+				}
+
+				return grip;
 			});
 
 			const newBoulder: Boulder = {
 				id: generateId(),
 				name: name,
 				path: grips,
-				start: selectorState.selectedStartGrip,
-				finish: selectorState.selectedFinishGrip,
 				createdAt: new Date().toISOString() //.toLocaleString()
 			};
 
@@ -161,10 +162,8 @@
 			const existingBoulders = JSON.parse(localStorage.getItem('boulders') || '[]');
 			localStorage.setItem('boulders', JSON.stringify([...existingBoulders, newBoulder]));
 
-			const boulderWithoutCreatedAt = omit(newBoulder, 'createdAt');
-
 			try {
-				const response = await services.boulder[action](boulderWithoutCreatedAt);
+				const response = await services.boulder[action](newBoulder);
 
 				log.info('Boulder saved successfully on server', response);
 				addToast(

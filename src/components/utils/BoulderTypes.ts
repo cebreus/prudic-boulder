@@ -3,6 +3,8 @@ export type Mode = 'Finish' | 'Start';
 export type Grip = {
 	id: string;
 	colorBrightness: string;
+	start?: string;
+	finish?: string;
 };
 
 export type Selector = {
@@ -25,3 +27,12 @@ export type ApiResponse = {
 	title: string;
 	detail: string;
 };
+
+// export type BoulderForApi = {
+// 	id: string;
+// 	createdAt: string;
+// 	name?: string;
+// 	start?: string;
+// 	finish?: string;
+// 	path: Grip[];
+// };
