@@ -1,7 +1,7 @@
 import log from 'loglevel';
 import type { ApiResponse } from './BoulderTypes.ts';
 
-export const cellsToSkip: ReadonlySet<string> = new Set([
+export const gripsToSkip: ReadonlySet<string> = new Set([
 	'B0',
 	'B3',
 	'B6',
@@ -87,8 +87,8 @@ export const cellsToSkip: ReadonlySet<string> = new Set([
 	'R8'
 ]);
 
-export const isSkippedCell = (cellId: string): boolean => {
-	return cellsToSkip.has(cellId);
+export const isSkippedGrip = (gripId: string): boolean => {
+	return gripsToSkip.has(gripId);
 };
 
 export const rows: number = 18;
@@ -99,7 +99,7 @@ type CssClassName = 'skipped' | 'holds' | 'start' | 'top';
 export const skippedClass: CssClassName = 'skipped';
 export const clickedClass: CssClassName = 'holds';
 export const startClass: CssClassName = 'start';
-export const topClass: CssClassName = 'top';
+export const finishClass: CssClassName = 'top';
 
 export const generateId = (name: string = ''): string => {
 	return `${name}${Date.now().toString(16)}-${Math.random().toString(16).slice(2, 8)}`;

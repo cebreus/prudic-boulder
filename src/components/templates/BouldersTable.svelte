@@ -51,7 +51,7 @@
 				<thead>
 					<tr>
 						<th>Name/ID</th>
-						<th>Cells</th>
+						<th>Grips</th>
 						<th colspan="3"></th>
 					</tr>
 				</thead>
@@ -78,8 +78,8 @@
 									{#if boulder.start}
 										Start: {boulder.start}
 									{/if}
-									{#if boulder.top}
-										Top: {boulder.top}
+									{#if boulder.finish}
+										Finish: {boulder.finish}
 									{/if}
 								</div>
 							</td>

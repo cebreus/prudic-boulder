@@ -40,7 +40,7 @@ All commands are run from the root of the project, from a terminal:
 
 ## 👀 Zadání pro vývojáře
 
-Intuitivní a přívětivá aplikace postavená na Svelte a Tailwind CSS v prostředí Astro. Mezi úkoly patří vytváření uživatelského rozhraní pro správu, vytváření a sdílení lezeckých cest, integrace s backendem pro ukládání a mazání dat a vývoj interaktivních funkcí, jako je výběr barvy, nastavení jasu a speciální tlačítka (Top, Start, Save, Show, Clear). Cílem je zajistit uživatelům hladký a intuitivní zážitek při současném dodržování principů modularity a přehlednosti kódu.
+Intuitivní a přívětivá aplikace postavená na Svelte a Tailwind CSS v prostředí Astro. Mezi úkoly patří vytváření uživatelského rozhraní pro správu, vytváření a sdílení lezeckých cest, integrace s backendem pro ukládání a mazání dat a vývoj interaktivních funkcí, jako je výběr barvy, nastavení jasu a speciální tlačítka (Finish, Start, Save, Show, Clear). Cílem je zajistit uživatelům hladký a intuitivní zážitek při současném dodržování principů modularity a přehlednosti kódu.
 
 ### Hlavní úkoly
 
@@ -61,8 +61,8 @@ Intuitivní a přívětivá aplikace postavená na Svelte a Tailwind CSS v prost
    - Vytvořit UI pro color picker a slider pro nastavení jasu.
 5. **Globální funkce**
    - **Export a import cest:** Implementovat funkci pro exportování a importování cest, aby uživatelé mohli sdílet nebo zálohovat své cesty.
-   - Tlačítko "**Top**" umožní uživateli označit vybranou buňku jako cílový bod cesty, kterého se má lezec dosáhnout. Tím se v aplikaci vytvoří vizuální značka, například změnou barvy nebo přidáním symbolu, která tuto buňku odlišuje jako konečný bod trasy.
-   - Podobně jako tlačítko "Top", tlačítko "**Start**" umožní uživatelům označit startovní buňku cesty. Tato buňka bude sloužit jako výchozí bod, odkud mají lezci začít svou cestu na boulderu. Toto označení bude rovněž vizuálně reprezentováno na uživatelském rozhraní.
+   - Tlačítko "**Finish**" umožní uživateli označit vybranou buňku jako cílový bod cesty, kterého se má lezec dosáhnout. Tím se v aplikaci vytvoří vizuální značka, například změnou barvy nebo přidáním symbolu, která tuto buňku odlišuje jako konečný bod trasy.
+   - Podobně jako tlačítko "Finish", tlačítko "**Start**" umožní uživatelům označit startovní buňku cesty. Tato buňka bude sloužit jako výchozí bod, odkud mají lezci začít svou cestu na boulderu. Toto označení bude rovněž vizuálně reprezentováno na uživatelském rozhraní.
    - Tlačítko "**Save**" slouží k uložení aktuálně navržené cesty. Po jeho stisknutí se veškeré informace o cestě, včetně umístění startovních a cílových bodů, barvy a jasu LED, uloží a odešlou na server. To umožní uživatelům cesty kdykoliv později načíst a použít.
    - Po stisknutí tlačítka "**Show**" se aktuálně navržená cesta nejen uloží, ale také fyzicky zobrazí na lezecké stěně pomocí LED diod. Server převezme data o cestě a aktivuje LED diody na stěně podle specifikací cesty, což umožní lezcům okamžitě vyzkoušet a prozkoumat navrženou trasu.
    - Tlačítko "**Clear**" slouží k resetování všech aktuálně zvolených buněk v rámci navrhování cesty. Po jeho stisknutí se odstraní veškeré nastavení, včetně označení startovních a cílových bodů, barvy a jasu, což umožní uživateli začít s navrhováním cesty znovu od začátku.
@@ -70,7 +70,7 @@ Intuitivní a přívětivá aplikace postavená na Svelte a Tailwind CSS v prost
 ### Technické detaily
 
 - Aplikace musí být co nejúspornější z pohledu velikosti i nároků. Uvažujme, že server je Rapsberry Pi. Aplikace bude primárně používána na mobilech.
-- Každá cesta může mít pouze jednu buňku s příznakem "Start" a pouze jednu příznakem "Top". Každá buňka může a současně nemusí mít hodnotu barvy a jasu.
+- Každá cesta může mít pouze jednu buňku s příznakem "Start" a pouze jednu příznakem "Finish". Každá buňka může a současně nemusí mít hodnotu barvy a jasu.
 - Rozhodnout se pro vhodný nástroj pro správu stavu, který umožní efektivní aktualizace UI a synchronizaci s backendem.
 - Použít fetch API nebo knihovnu pro komunikaci s backendem. Zajistit ošetření chyb a feedback uživateli (dismissable toast).
 - Ujistit se, že aplikace je responzivní a přístupná, včetně klávesových zkratek pro snadnější navigaci.
@@ -83,8 +83,8 @@ Intuitivní a přívětivá aplikace postavená na Svelte a Tailwind CSS v prost
 	{
 		"id": "550e8400",
 		"start": "A1",
-		"top": "B2",
-		"cells": [{ "id": "A1", "colorBrightness": "255 0 0 / 50%" }]
+		"finish": "B2",
+		"grips": [{ "id": "A1", "colorBrightness": "255 0 0 / 50%" }]
 	}
 ]
 ```

@@ -2,7 +2,7 @@
 	import Boulder from '../atoms/Boulder.svelte';
 	import Toast from '../atoms/Toast.svelte';
 	import log from '../utils/logger.ts';
-	import { clickedCells, selector, boulders } from '../../stores/BoulderStore.svelte';
+	import { clickedGrips, selector, boulders } from '../../stores/BoulderStore.svelte';
 	import Dialog from '../molecules/Dialog.svelte';
 	import Button from '../atoms/Button.svelte';
 	import BoulderButtons from '../atoms/BoulderButtons.svelte';
@@ -19,7 +19,7 @@
 
 	const handleSaveBoulder = () => {
 		log.debug('handleSaveBoulder()');
-		if ($clickedCells.size > 0) {
+		if ($clickedGrips.size > 0) {
 			isOpen = true;
 			currentAction = 'save';
 			log.info('isOpen = true, action = save');
@@ -29,7 +29,7 @@
 	};
 
 	const handleDisplayBoulder = () => {
-		if ($clickedCells.size > 0) {
+		if ($clickedGrips.size > 0) {
 			isOpen = true;
 			currentAction = 'display';
 			log.debug('isOpen = true, action = display');
@@ -42,9 +42,9 @@
 		isOpen = false;
 		const trimmedInputBoulderName = inputBoulderName.trim();
 		if (currentAction === 'save') {
-			boulders.addBoulder($clickedCells, $selector, trimmedInputBoulderName, 'save');
+			boulders.addBoulder($clickedGrips, $selector, trimmedInputBoulderName, 'save');
 		} else if (currentAction === 'display') {
-			boulders.addBoulder($clickedCells, $selector, trimmedInputBoulderName, 'display');
+			boulders.addBoulder($clickedGrips, $selector, trimmedInputBoulderName, 'display');
 		}
 		currentAction = undefined;
 	};

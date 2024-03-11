@@ -1,14 +1,14 @@
-export type Mode = 'Top' | 'Start';
+export type Mode = 'Finish' | 'Start';
 
-export type Cell = {
+export type Grip = {
 	id: string;
 	colorBrightness: string;
 };
 
 export type Selector = {
 	selectedMode: Mode | undefined;
-	selectedStartCell: string | undefined;
-	selectedTopCell: string | undefined;
+	selectedStartGrip: string | undefined;
+	selectedFinishGrip: string | undefined;
 };
 
 export type Boulder = {
@@ -16,8 +16,8 @@ export type Boulder = {
 	createdAt: string;
 	name?: string;
 	start?: string;
-	top?: string;
-	path: Cell[];
+	finish?: string;
+	path: Grip[];
 };
 
 export type ApiResponse = {

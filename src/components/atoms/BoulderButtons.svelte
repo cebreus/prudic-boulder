@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { clickedCells, selector } from '../../stores/BoulderStore.svelte';
+	import { clickedGrips, selector } from '../../stores/BoulderStore.svelte';
 	import Button from './Button.svelte';
 
 	export const variant: 'default' | 'play' = 'default';
@@ -10,7 +10,7 @@
 {#if variant === 'default'}
 	<div class="grid w-[20.8em] grid-flow-col justify-stretch gap-4 pl-9 pr-1 pt-4 sm:w-[23.5em]">
 		<Button variant="outline" on:click={() => selector.setMode('Start')}>Start</Button>
-		<Button variant="outline" on:click={() => selector.setMode('Top')}>Top</Button>
+		<Button variant="outline" on:click={() => selector.setMode('Finish')}>Finish</Button>
 		<Button emoji="💾" variant="outlineGreen" aria-label="Save" on:click={handleSaveBoulder}
 		></Button>
 		<Button
@@ -18,7 +18,7 @@
 			variant="outlineYellow"
 			aria-label="Clear"
 			on:click={() => {
-				clickedCells.clear();
+				clickedGrips.clear();
 				selector.clear();
 			}}
 		></Button>

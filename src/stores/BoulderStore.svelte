@@ -1,6 +1,12 @@
 <script context="module" lang="ts">
 	import { addToast } from '../components/utils/ToastService';
-	import { generateId, clickedClass, startClass, topClass, omit } from '../components/utils/utils';
+	import {
+		generateId,
+		clickedClass,
+		startClass,
+		finishClass,
+		omit
+	} from '../components/utils/utils';
 	import { writable } from 'svelte/store';
 	import log from '../components/utils/logger.ts';
 
@@ -11,53 +17,53 @@
 	// check for browser environment
 	const isBrowser = typeof window !== 'undefined';
 
-	// Custom Store for ClickedCells
-	const createClickedCellsStore = () => {
+	// Custom Store for ClickedGrips
+	const createClickedGripsStore = () => {
 		const { subscribe, set, update } = writable(new Map());
 
 		return {
 			subscribe,
-			toggle: (cellId: string, selectedMode: Mode | undefined) => {
-				log.info('  createClickedCellsStore.toggle');
+			toggle: (gripId: string, selectedMode: Mode | undefined) => {
+				log.info('  createClickedGripsStore.toggle');
 				log.info('selectedMode in store:', selectedMode);
-				log.info('    Toggle:   ', cellId, 'with mode:', selectedMode);
-				update((cells) => {
-					const updated = new Map(cells);
+				log.info('    Toggle:   ', gripId, 'with mode:', selectedMode);
+				update((grips) => {
+					const updated = new Map(grips);
 
-					let cellClass = '';
-					if (selectedMode === 'Start') cellClass = startClass;
-					else if (selectedMode === 'Top') cellClass = topClass;
-					else cellClass = clickedClass;
+					let gripClass = '';
+					if (selectedMode === 'Start') gripClass = startClass;
+					else if (selectedMode === 'Finish') gripClass = finishClass;
+					else gripClass = clickedClass;
 
-					if (selectedMode !== 'Start' && selectedMode !== 'Top') {
-						if (updated.has(cellId)) {
-							log.info('    Removing: ', cellId);
-							updated.delete(cellId);
+					if (selectedMode !== 'Start' && selectedMode !== 'Finish') {
+						if (updated.has(gripId)) {
+							log.info('    Removing: ', gripId);
+							updated.delete(gripId);
 						} else {
-							log.info('    Adding:   ', cellId);
-							updated.set(cellId, { class: cellClass });
+							log.info('    Adding:   ', gripId);
+							updated.set(gripId, { class: gripClass });
 						}
 					} else {
-						log.info('    Adding:   ', cellId);
-						updated.set(cellId, { class: cellClass });
+						log.info('    Adding:   ', gripId);
+						updated.set(gripId, { class: gripClass });
 					}
 					return updated;
 				});
 			},
 
-			removeCellById: (cellId: string) => {
-				log.info('createClickedCellsStore.removeCellById');
-				update((cells) => {
-					const updated = new Map(cells);
-					if (updated.has(cellId)) {
-						log.info('    Removing: ', cellId);
-						updated.delete(cellId);
+			removeGripById: (gripId: string) => {
+				log.info('createClickedGripsStore.removeGripById');
+				update((grips) => {
+					const updated = new Map(grips);
+					if (updated.has(gripId)) {
+						log.info('    Removing: ', gripId);
+						updated.delete(gripId);
 					}
 					return updated;
 				});
 			},
 			clear: () => {
-				log.info('createClickedCellsStore.clear');
+				log.info('createClickedGripsStore.clear');
 				set(new Map());
 			}
 		};
@@ -67,8 +73,8 @@
 	const createSelectorStore = () => {
 		const { subscribe, set, update } = writable<Selector>({
 			selectedMode: undefined,
-			selectedStartCell: undefined,
-			selectedTopCell: undefined
+			selectedStartGrip: undefined,
+			selectedFinishGrip: undefined
 		});
 
 		return {
@@ -78,27 +84,27 @@
 				update((s) => ({ ...s, selectedMode: mode }));
 			},
 
-			updateSelector: (cellId: string, selectedMode: Mode | undefined) => {
+			updateSelector: (gripId: string, selectedMode: Mode | undefined) => {
 				log.debug('  createSelectorStore.updateSelector');
 				update((prev) => {
 					let updatedSelector = { ...prev };
 
 					if (selectedMode === 'Start') {
-						if (prev.selectedStartCell) {
-							clickedCells.removeCellById(prev.selectedStartCell);
+						if (prev.selectedStartGrip) {
+							clickedGrips.removeGripById(prev.selectedStartGrip);
 						}
-						if (cellId === prev.selectedTopCell) {
-							updatedSelector.selectedTopCell = undefined;
+						if (gripId === prev.selectedFinishGrip) {
+							updatedSelector.selectedFinishGrip = undefined;
 						}
-						updatedSelector.selectedStartCell = cellId;
-					} else if (selectedMode === 'Top') {
-						if (prev.selectedTopCell) {
-							clickedCells.removeCellById(prev.selectedTopCell);
+						updatedSelector.selectedStartGrip = gripId;
+					} else if (selectedMode === 'Finish') {
+						if (prev.selectedFinishGrip) {
+							clickedGrips.removeGripById(prev.selectedFinishGrip);
 						}
-						if (cellId === prev.selectedStartCell) {
-							updatedSelector.selectedStartCell = undefined;
+						if (gripId === prev.selectedStartGrip) {
+							updatedSelector.selectedStartGrip = undefined;
 						}
-						updatedSelector.selectedTopCell = cellId;
+						updatedSelector.selectedFinishGrip = gripId;
 					}
 					updatedSelector.selectedMode = undefined;
 
@@ -110,8 +116,8 @@
 				log.info('createSelectorStore.clear');
 				set({
 					selectedMode: undefined,
-					selectedStartCell: undefined,
-					selectedTopCell: undefined
+					selectedStartGrip: undefined,
+					selectedFinishGrip: undefined
 				});
 			}
 		};
@@ -123,15 +129,15 @@
 		const { subscribe, update } = writable(initialValue);
 
 		const addBoulder = async (
-			clickedCellsMap: Map<string, { class: string }>,
+			clickedGripsMap: Map<string, { class: string }>,
 			selectorState: Selector,
 			name: string | undefined,
 			action: 'save' | 'display'
 		) => {
 			log.debug('createBouldersStore.addBoulder');
 
-			const clickedCellKeys = Array.from(clickedCellsMap.keys());
-			const cells = clickedCellKeys.map((key) => {
+			const clickedGripKeys = Array.from(clickedGripsMap.keys());
+			const grips = clickedGripKeys.map((key) => {
 				// Example of colorBrightness
 				const colorBrightness = '255 0 0 / 50%';
 				return {
@@ -143,9 +149,9 @@
 			const newBoulder: Boulder = {
 				id: generateId(),
 				name: name,
-				path: cells,
-				start: selectorState.selectedStartCell,
-				top: selectorState.selectedTopCell,
+				path: grips,
+				start: selectorState.selectedStartGrip,
+				finish: selectorState.selectedFinishGrip,
 				createdAt: new Date().toISOString() //.toLocaleString()
 			};
 
@@ -182,7 +188,7 @@
 			});
 		};
 
-		const getCellClass = (selectedBoulderId: string, cellId: string) => {
+		const getGripClass = (selectedBoulderId: string, gripId: string) => {
 			if (!selectedBoulderId) return 'lol';
 
 			const boulders: Boulder[] = JSON.parse(localStorage.getItem('boulders') || '[]');
@@ -190,20 +196,20 @@
 
 			if (!selectedBoulder) return '';
 
-			if (selectedBoulder.start === cellId) {
+			if (selectedBoulder.start === gripId) {
 				return startClass;
-			} else if (selectedBoulder.top === cellId) {
-				return topClass;
-			} else if (selectedBoulder.path.some((cell) => cell.id === cellId)) {
+			} else if (selectedBoulder.finish === gripId) {
+				return finishClass;
+			} else if (selectedBoulder.path.some((grip) => grip.id === gripId)) {
 				return clickedClass;
 			}
 			return '';
 		};
 
-		return { subscribe, addBoulder, removeBoulder, getCellClass };
+		return { subscribe, addBoulder, removeBoulder, getGripClass: getGripClass };
 	};
 
-	export const clickedCells = createClickedCellsStore();
+	export const clickedGrips = createClickedGripsStore();
 	export const selector = createSelectorStore();
 	export const boulders = createBouldersStore();
 </script>

@@ -9,15 +9,15 @@
 Contains the Boulder component, buttons and colour picker. 
 
 Buttons: 
-- Top" sets the end of the path
+- Finish" sets the end of the path
 - Start" sets start of path
 - Show" sends data to server, server lights up wall
 - Clear" clears set data Boulder
 - Save" send data to server
 
-Colour picker: set colour, click on cell -> apply colour 
-from colour picker to clicked table cells, change 
-background colour to these cells.
+Colour picker: set colour, click on grip -> apply colour 
+from colour picker to clicked table grip, change 
+background colour to these grip.
 		</pre>
 		</div>
 	</div>
