@@ -6,10 +6,11 @@
 	import Icon from '../atoms/Icon.svelte';
 	import Dialog from '../molecules/Dialog.svelte';
 	import Toast from '../atoms/Toast.svelte';
-	import { mdiDelete, mdiFileImportOutline, mdiFileExportOutline } from '@mdi/js';
+	import { mdiDelete, mdiFileImportOutline } from '@mdi/js';
 	import type { Boulder } from '../utils/BoulderTypes.ts';
 	import log from 'loglevel';
 	import Import from '../atoms/Import.svelte';
+	import ExportButton from '../atoms/ExportButton.svelte';
 
 	let bouldersFromLS: Boulder[] = [];
 	let selectedBoulder: Boulder = { id: '', createdAt: '', path: [] };
@@ -104,10 +105,7 @@
 								</div>
 							</td>
 							<td>
-								<Icon
-									path={mdiFileExportOutline}
-									class="text-white-100 hover:text-white-300 -ml-1 mr-2 h-4 w-4 transition-colors"
-								/>
+								<ExportButton {boulder} />
 							</td>
 							<td>
 								<button on:click={() => handleRemoveBoulder(boulder.id)}>
@@ -140,7 +138,7 @@
 
 <Dialog isOpen={isOpenImport} on:close={() => (isOpenImport = false)}>
 	<svelte:fragment slot="DialogTitle">
-		<div class="max-w-xs truncate">Vlozte file ve formatu json</div>
+		<div class="max-w-xs truncate">Vložte soubor ve formátu JSON</div>
 	</svelte:fragment>
 	<svelte:fragment slot="DialogContent">
 		<Import {handleCloseDialog} />

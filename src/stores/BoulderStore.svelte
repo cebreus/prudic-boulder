@@ -12,6 +12,7 @@
 
 	// Define TypeScript types
 	import { type Boulder, type Mode, type Selector } from '../components/utils/BoulderTypes';
+	import type { Action } from '../components/atoms/Import.svelte';
 
 	// check for browser environment
 	const isBrowser = typeof window !== 'undefined';
@@ -180,22 +181,27 @@
 			});
 		};
 
-		const updateStore = (bouldersToImport: Boulder[], action: string) => {
+		const updateStore = (bouldersToImport: Boulder[], action: 'Add' | 'Replace') => {
 			update((currentBoulders: Boulder[]) => {
-				let newBoulders: Boulder[];
-				if (action === 'add') {
-					newBoulders = [...currentBoulders, ...bouldersToImport];
-				} else {
-					newBoulders = [...bouldersToImport];
+				const duplicateBoulder = bouldersToImport.find((importedBoulder) =>
+					currentBoulders.some((existingBoulder) => existingBoulder.id === importedBoulder.id)
+				);
+
+				if (duplicateBoulder && action === 'Add') {
+					addToast(`Boulder s ID ${duplicateBoulder.id} již existuje. Import byl zrušen.`, 'error');
+					return currentBoulders;
 				}
 
+				const newBoulders =
+					action === 'Add' ? [...currentBoulders, ...bouldersToImport] : [...bouldersToImport];
+
 				localStorage.setItem('boulders', JSON.stringify(newBoulders));
-				addToast(`Boldery byly ${action === 'add' ? 'přidáný' : 'nahrazený'}`, 'success');
+				addToast(`Boldery byly ${action === 'Add' ? 'přidáný' : 'nahrazený'}`, 'success');
 				return newBoulders;
 			});
 		};
 
-		const importBoulder = async (fileContent: string, action: string) => {
+		const importBoulder = (fileContent: string, action: 'Add' | 'Replace') => {
 			try {
 				const bouldersToImport = validateAndTransformData(fileContent);
 				updateStore(bouldersToImport, action);

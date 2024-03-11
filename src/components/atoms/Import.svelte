@@ -5,11 +5,15 @@
 	import { readFileContent } from '../utils/utils.ts';
 	import log from 'loglevel';
 
-	type Action = 'Add' | 'Replace';
+	type ImportAction = 'Add' | 'Replace';
 
 	export let handleCloseDialog: () => void;
 	let selectedFile: string = '';
-	let action: Action = 'Add';
+	let action: ImportAction = 'Add';
+
+	$: {
+		console.log('action', action);
+	}
 
 	const handleFileChange = async (event: Event) => {
 		const input = event.target as HTMLInputElement;
@@ -17,7 +21,6 @@
 			try {
 				selectedFile = await readFileContent(input.files[0]);
 			} catch (error) {
-				// Handle file reading, JSON parsing or data validation errors
 				log.error('Error processing file:', error);
 				addToast(
 					`Chybné zpracování souboru: ${error instanceof Error ? error.message : String(error)}`,
@@ -27,7 +30,7 @@
 		}
 	};
 
-	const handleAction = async () => {
+	const handleAddButton = async () => {
 		if (selectedFile) {
 			handleCloseDialog();
 			await boulders.importBoulder(selectedFile, action);
@@ -41,13 +44,13 @@
 
 {#if selectedFile}
 	<label>
-		<input type="radio" bind:group={action} value="add" />
+		<input type="radio" bind:group={action} value="Add" />
 		Přidat do stávajícího seznamu
 	</label>
 
 	<label>
-		<input type="radio" bind:group={action} value="replace" />
+		<input type="radio" bind:group={action} value="Replace" />
 		Nahrazení celé tabulky novými daty
 	</label>
 {/if}
-<Button on:click={handleAction} variant="outline">Přidat</Button>
+<Button on:click={handleAddButton} variant="outline">Přidat</Button>
