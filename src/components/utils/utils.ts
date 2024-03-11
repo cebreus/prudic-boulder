@@ -100,7 +100,7 @@ type CssClassName = 'skipped' | 'holds' | 'start' | 'top';
 export const skippedClass: CssClassName = 'skipped';
 export const clickedClass: CssClassName = 'holds';
 export const startClass: CssClassName = 'start';
-export const finishClass: string = 'finish';
+export const topClass: CssClassName = 'top';
 
 export const generateId = (name: string = ''): string => {
 	return `${name}${Date.now().toString(16)}-${Math.random().toString(16).slice(2, 8)}`;
@@ -142,4 +142,32 @@ export const adjustColor = (hex: string, brightness: number): string => {
 	const factor = brightness / 100;
 	[r, g, b] = [r, g, b].map((c) => Math.round(c * factor));
 	return `#${[r, g, b].map((x) => x.toString(16).padStart(2, '0')).join('')}`;
+};
+export const hexToRgba = (hex: string, alpha?: number): string => {
+	hex = hex.replace(/^#/, '');
+	let r: number,
+		g: number,
+		b: number,
+		a: number = 1;
+
+	// Depending on the string length, parse differently
+	if (hex.length === 3) {
+		r = parseInt(hex[0] + hex[0], 16);
+		g = parseInt(hex[1] + hex[1], 16);
+		b = parseInt(hex[2] + hex[2], 16);
+	} else if (hex.length === 6) {
+		r = parseInt(hex.substring(0, 2), 16);
+		g = parseInt(hex.substring(2, 4), 16);
+		b = parseInt(hex.substring(4, 6), 16);
+		a = alpha !== undefined ? alpha : 1;
+	} else if (hex.length === 8) {
+		r = parseInt(hex.substring(0, 2), 16);
+		g = parseInt(hex.substring(2, 4), 16);
+		b = parseInt(hex.substring(4, 6), 16);
+		a = parseInt(hex.substring(6, 8), 16) / 255;
+	} else {
+		throw new Error('Invalid hex color format');
+	}
+
+	return `rgba(${r}, ${g}, ${b}, ${a})`;
 };
