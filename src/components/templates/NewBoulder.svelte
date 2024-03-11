@@ -29,18 +29,19 @@
 	};
 
 	const handleDisplayBoulder = () => {
-		if ($clickedGrips.size > 0) {
-			isOpen = true;
-			currentAction = 'display';
-			log.debug('isOpen = true, action = display');
-		} else {
+		if ($clickedGrips.size === 0) {
 			addToast('Vyberte alespoň jednu buňku!');
+			return;
 		}
+		isOpen = true;
+		currentAction = 'display';
+		log.debug('isOpen = true, action = display');
 	};
 	const handleDialogResponse = () => {
 		log.debug('handleDialogResponse()');
 		isOpen = false;
 		const trimmedInputBoulderName = inputBoulderName.trim();
+
 		if (currentAction === 'save') {
 			boulders.addBoulder($clickedGrips, $selector, trimmedInputBoulderName, 'save');
 		} else if (currentAction === 'display') {
