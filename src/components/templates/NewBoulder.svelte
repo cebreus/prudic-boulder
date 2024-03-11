@@ -19,13 +19,13 @@
 
 	const handleSaveBoulder = () => {
 		log.debug('handleSaveBoulder()');
-		if ($clickedGrips.size > 0) {
-			isOpen = true;
-			currentAction = 'save';
-			log.info('isOpen = true, action = save');
-		} else {
+		if ($clickedGrips.size === 0) {
 			addToast('Vyberte alespoň jednu buňku!');
+			return;
 		}
+		isOpen = true;
+		currentAction = 'save';
+		log.info('isOpen = true, action = save');
 	};
 
 	const handleDisplayBoulder = () => {
