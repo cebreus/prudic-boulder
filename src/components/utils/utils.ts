@@ -169,5 +169,34 @@ export const hexToRgba = (hex: string, alpha?: number): string => {
 		throw new Error('Invalid hex color format');
 	}
 
-	return `rgb(${r} ${g} ${b} / ${a})`;
+	return `rgba(${r}, ${g}, ${b}, ${a})`;
+};
+
+export const rgbaToHex = (color: string | undefined): string => {
+	if (color === undefined) {
+		return '';
+	}
+
+	const rgbaMatch = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d*\.?\d+))?\)/);
+	if (!rgbaMatch) {
+		throw new Error('Invalid RGBA color format');
+	}
+
+	// Parse RGBA components
+	const [r, g, b] = rgbaMatch.slice(1, 4).map((num) => parseInt(num, 10)); // RGB components
+	const a = rgbaMatch[4] !== undefined ? parseFloat(rgbaMatch[4]) : 1; // Alpha component
+
+	// Helper function to convert and clamp each color component
+	const convertAndClamp = (component: number): string => {
+		const clampedValue = Math.max(0, Math.min(255, Math.round(component * a + 255 * (1 - a))));
+		const hex = clampedValue.toString(16);
+		return hex.padStart(2, '0');
+	};
+
+	// Convert and clamp each RGB component
+	const redHex = convertAndClamp(r);
+	const greenHex = convertAndClamp(g);
+	const blueHex = convertAndClamp(b);
+
+	return `#${redHex}${greenHex}${blueHex}`;
 };

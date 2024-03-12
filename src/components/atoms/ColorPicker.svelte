@@ -1,10 +1,14 @@
 <script lang="ts">
+	import { rgbaToHex } from '../utils/utils.ts';
+	import { mdiRefresh } from '@mdi/js';
+	import Icon from './Icon.svelte';
+	import Button from './Button.svelte';
+
 	export let color: string | undefined = undefined;
 	export let onColorChange: (newColor: string) => void;
+	export let handleRefreshButton: () => void;
 
-	$: {
-		console.log('color in picker: ', color);
-	}
+	$: bindColor = rgbaToHex(color);
 </script>
 
 <div>
@@ -14,8 +18,13 @@
 	<input
 		type="color"
 		id="colorPicker"
-		bind:value={color}
+		bind:value={bindColor}
 		on:input={(e) => onColorChange(e.currentTarget.value)}
 		class="h-10 w-full border-0 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
 	/>
+	<div class="flex items-end">
+		<Button variant="outline" on:click={() => handleRefreshButton()}>
+			<Icon path={mdiRefresh} class="size-4" />
+		</Button>
+	</div>
 </div>

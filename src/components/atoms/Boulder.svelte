@@ -7,10 +7,6 @@
 	export let selectedBoulderID: string | undefined = undefined;
 	export let color: string | undefined = undefined;
 
-	$: {
-		console.log('color v boulderu===========>:', color);
-	}
-
 	export const tableRows = Array.from({ length: rows }, (_, i) => String.fromCharCode(65 + i));
 	export const tableCols = Array.from({ length: cols }, (_, i) => i);
 
@@ -83,7 +79,7 @@
 		@apply size-7 rounded-sm text-center slashed-zero tabular-nums transition-colors sm:h-8 sm:w-8;
 	}
 	:global(table.wall td:not(.skipped)) {
-		@apply cursor-pointer border border-sky-300 bg-sky-50 text-sky-600 hover:border-sky-400 hover:bg-sky-100 hover:text-sky-700 dark:border-sky-700 dark:bg-sky-950 dark:text-sky-200  dark:hover:bg-sky-900 dark:hover:text-white;
+		@apply cursor-pointer border-2 border-sky-300 bg-sky-50 text-sky-600 hover:border-sky-400 hover:bg-sky-100 hover:text-sky-700 dark:border-sky-700 dark:bg-sky-950 dark:text-sky-200  dark:hover:bg-sky-900 dark:hover:text-white;
 	}
 	:global(table.wall td.holds) {
 		@apply border-amber-300 bg-amber-100 text-amber-600 hover:border-amber-400 hover:bg-amber-200 hover:text-amber-700 dark:border-amber-400 dark:bg-amber-600 dark:text-amber-200  dark:hover:border-amber-200 dark:hover:bg-amber-600 dark:hover:text-white;
