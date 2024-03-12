@@ -32,17 +32,17 @@
 					if (selectedMode !== 'Start' && selectedMode !== 'Finish') {
 						if (updated.has(gripId)) {
 							log.info('    Removing: ', gripId);
-							updated.set(gripId, { class: gripClass, color: 'defaultColor' }); // Замените 'defaultColor' на ваш цвет по умолчанию
-
+							// updated.set(gripId, { class: gripClass, color: undefined });
+							updated.delete(gripId);
 						} else {
 							log.info('    Adding:   ', gripId);
 							log.info('    Class:   ', gripClass);
 							log.info('    color:   ', color);
-							updated.set(gripId, { class: gripClass, color: color  });
+							updated.set(gripId, { class: gripClass, color: color });
 						}
 					} else {
 						log.info('    Adding:   ', gripId);
-						updated.set(gripId, { class: gripClass, color: color});
+						updated.set(gripId, { class: gripClass, color: color });
 					}
 					return updated;
 				});
@@ -137,7 +137,7 @@
 		const { subscribe, update } = writable(initialValue);
 
 		const addBoulder = async (
-			clickedGripsMap: Map<string, { class: string, color: string }>,
+			clickedGripsMap: Map<string, { class: string; color: string }>,
 			selectorState: Selector,
 			name: string | undefined,
 			action: 'save' | 'display'
@@ -156,10 +156,9 @@
 			const grips = clickedGripKeys.map((key) => {
 				const gripData = clickedGripsMap.get(key);
 				// Example of colorBrightness
-				let  colorBrightness = '255 0 0 / 50%';
+				let colorBrightness = 'rgb(250 218 94/ 100%)'; // Default color if no specific color is provided
 
 				colorBrightness = gripData?.color || colorBrightness;
-
 
 				let grip: Grip = {
 					id: key,
@@ -167,9 +166,17 @@
 				};
 
 				if (selectorState.selectedStartGrip === key && !gripData?.color) {
-					grip = { ...grip, start: selectorState.selectedStartGrip, colorBrightness: '220 252 231 / 100%'};
+					grip = {
+						...grip,
+						start: selectorState.selectedStartGrip,
+						colorBrightness: 'rgb(137 239 174/ 100%)'
+					};
 				} else if (selectorState.selectedFinishGrip === key && !gripData?.color) {
-					grip = { ...grip, finish: selectorState.selectedFinishGrip, colorBrightness: '253 244 255 / 100%'};
+					grip = {
+						...grip,
+						finish: selectorState.selectedFinishGrip,
+						colorBrightness: 'rgb(243 189 253/ 100%)'
+					};
 				}
 
 				return grip;
@@ -216,25 +223,25 @@
 		};
 
 		const getGripClass = (selectedBoulderId: string, gripId: string) => {
+			if (!selectedBoulderId) return { class: '', color: '' };
+
 			const boulders: Boulder[] = JSON.parse(localStorage.getItem('boulders') || '[]');
 			const selectedBoulder = boulders.find((boulder) => boulder.id === selectedBoulderId);
 
-			if (!selectedBoulder) return '';
+			if (!selectedBoulder) return { class: '', color: '' };
 
 			// Find the cell within the path of the selected boulder that matches the provided cellId
-			const cell = selectedBoulder.path.find((cell) => cell.id === gripId);
+			const grip = selectedBoulder.path.find((cell) => cell.id === gripId);
 			// If the cell isn't part of the selected boulder's path, return default values
-			if (!cell) return { class: '', color: '' };
-
+			if (!grip) return { class: '', color: '' };
 
 			let gripClass = '';
 
-			if (selectedBoulder.start === gripId) gripClass =  startClass;
-			if (selectedBoulder.finish === gripId) gripClass =  finishClass;
+			if (selectedBoulder.start === gripId) gripClass = startClass;
+			if (selectedBoulder.finish === gripId) gripClass = finishClass;
 			if (selectedBoulder.path.some((grip) => grip.id === gripId)) gripClass = clickedClass;
 
-			return { class: gripClass, color: cell.colorBrightness || '' };
-
+			return { class: gripClass, color: grip.colorBrightness || '' };
 		};
 
 		return { subscribe, addBoulder, removeBoulder, getGripClass: getGripClass };

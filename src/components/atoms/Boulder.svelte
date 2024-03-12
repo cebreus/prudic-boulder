@@ -12,20 +12,8 @@
 
 	$: selectedMode = $selector.selectedMode;
 
-	const toggleGripAndUpdateSelector = (gripId: string) => {
-		if (isSkippedGrip(gripId)) {
-			log.debug(`Toggling grip: ${gripId} SKIPPED with mode: ${$selector.selectedMode}`);
-	$: {
-		console.log('CLICKED :', $clickedGrips);
-	}
-
-	// Добавленная функция для обновления цвета ячейки
-	function applyColorToCell(cellId: string) {
-		clickedGrips.setColorForCell(cellId, color); // Предполагается, что переменная color уже определена в вашем компоненте
-	}
-
 	const toggleCellAndUpdateSelector = (cellId: string) => {
-		if (isSkippedCell(cellId)) {
+		if (isSkippedGrip(cellId)) {
 			log.debug(`Toggling cell: ${cellId} SKIPPED with mode: ${$selector.selectedMode}`);
 			return;
 		}
@@ -33,7 +21,7 @@
 		selector.updateSelector(cellId, selectedMode);
 
 		console.log('color here: ', color);
-		clickedCells.toggle(cellId, selectedMode, color);
+		clickedGrips.toggle(cellId, selectedMode, color);
 	};
 </script>
 
@@ -52,14 +40,31 @@
 				<th>{String.fromCharCode(65 + rowIndex)}</th>
 				{#each tableCols as col}
 					{@const gripId = `${row}${col}`}
+					<!--					<td-->
+					<!--						class={isSkippedGrip(gripId)-->
+					<!--							? skippedClass-->
+					<!--							: selectedBoulderID-->
+					<!--								? boulders.getGripClass(selectedBoulderID, gripId)-->
+					<!--								: $clickedGrips.get(gripId)?.class ?? ''}-->
+					<!--						style="background-color: {$clickedGrips.get(gripId)?.color || ''};"-->
+					<!--						on:click={selectedBoulderID ? null : () => toggleCellAndUpdateSelector(gripId)}-->
+					<!--					>-->
+					<!--						{isSkippedGrip(gripId) ? '' : gripId}-->
+					<!--					</td>-->
 					<td
 						class={isSkippedGrip(gripId)
 							? skippedClass
 							: selectedBoulderID
-								? boulders.getGripClass(selectedBoulderID, gripId)
+								? boulders.getGripClass(selectedBoulderID, gripId).class
 								: $clickedGrips.get(gripId)?.class ?? ''}
-						style="background-color: {$clickedGrips.get(gripId)?.color || ''};"
-						on:click={selectedBoulderID ? null : () => toggleCellAndUpdateSelector(gripId)}
+						style:background-color={selectedBoulderID
+							? boulders.getGripClass(selectedBoulderID, gripId).color
+							: $clickedGrips.get(gripId)?.color ?? ''}
+						on:click={selectedBoulderID
+							? null
+							: () => {
+									toggleCellAndUpdateSelector(gripId);
+								}}
 					>
 						{isSkippedGrip(gripId) ? '' : gripId}
 					</td>
@@ -88,7 +93,7 @@
 	:global(table.wall td.start) {
 		@apply border-green-300 bg-green-100 text-green-600 hover:border-green-400 hover:bg-green-100 hover:text-green-700 dark:border-green-400 dark:bg-green-600 dark:text-green-200  dark:hover:border-green-200 dark:hover:bg-green-600 dark:hover:text-white;
 	}
-	:global(table.wall td.top) {
+	:global(table.wall td.finish) {
 		@apply border-fuchsia-300 bg-fuchsia-50 text-fuchsia-600 hover:border-fuchsia-400 hover:bg-fuchsia-100 hover:text-fuchsia-700 dark:border-fuchsia-400 dark:bg-fuchsia-600 dark:text-fuchsia-200  dark:hover:border-fuchsia-200 dark:hover:bg-fuchsia-600 dark:hover:text-white;
 	}
 </style>

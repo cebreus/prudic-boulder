@@ -95,12 +95,12 @@ export const isSkippedGrip = (gripId: string): boolean => {
 export const rows: number = 18;
 export const cols: number = 10;
 
-type CssClassName = 'skipped' | 'holds' | 'start' | 'top';
+type CssClassName = 'skipped' | 'holds' | 'start' | 'finish';
 
 export const skippedClass: CssClassName = 'skipped';
 export const clickedClass: CssClassName = 'holds';
 export const startClass: CssClassName = 'start';
-export const topClass: CssClassName = 'top';
+export const finishClass: CssClassName = 'finish';
 
 export const generateId = (name: string = ''): string => {
 	return `${name}${Date.now().toString(16)}-${Math.random().toString(16).slice(2, 8)}`;
