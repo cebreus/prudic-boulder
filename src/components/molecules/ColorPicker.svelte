@@ -1,12 +1,6 @@
 <script lang="ts">
-	import { rgbaToHex } from '../utils/utils.ts';
-	import { mdiRefresh } from '@mdi/js';
-	import Icon from './Icon.svelte';
-	import Button from './Button.svelte';
-
 	export let color: string | undefined = undefined;
 	export let onColorChange: (newColor: string) => void;
-	export let handleRefreshButton: () => void;
 
 	$: bindColor = rgbaToHex(color);
 </script>

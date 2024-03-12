@@ -13,8 +13,8 @@
 	let isOpen: boolean = false;
 	let inputBoulderName: string;
 
-	let initialColor = '#FF0000';
-	let color: string = '';
+	let initialColor: string = '#FF0000';
+	let color: string | undefined = '';
 	let brightness = 100;
 
 	$: color = hexToRgba(initialColor, brightness);
@@ -55,7 +55,7 @@
 	};
 
 	const handleRefreshButton = () => {
-		initialColor = '#ffffff';
+		color = undefined;
 	};
 </script>
 
