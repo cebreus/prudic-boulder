@@ -11,7 +11,7 @@
 	import log from 'loglevel';
 
 	let bouldersFromLS: Boulder[] = [];
-	let selectedBoulder: Boulder = { id: '', createdAt: 0, path: [] };
+	let selectedBoulder: Boulder;
 	export let isOpen = false;
 
 	const unsubscribe = boulders.subscribe((value) => {

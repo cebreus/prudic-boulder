@@ -136,13 +136,6 @@ export const sendPostRequest = async <T>(url: string, data: T): Promise<ApiRespo
 		throw error;
 	}
 };
-
-export const adjustColor = (hex: string, brightness: number): string => {
-	let [r, g, b] = hex.match(/\w\w/g)!.map((x) => parseInt(x, 16));
-	const factor = brightness / 100;
-	[r, g, b] = [r, g, b].map((c) => Math.round(c * factor));
-	return `#${[r, g, b].map((x) => x.toString(16).padStart(2, '0')).join('')}`;
-};
 export const hexToRgba = (hex: string | undefined, alpha: number): string => {
 	if (!hex) {
 		return '';
