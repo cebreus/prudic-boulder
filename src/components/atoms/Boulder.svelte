@@ -2,7 +2,6 @@
 	import { clickedGrips, selector, boulders } from '../../stores/BoulderStore.svelte';
 	import { skippedClass, rows, cols, isSkippedGrip } from '../utils/utils.ts';
 	import log from '../utils/logger.ts';
-	import { get } from 'svelte/store';
 
 	export let selectedBoulderID: string | undefined = undefined;
 	export let color: string | undefined = undefined;
@@ -40,17 +39,6 @@
 				<th>{String.fromCharCode(65 + rowIndex)}</th>
 				{#each tableCols as col}
 					{@const gripId = `${row}${col}`}
-					<!--					<td-->
-					<!--						class={isSkippedGrip(gripId)-->
-					<!--							? skippedClass-->
-					<!--							: selectedBoulderID-->
-					<!--								? boulders.getGripClass(selectedBoulderID, gripId)-->
-					<!--								: $clickedGrips.get(gripId)?.class ?? ''}-->
-					<!--						style="background-color: {$clickedGrips.get(gripId)?.color || ''};"-->
-					<!--						on:click={selectedBoulderID ? null : () => toggleCellAndUpdateSelector(gripId)}-->
-					<!--					>-->
-					<!--						{isSkippedGrip(gripId) ? '' : gripId}-->
-					<!--					</td>-->
 					<td
 						class={isSkippedGrip(gripId)
 							? skippedClass
