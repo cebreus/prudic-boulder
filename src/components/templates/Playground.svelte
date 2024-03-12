@@ -28,10 +28,13 @@
 
 	const handleSaveBoulder = () => {
 		log.debug('handleSaveBoulder()');
-		if ($clickedGrips.size > 0) {
-			isOpen = true;
-			log.info('Dialog opened');
+		if ($clickedGrips.size === 0) {
+			log.trace('Pick at least one cell');
+			addToast('Vyberte alespoň jednu buňku!');
+			return;
 		}
+		isOpen = true;
+		log.info('Dialog opened');
 	};
 
 	const handleDialogResponse = () => {
@@ -67,7 +70,6 @@
 		<div class="mb-4">
 			<ColorPicker {color} onColorChange={handleColorChange} {handleRefreshButton} />
 		</div>
-
 		<div class="mb-6">
 			<BrightnessSlider {brightness} onBrightnessChange={handleBrightnessChange} />
 		</div>
