@@ -75,12 +75,14 @@
 									{/each}
 								{/if}
 								<div>
-									{#if boulder.start}
-										Start: {boulder.start}
-									{/if}
-									{#if boulder.finish}
-										Finish: {boulder.finish}
-									{/if}
+									{#each boulder.path as grip}
+										{#if grip.start}
+											<p>Start: {grip.id}</p>
+										{/if}
+										{#if grip.finish}
+											<p>Finish: {grip.id}</p>
+										{/if}
+									{/each}
 								</div>
 							</td>
 							<td>

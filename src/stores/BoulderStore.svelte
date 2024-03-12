@@ -156,7 +156,7 @@
 			const grips = clickedGripKeys.map((key) => {
 				const gripData = clickedGripsMap.get(key);
 				// Example of colorBrightness
-				let colorBrightness = 'rgb(250 218 94/ 100%)'; // Default color if no specific color is provided
+				let colorBrightness = 'rgb(252 237 170/ 100%)'; // Default color if no specific color is provided
 
 				colorBrightness = gripData?.color || colorBrightness;
 
@@ -169,13 +169,13 @@
 					grip = {
 						...grip,
 						start: selectorState.selectedStartGrip,
-						colorBrightness: 'rgb(137 239 174/ 100%)'
+						colorBrightness: 'rgb(121 206 147 / 100%)'
 					};
 				} else if (selectorState.selectedFinishGrip === key && !gripData?.color) {
 					grip = {
 						...grip,
 						finish: selectorState.selectedFinishGrip,
-						colorBrightness: 'rgb(243 189 253/ 100%)'
+						colorBrightness: 'rgb(208 151 220 / 100%)'
 					};
 				}
 
@@ -237,9 +237,9 @@
 
 			let gripClass = '';
 
-			if (selectedBoulder.start === gripId) gripClass = startClass;
-			if (selectedBoulder.finish === gripId) gripClass = finishClass;
-			if (selectedBoulder.path.some((grip) => grip.id === gripId)) gripClass = clickedClass;
+			if (selectedBoulder.path.find((grip) => grip.start === gripId)) gripClass = startClass;
+			else if (selectedBoulder.path.find((grip) => grip.finish === gripId)) gripClass = finishClass;
+			else gripClass = clickedClass;
 
 			return { class: gripClass, color: grip.colorBrightness || '' };
 		};
