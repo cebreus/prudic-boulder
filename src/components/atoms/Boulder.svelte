@@ -32,6 +32,7 @@
 		log.debug(`Toggling cell: ${cellId} with mode: ${$selector.selectedMode}`);
 		selector.updateSelector(cellId, selectedMode);
 
+		console.log('color here: ', color);
 		clickedCells.toggle(cellId, selectedMode, color);
 	};
 </script>

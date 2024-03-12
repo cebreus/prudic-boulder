@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let color: string | undefined = undefined;
+	export let color: string | undefined
 	export let onColorChange: (newColor: string) => void;
 
 	$: bindColor = rgbaToHex(color);

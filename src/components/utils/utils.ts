@@ -143,14 +143,17 @@ export const adjustColor = (hex: string, brightness: number): string => {
 	[r, g, b] = [r, g, b].map((c) => Math.round(c * factor));
 	return `#${[r, g, b].map((x) => x.toString(16).padStart(2, '0')).join('')}`;
 };
-export const hexToRgba = (hex: string, alpha?: number): string => {
+export const hexToRgba = (hex: string | undefined, alpha: number): string => {
+	if (!hex) {
+		return '';
+	}
+
 	hex = hex.replace(/^#/, '');
 	let r: number,
 		g: number,
 		b: number,
-		a: number = 1;
+		a: number = 100;
 
-	// Depending on the string length, parse differently
 	if (hex.length === 3) {
 		r = parseInt(hex[0] + hex[0], 16);
 		g = parseInt(hex[1] + hex[1], 16);
@@ -159,7 +162,7 @@ export const hexToRgba = (hex: string, alpha?: number): string => {
 		r = parseInt(hex.substring(0, 2), 16);
 		g = parseInt(hex.substring(2, 4), 16);
 		b = parseInt(hex.substring(4, 6), 16);
-		a = alpha !== undefined ? alpha : 1;
+		a = alpha !== undefined ? alpha : a;
 	} else if (hex.length === 8) {
 		r = parseInt(hex.substring(0, 2), 16);
 		g = parseInt(hex.substring(2, 4), 16);
@@ -169,7 +172,7 @@ export const hexToRgba = (hex: string, alpha?: number): string => {
 		throw new Error('Invalid hex color format');
 	}
 
-	return `rgba(${r}, ${g}, ${b}, ${a})`;
+	return `rgb(${r} ${g} ${b} / ${a}%)`;
 };
 
 export const rgbaToHex = (color: string | undefined): string => {
@@ -177,14 +180,28 @@ export const rgbaToHex = (color: string | undefined): string => {
 		return '';
 	}
 
-	const rgbaMatch = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d*\.?\d+))?\)/);
-	if (!rgbaMatch) {
-		throw new Error('Invalid RGBA color format');
+	const rgbMatch = color.match(/rgb\((\d{1,3})\s+(\d{1,3})\s+(\d{1,3})(?:\s*\/\s*(\d{1,3})%?)?\)/i);
+	if (!rgbMatch) {
+		// throw new Error('Invalid RGBA color format');
+		log.error('Invalid RGBA color format');
+		return '';
 	}
 
-	// Parse RGBA components
-	const [r, g, b] = rgbaMatch.slice(1, 4).map((num) => parseInt(num, 10)); // RGB components
-	const a = rgbaMatch[4] !== undefined ? parseFloat(rgbaMatch[4]) : 1; // Alpha component
+	// Directly parse RGB values from the match
+	const r = Number(rgbMatch[1]);
+	const g = Number(rgbMatch[2]);
+	const b = Number(rgbMatch[3]);
+	const a = rgbMatch[4] ? Number(rgbMatch[4]) / 100 : 1;
+
+	// Ensure RGB values are within the valid range
+	if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
+		throw new Error('RGB values must be in the range 0-255');
+	}
+
+	// Validate the alpha value is within the correct range
+	if (a < 0 || a > 1) {
+		throw new Error('Alpha value must be between 0% and 100%');
+	}
 
 	// Helper function to convert and clamp each color component
 	const convertAndClamp = (component: number): string => {

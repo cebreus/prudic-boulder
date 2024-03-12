@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let brightness: number;
+	export let brightness: number = 100;
 	export let onBrightnessChange: (value: number) => void;
 </script>
 
@@ -7,7 +7,7 @@
 	for="brightnessSlider"
 	class="mb-3 block text-sm font-bold text-slate-400 dark:text-slate-400"
 >
-	Adjust Brightness: {brightness}%
+	Brightness: {brightness}%
 </label>
 <input
 	type="range"

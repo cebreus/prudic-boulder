@@ -9,21 +9,22 @@
 	import { hexToRgba } from '../utils/utils.ts';
 	import ColorPicker from '../molecules/ColorPicker.svelte';
 	import BrightnessSlider from '../molecules/BrightnessSlider.svelte';
+	import { addToast } from '../utils/ToastService.ts';
 
 	let isOpen: boolean = false;
 	let inputBoulderName: string;
 
-	let initialColor: string = '#FF0000';
-	let color: string | undefined = '';
-	let brightness = 100;
+	let currentColor: string | undefined;
+	let displayColor: string | undefined;
+	let brightness: number;
 
-	$: color = hexToRgba(initialColor, brightness);
+	$: displayColor = hexToRgba(currentColor, brightness);
 	$: if (!isOpen) {
 		inputBoulderName = '';
 	}
 
 	const handleColorChange = (newColor: string) => {
-		initialColor = newColor;
+		currentColor = newColor;
 	};
 
 	const handleSaveBoulder = () => {
@@ -58,17 +59,17 @@
 	};
 
 	const handleRefreshButton = () => {
-		color = undefined;
+		displayColor = undefined;
 	};
 </script>
 
 <div class="mt-5 flex-col">
-	<Boulder {color} />
+	<Boulder color={displayColor} />
 	<BoulderButtons {handleSaveBoulder} />
 
 	<div class="mt-5 grid w-[20.8em] justify-stretch gap-4 pl-9 pr-1 pt-4 sm:w-[23.5em]">
 		<div class="mb-4">
-			<ColorPicker {color} onColorChange={handleColorChange} {handleRefreshButton} />
+			<ColorPicker color={displayColor} onColorChange={handleColorChange} {handleRefreshButton} />
 		</div>
 		<div class="mb-6">
 			<BrightnessSlider {brightness} onBrightnessChange={handleBrightnessChange} />
