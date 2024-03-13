@@ -254,7 +254,10 @@
 				updateStore(bouldersToImport, action);
 			} catch (error) {
 				log.error('Error importing boulders:', error);
-				addToast('Chyba při importu bolderů', 'error');
+				addToast(
+					`Chyba při importu bolderů: ${error instanceof Error ? error.message : String(error)}`,
+					'error'
+				);
 			}
 		};
 

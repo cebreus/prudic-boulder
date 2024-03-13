@@ -224,24 +224,24 @@ export const validateAndTransformData = (fileContent: string): Boulder[] => {
 	try {
 		const data = JSON.parse(fileContent);
 
-		// Ensure the parsed data is in an array format
 		const boulders = Array.isArray(data) ? data : [data];
 
-		// Validate each boulder object in the array
-		const validatedBoulders = boulders.map((boulder) => {
-			// Check for the presence of required properties 'id' and 'path'
-			if (typeof boulder.id !== 'string' || !Array.isArray(boulder.path)) {
-				throw new Error('Invalid object format: required fields "id" and/or "path" are missing');
+		return boulders.map((boulder, index) => {
+			if (typeof boulder.id !== 'string') {
+				throw new Error(`Boulder at index ${index} has an invalid or missing "id" property.`);
 			}
-			// Optionally, validate the 'path' array items if necessary
-			return boulder; // Assuming the object is valid
+			if (!Array.isArray(boulder.path)) {
+				throw new Error(`Boulder at index ${index} has an invalid or missing "path" property.`);
+			}
+			return boulder;
 		});
-
-		return validatedBoulders;
 	} catch (error) {
-		// Throw an error if JSON parsing fails or validation fails
-		throw new Error(
-			`Error processing JSON: ${error instanceof Error ? error.message : String(error)}`
-		);
+		if (error instanceof SyntaxError) {
+			throw new Error(`JSON parsing error: ${error.message}`);
+		} else if (error instanceof Error) {
+			throw new Error(`Validation error: ${error.message}`);
+		} else {
+			throw new Error(`Unexpected error: ${String(error)}`);
+		}
 	}
 };
