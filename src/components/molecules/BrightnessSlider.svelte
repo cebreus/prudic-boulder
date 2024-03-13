@@ -3,11 +3,8 @@
 	export let onBrightnessChange: (value: number) => void;
 </script>
 
-<label
-	for="brightnessSlider"
-	class="mb-3 block text-sm font-bold text-slate-400 dark:text-slate-400"
->
-	Brightness: {brightness}%
+<label for="brightnessSlider" class="mb-3 block text-sm font-bold">
+	Nastavte jas: {brightness}%
 </label>
 <input
 	type="range"
@@ -16,5 +13,5 @@
 	max="100"
 	bind:value={brightness}
 	on:input={(e) => onBrightnessChange(e.currentTarget.valueAsNumber)}
-	class="h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-200"
+	class="h-2 w-full cursor-pointer appearance-none rounded-lg bg-sky-400"
 />
