@@ -222,7 +222,7 @@
 			});
 		};
 
-		const getGripClass = (selectedBoulderId: string, gripId: string) => {
+		const getGripClass = (selectedBoulderId: string | undefined, gripId: string) => {
 			if (!selectedBoulderId) return { class: '', color: '' };
 
 			const boulders: Boulder[] = JSON.parse(localStorage.getItem('boulders') || '[]');

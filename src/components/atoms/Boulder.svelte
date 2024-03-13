@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { clickedGrips, selector, boulders } from '../../stores/BoulderStore.svelte';
-	import { skippedClass, rows, cols, isSkippedGrip } from '../utils/utils.ts';
+	import { rows, cols, isSkippedGrip } from '../utils/utils.ts';
 	import log from '../utils/logger.ts';
 
 	export let selectedBoulderID: string | undefined = undefined;
@@ -11,7 +11,7 @@
 
 	$: selectedMode = $selector.selectedMode;
 
-	const toggleCellAndUpdateSelector = (cellId: string) => {
+	const toggleGripAndUpdateSelector = (cellId: string) => {
 		if (isSkippedGrip(cellId)) {
 			log.debug(`Toggling cell: ${cellId} SKIPPED with mode: ${$selector.selectedMode}`);
 			return;
@@ -40,18 +40,15 @@
 				{#each tableCols as col}
 					{@const gripId = `${row}${col}`}
 					<td
-						class={isSkippedGrip(gripId)
-							? skippedClass
-							: selectedBoulderID
-								? boulders.getGripClass(selectedBoulderID, gripId).class
-								: $clickedGrips.get(gripId)?.class ?? ''}
+						class:skipped={isSkippedGrip(gripId)}
+						class={`${boulders.getGripClass(selectedBoulderID, gripId).class} ${$clickedGrips.get(gripId)?.class ?? ''}`}
 						style:background-color={selectedBoulderID
 							? boulders.getGripClass(selectedBoulderID, gripId).color
 							: $clickedGrips.get(gripId)?.color ?? ''}
 						on:click={selectedBoulderID
 							? null
 							: () => {
-									toggleCellAndUpdateSelector(gripId);
+									toggleGripAndUpdateSelector(gripId);
 								}}
 					>
 						{isSkippedGrip(gripId) ? '' : gripId}
