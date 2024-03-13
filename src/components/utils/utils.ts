@@ -95,12 +95,12 @@ export const isSkippedGrip = (gripId: string): boolean => {
 export const rows: number = 18;
 export const cols: number = 10;
 
-type CssClassName = 'skipped' | 'holds' | 'start' | 'top';
+type CssClassName = 'skipped' | 'holds' | 'start' | 'finish';
 
 export const skippedClass: CssClassName = 'skipped';
 export const clickedClass: CssClassName = 'holds';
 export const startClass: CssClassName = 'start';
-export const finishClass: string = 'finish';
+export const finishClass: CssClassName = 'finish';
 
 export const generateId = (name: string = ''): string => {
 	return `${name}${Date.now().toString(16)}-${Math.random().toString(16).slice(2, 8)}`;
@@ -135,4 +135,78 @@ export const sendPostRequest = async <T>(url: string, data: T): Promise<ApiRespo
 		log.error('Error in sendPostRequest function', error);
 		throw error;
 	}
+};
+export const hexToRgba = (hex: string | undefined, alpha: number): string => {
+	if (!hex) {
+		return '';
+	}
+
+	hex = hex.replace(/^#/, '');
+	let r: number,
+		g: number,
+		b: number,
+		a: number = 100;
+
+	if (hex.length === 3) {
+		r = parseInt(hex[0] + hex[0], 16);
+		g = parseInt(hex[1] + hex[1], 16);
+		b = parseInt(hex[2] + hex[2], 16);
+	} else if (hex.length === 6) {
+		r = parseInt(hex.substring(0, 2), 16);
+		g = parseInt(hex.substring(2, 4), 16);
+		b = parseInt(hex.substring(4, 6), 16);
+		a = alpha !== undefined ? alpha : a;
+	} else if (hex.length === 8) {
+		r = parseInt(hex.substring(0, 2), 16);
+		g = parseInt(hex.substring(2, 4), 16);
+		b = parseInt(hex.substring(4, 6), 16);
+		a = parseInt(hex.substring(6, 8), 16) / 255;
+	} else {
+		throw new Error('Invalid hex color format');
+	}
+
+	return `rgb(${r} ${g} ${b} / ${a}%)`;
+};
+
+export const rgbaToHex = (color: string | undefined): string => {
+	if (color === undefined) {
+		return '';
+	}
+
+	const rgbMatch = color.match(/rgb\((\d{1,3})\s+(\d{1,3})\s+(\d{1,3})(?:\s*\/\s*(\d{1,3})%?)?\)/i);
+	if (!rgbMatch) {
+		// throw new Error('Invalid RGBA color format');
+		log.error('Invalid RGBA color format');
+		return '';
+	}
+
+	// Directly parse RGB values from the match
+	const r = Number(rgbMatch[1]);
+	const g = Number(rgbMatch[2]);
+	const b = Number(rgbMatch[3]);
+	const a = rgbMatch[4] ? Number(rgbMatch[4]) / 100 : 1;
+
+	// Ensure RGB values are within the valid range
+	if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
+		throw new Error('RGB values must be in the range 0-255');
+	}
+
+	// Validate the alpha value is within the correct range
+	if (a < 0 || a > 1) {
+		throw new Error('Alpha value must be between 0% and 100%');
+	}
+
+	// Helper function to convert and clamp each color component
+	const convertAndClamp = (component: number): string => {
+		const clampedValue = Math.max(0, Math.min(255, Math.round(component * a + 255 * (1 - a))));
+		const hex = clampedValue.toString(16);
+		return hex.padStart(2, '0');
+	};
+
+	// Convert and clamp each RGB component
+	const redHex = convertAndClamp(r);
+	const greenHex = convertAndClamp(g);
+	const blueHex = convertAndClamp(b);
+
+	return `#${redHex}${greenHex}${blueHex}`;
 };

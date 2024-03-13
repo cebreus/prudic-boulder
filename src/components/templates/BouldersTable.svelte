@@ -11,7 +11,7 @@
 	import log from 'loglevel';
 
 	let bouldersFromLS: Boulder[] = [];
-	let selectedBoulder: Boulder = { id: '', createdAt: 0, path: [] };
+	let selectedBoulder: Boulder;
 	export let isOpen = false;
 
 	const unsubscribe = boulders.subscribe((value) => {
@@ -19,7 +19,7 @@
 			...boulder,
 			createdAt: new Date(boulder.createdAt).toLocaleString()
 		}));
-		log.info('Boulders:', bouldersFromLS);
+		log.info('BouldersFrom LS:', bouldersFromLS);
 	});
 
 	onDestroy(unsubscribe);
@@ -75,12 +75,14 @@
 									{/each}
 								{/if}
 								<div>
-									{#if boulder.start}
-										Start: {boulder.start}
-									{/if}
-									{#if boulder.finish}
-										Finish: {boulder.finish}
-									{/if}
+									{#each boulder.path as grip}
+										{#if grip.start}
+											<p>Start: {grip.id}</p>
+										{/if}
+										{#if grip.finish}
+											<p>Finish: {grip.id}</p>
+										{/if}
+									{/each}
 								</div>
 							</td>
 							<td>

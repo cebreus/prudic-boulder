@@ -5,8 +5,8 @@
 	import { clickedGrips, selector, boulders } from '../../stores/BoulderStore.svelte';
 	import Dialog from '../molecules/Dialog.svelte';
 	import Button from '../atoms/Button.svelte';
-	import BoulderButtons from '../atoms/BoulderButtons.svelte';
 	import { addToast } from '../utils/ToastService.ts';
+	import BoulderButtons from '../molecules/BoulderButtons.svelte';
 
 	let isOpen: boolean = false;
 	let inputBoulderName: string;
@@ -37,6 +37,7 @@
 		currentAction = 'display';
 		log.debug('isOpen = true, action = display');
 	};
+
 	const handleDialogResponse = () => {
 		log.debug('handleDialogResponse()');
 		isOpen = false;

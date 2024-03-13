@@ -1,6 +1,7 @@
-import type { ApiResponse, Boulder } from './BoulderTypes.ts';
-import log from './logger.ts';
 import { sendPostRequest } from './utils.ts';
+import log from './logger.ts';
+
+import type { ApiResponse, Boulder } from './BoulderTypes.ts';
 
 export const apiKey = import.meta.env.VITE_API_KEY as string;
 const api = import.meta.env.VITE_BASE_URL as string;

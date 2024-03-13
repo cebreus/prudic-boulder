@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { clickedGrips, selector } from '../../stores/BoulderStore.svelte';
-	import Button from './Button.svelte';
+	import Button from '../atoms/Button.svelte';
 
 	export const variant: 'default' | 'play' = 'default';
 	export let handleSaveBoulder: () => void;

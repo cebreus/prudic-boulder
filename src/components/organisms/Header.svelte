@@ -1,16 +1,12 @@
 <script lang="ts">
-	import MenuToggler from '../../icons/MenuToggler.svelte';
-	import Logo from '../../icons/Logo.svelte';
-	import { twMerge } from 'tailwind-merge';
 	import { slide } from 'svelte/transition';
+	import { twMerge } from 'tailwind-merge';
+	import Logo from '../../icons/Logo.svelte';
+	import MenuToggler from '../../icons/MenuToggler.svelte';
 
 	export let currentPath = '';
 
 	let menuOpen = false;
-
-	$: {
-		console.log('menu open:', menuOpen);
-	}
 
 	const defaultClass = 'block rounded-md px-3 py-1.5 text-sm font-medium transition-colors';
 	const activeClass =

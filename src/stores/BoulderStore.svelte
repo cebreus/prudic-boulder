@@ -17,7 +17,7 @@
 
 		return {
 			subscribe,
-			toggle: (gripId: string, selectedMode: Mode | undefined) => {
+			toggle: (gripId: string, selectedMode: Mode | undefined, color: string | undefined) => {
 				log.info('  createClickedGripsStore.toggle');
 				log.info('selectedMode in store:', selectedMode);
 				log.info('    Toggle:   ', gripId, 'with mode:', selectedMode);
@@ -32,15 +32,29 @@
 					if (selectedMode !== 'Start' && selectedMode !== 'Finish') {
 						if (updated.has(gripId)) {
 							log.info('    Removing: ', gripId);
+							// updated.set(gripId, { class: gripClass, color: undefined });
 							updated.delete(gripId);
 						} else {
 							log.info('    Adding:   ', gripId);
-							updated.set(gripId, { class: gripClass });
+							log.info('    Class:   ', gripClass);
+							log.info('    color:   ', color);
+							updated.set(gripId, { class: gripClass, color: color });
 						}
 					} else {
 						log.info('    Adding:   ', gripId);
-						updated.set(gripId, { class: gripClass });
+						updated.set(gripId, { class: gripClass, color: color });
 					}
+					return updated;
+				});
+			},
+
+			setColorForGrip: (gripId: string, color: string) => {
+				log.info('My color:', color);
+				update((grips) => {
+					const updated = new Map(grips);
+					const grip = updated.get(gripId) || {};
+					grip.color = color;
+					updated.set(gripId, grip);
 					return updated;
 				});
 			},
@@ -123,27 +137,46 @@
 		const { subscribe, update } = writable(initialValue);
 
 		const addBoulder = async (
-			clickedGripsMap: Map<string, { class: string }>,
+			clickedGripsMap: Map<string, { class: string; color: string }>,
 			selectorState: Selector,
 			name: string | undefined,
 			action: 'save' | 'display'
 		) => {
 			log.debug('createBouldersStore.addBoulder');
+			if (!clickedGripsMap.size) {
+				log.trace('Pick at least one grip');
+				addToast('Vyberte alespoň jednu buňku!');
+				return;
+			}
+
+			console.log('Clicked grips ', clickedGripsMap);
 
 			const clickedGripKeys = Array.from(clickedGripsMap.keys());
 
 			const grips = clickedGripKeys.map((key) => {
+				const gripData = clickedGripsMap.get(key);
 				// Example of colorBrightness
-				const colorBrightness = '255 0 0 / 50%';
+				let colorBrightness = 'rgb(252 237 170/ 100%)'; // Default color if no specific color is provided
+
+				colorBrightness = gripData?.color || colorBrightness;
+
 				let grip: Grip = {
 					id: key,
 					colorBrightness: colorBrightness
 				};
 
-				if (selectorState.selectedStartGrip === key) {
-					grip = { ...grip, start: selectorState.selectedStartGrip };
-				} else if (selectorState.selectedFinishGrip === key) {
-					grip = { ...grip, finish: selectorState.selectedFinishGrip };
+				if (selectorState.selectedStartGrip === key && !gripData?.color) {
+					grip = {
+						...grip,
+						start: selectorState.selectedStartGrip,
+						colorBrightness: 'rgb(121 206 147 / 100%)'
+					};
+				} else if (selectorState.selectedFinishGrip === key && !gripData?.color) {
+					grip = {
+						...grip,
+						finish: selectorState.selectedFinishGrip,
+						colorBrightness: 'rgb(208 151 220 / 100%)'
+					};
 				}
 
 				return grip;
@@ -158,7 +191,9 @@
 
 			log.debug('  newBoulder:', newBoulder);
 
+			// Update the boulders store with the new boulder
 			update((boulders) => [...boulders, newBoulder]);
+			// Get existing boulders from localStorage, add the new boulder, and update localStorage
 			const existingBoulders = JSON.parse(localStorage.getItem('boulders') || '[]');
 			localStorage.setItem('boulders', JSON.stringify([...existingBoulders, newBoulder]));
 
@@ -187,17 +222,26 @@
 			});
 		};
 
-		const getGripClass = (selectedBoulderId: string, gripId: string) => {
+		const getGripClass = (selectedBoulderId: string | undefined, gripId: string) => {
+			if (!selectedBoulderId) return { class: '', color: '' };
+
 			const boulders: Boulder[] = JSON.parse(localStorage.getItem('boulders') || '[]');
 			const selectedBoulder = boulders.find((boulder) => boulder.id === selectedBoulderId);
 
-			if (!selectedBoulder) return '';
+			if (!selectedBoulder) return { class: '', color: '' };
 
-			if (selectedBoulder.start === gripId) return startClass;
-			if (selectedBoulder.finish === gripId) return finishClass;
-			if (selectedBoulder.path.some((grip) => grip.id === gripId)) return clickedClass;
+			// Find the grip within the path of the selected boulder that matches the provided gripId
+			const grip = selectedBoulder.path.find((grip) => grip.id === gripId);
+			// If the gri isn't part of the selected boulder's path, return default values
+			if (!grip) return { class: '', color: '' };
 
-			return '';
+			let gripClass = '';
+
+			if (selectedBoulder.path.find((grip) => grip.start === gripId)) gripClass = startClass;
+			else if (selectedBoulder.path.find((grip) => grip.finish === gripId)) gripClass = finishClass;
+			else gripClass = clickedClass;
+
+			return { class: gripClass, color: grip.colorBrightness || '' };
 		};
 
 		return { subscribe, addBoulder, removeBoulder, getGripClass: getGripClass };
