@@ -1,8 +1,8 @@
 <script lang="ts">
+	import { mdiRefresh } from '@mdi/js';
 	import { rgbaToHex } from '../utils/utils.ts';
 	import Button from '../atoms/Button.svelte';
 	import Icon from '../atoms/Icon.svelte';
-	import { mdiRefresh } from '@mdi/js';
 
 	export let color: string | undefined;
 	export let onColorChange: (newColor: string) => void;

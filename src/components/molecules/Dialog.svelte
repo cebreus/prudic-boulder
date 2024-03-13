@@ -8,8 +8,8 @@
 		Transition,
 		TransitionChild
 	} from '@rgossiaux/svelte-headlessui';
-	import Icon from '../../components/atoms/Icon.svelte';
 	import { mdiClose } from '@mdi/js';
+	import Icon from '../../components/atoms/Icon.svelte';
 
 	export let isOpen: boolean = false;
 	const handleKeydown = (event: CustomEvent) => {

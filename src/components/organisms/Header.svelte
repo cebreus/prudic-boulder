@@ -1,8 +1,8 @@
 <script lang="ts">
-	import MenuToggler from '../../icons/MenuToggler.svelte';
-	import Logo from '../../icons/Logo.svelte';
-	import { twMerge } from 'tailwind-merge';
 	import { slide } from 'svelte/transition';
+	import { twMerge } from 'tailwind-merge';
+	import Logo from '../../icons/Logo.svelte';
+	import MenuToggler from '../../icons/MenuToggler.svelte';
 
 	export let currentPath = '';
 
