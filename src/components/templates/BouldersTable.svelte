@@ -6,7 +6,7 @@
 	import Icon from '../atoms/Icon.svelte';
 	import Dialog from '../molecules/Dialog.svelte';
 	import Toast from '../atoms/Toast.svelte';
-	import { mdiDelete, mdiFileImportOutline, mdiFileExportOutline } from '@mdi/js';
+	import { mdiDelete, mdiFileImportOutline } from '@mdi/js';
 	import type { Boulder } from '../utils/BoulderTypes.ts';
 	import log from 'loglevel';
 	import Import from '../atoms/Import.svelte';
