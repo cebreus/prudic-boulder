@@ -11,16 +11,16 @@
 
 	$: selectedMode = $selector.selectedMode;
 
-	const toggleGripAndUpdateSelector = (cellId: string) => {
-		if (isSkippedGrip(cellId)) {
-			log.debug(`Toggling cell: ${cellId} SKIPPED with mode: ${$selector.selectedMode}`);
+	const toggleGripAndUpdateSelector = (gripId: string) => {
+		if (isSkippedGrip(gripId)) {
+			log.debug(`Toggling grip: ${gripId} SKIPPED with mode: ${$selector.selectedMode}`);
 			return;
 		}
-		log.debug(`Toggling cell: ${cellId} with mode: ${$selector.selectedMode}`);
-		selector.updateSelector(cellId, selectedMode);
+		log.debug(`Toggling grip: ${gripId} with mode: ${$selector.selectedMode}`);
+		selector.updateSelector(gripId, selectedMode);
 
 		console.log('color here: ', color);
-		clickedGrips.toggle(cellId, selectedMode, color);
+		clickedGrips.toggle(gripId, selectedMode, color);
 	};
 </script>
 

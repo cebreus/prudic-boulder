@@ -18,7 +18,7 @@
 		return {
 			subscribe,
 			toggle: (gripId: string, selectedMode: Mode | undefined, color: string | undefined) => {
-				log.info('  createClickedCellsStore.toggle');
+				log.info('  createClickedGripsStore.toggle');
 				log.info('selectedMode in store:', selectedMode);
 				log.info('    Toggle:   ', gripId, 'with mode:', selectedMode);
 				update((grips) => {
@@ -48,13 +48,13 @@
 				});
 			},
 
-			setColorForCell: (cellId: string, color: string) => {
+			setColorForGrip: (gripId: string, color: string) => {
 				log.info('My color:', color);
-				update((cells) => {
-					const updated = new Map(cells);
-					const cell = updated.get(cellId) || {};
-					cell.color = color;
-					updated.set(cellId, cell);
+				update((grips) => {
+					const updated = new Map(grips);
+					const grip = updated.get(gripId) || {};
+					grip.color = color;
+					updated.set(gripId, grip);
 					return updated;
 				});
 			},
@@ -144,12 +144,12 @@
 		) => {
 			log.debug('createBouldersStore.addBoulder');
 			if (!clickedGripsMap.size) {
-				log.trace('Pick at least one cell');
+				log.trace('Pick at least one grip');
 				addToast('Vyberte alespoň jednu buňku!');
 				return;
 			}
 
-			console.log('Clicked cells ', clickedGripsMap);
+			console.log('Clicked grips ', clickedGripsMap);
 
 			const clickedGripKeys = Array.from(clickedGripsMap.keys());
 
@@ -230,9 +230,9 @@
 
 			if (!selectedBoulder) return { class: '', color: '' };
 
-			// Find the cell within the path of the selected boulder that matches the provided cellId
-			const grip = selectedBoulder.path.find((cell) => cell.id === gripId);
-			// If the cell isn't part of the selected boulder's path, return default values
+			// Find the grip within the path of the selected boulder that matches the provided gripId
+			const grip = selectedBoulder.path.find((grip) => grip.id === gripId);
+			// If the gri isn't part of the selected boulder's path, return default values
 			if (!grip) return { class: '', color: '' };
 
 			let gripClass = '';

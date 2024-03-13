@@ -30,7 +30,7 @@
 	const handleSaveBoulder = () => {
 		log.debug('handleSaveBoulder()');
 		if ($clickedGrips.size === 0) {
-			log.trace('Pick at least one cell');
+			log.trace('Pick at least one grip');
 			addToast('Vyberte alespoň jednu buňku!');
 			return;
 		}
