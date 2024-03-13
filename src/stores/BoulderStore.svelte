@@ -1,6 +1,12 @@
 <script context="module" lang="ts">
 	import { addToast } from '../components/utils/ToastService';
-	import { generateId, clickedClass, startClass, finishClass } from '../components/utils/utils';
+	import {
+		generateId,
+		clickedClass,
+		startClass,
+		finishClass,
+		validateAndTransformData
+	} from '../components/utils/utils';
 	import { writable } from 'svelte/store';
 	import log from '../components/utils/logger.ts';
 
@@ -222,6 +228,36 @@
 			});
 		};
 
+		const updateStore = (bouldersToImport: Boulder[], action: 'Add' | 'Replace') => {
+			update((currentBoulders: Boulder[]) => {
+				const duplicateBoulder = bouldersToImport.find((importedBoulder) =>
+					currentBoulders.some((existingBoulder) => existingBoulder.id === importedBoulder.id)
+				);
+
+				if (duplicateBoulder && action === 'Add') {
+					addToast(`Boulder s ID ${duplicateBoulder.id} již existuje. Import byl zrušen.`, 'error');
+					return currentBoulders;
+				}
+
+				const newBoulders =
+					action === 'Add' ? [...currentBoulders, ...bouldersToImport] : [...bouldersToImport];
+
+				localStorage.setItem('boulders', JSON.stringify(newBoulders));
+				addToast(`Boldery byly ${action === 'Add' ? 'přidáný' : 'nahrazený'}`, 'success');
+				return newBoulders;
+			});
+		};
+
+		const importBoulder = (fileContent: string, action: 'Add' | 'Replace') => {
+			try {
+				const bouldersToImport = validateAndTransformData(fileContent);
+				updateStore(bouldersToImport, action);
+			} catch (error) {
+				log.error('Error importing boulders:', error);
+				addToast('Chyba při importu bolderů', 'error');
+			}
+		};
+
 		const getGripClass = (selectedBoulderId: string | undefined, gripId: string) => {
 			if (!selectedBoulderId) return { class: '', color: '' };
 
@@ -244,7 +280,7 @@
 			return { class: gripClass, color: grip.colorBrightness || '' };
 		};
 
-		return { subscribe, addBoulder, removeBoulder, getGripClass: getGripClass };
+		return { subscribe, addBoulder, removeBoulder, getGripClass: getGripClass, importBoulder };
 	};
 
 	export const clickedGrips = createClickedGripsStore();

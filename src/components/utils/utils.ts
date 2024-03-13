@@ -1,5 +1,5 @@
 import log from 'loglevel';
-import type { ApiResponse } from './BoulderTypes.ts';
+import type { ApiResponse, Boulder } from './BoulderTypes.ts';
 import { apiKey } from './services.ts';
 
 export const gripsToSkip: ReadonlySet<string> = new Set([
@@ -209,4 +209,39 @@ export const rgbaToHex = (color: string | undefined): string => {
 	const blueHex = convertAndClamp(b);
 
 	return `#${redHex}${greenHex}${blueHex}`;
+};
+
+export const readFileContent = async (file: File): Promise<string> => {
+	return new Promise((resolve, reject) => {
+		const reader = new FileReader();
+		reader.onload = () => resolve(reader.result as string);
+		reader.onerror = (error) => reject(error);
+		reader.readAsText(file);
+	});
+};
+
+export const validateAndTransformData = (fileContent: string): Boulder[] => {
+	try {
+		const data = JSON.parse(fileContent);
+
+		// Ensure the parsed data is in an array format
+		const boulders = Array.isArray(data) ? data : [data];
+
+		// Validate each boulder object in the array
+		const validatedBoulders = boulders.map((boulder) => {
+			// Check for the presence of required properties 'id' and 'path'
+			if (typeof boulder.id !== 'string' || !Array.isArray(boulder.path)) {
+				throw new Error('Invalid object format: required fields "id" and/or "path" are missing');
+			}
+			// Optionally, validate the 'path' array items if necessary
+			return boulder; // Assuming the object is valid
+		});
+
+		return validatedBoulders;
+	} catch (error) {
+		// Throw an error if JSON parsing fails or validation fails
+		throw new Error(
+			`Error processing JSON: ${error instanceof Error ? error.message : String(error)}`
+		);
+	}
 };

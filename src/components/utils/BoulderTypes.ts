@@ -15,7 +15,7 @@ export type Selector = {
 
 export type Boulder = {
 	id: string;
-	createdAt: string;
+	createdAt?: string;
 	name?: string;
 	start?: string;
 	finish?: string;
