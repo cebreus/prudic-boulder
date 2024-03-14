@@ -203,12 +203,18 @@
 			const existingBoulders = JSON.parse(localStorage.getItem('boulders') || '[]');
 			localStorage.setItem('boulders', JSON.stringify([...existingBoulders, newBoulder]));
 
+			addToast(
+				`Prudič byl uložen`,
+				'success',
+				'Přejděte na <a href="/">hlavní stránku</a> pro zobrazení'
+			);
+
 			try {
 				const response = await services.boulder[action](newBoulder);
 
 				log.info('Boulder saved successfully on server', response);
 				addToast(
-					`Prudič byl  ${action === 'save' ? 'uložen' : 'zobrazen a uložen'}`,
+					`Prudič byl  ${action === 'save' ? 'uložen' : 'zobrazen a uložen na server'}`,
 					'success',
 					`${action === 'save' ? 'Přejděte na <a href="/">hlavní stránku</a> pro zobrazení' : ''}`
 				);
@@ -228,37 +234,48 @@
 			});
 		};
 
-		const updateStore = (bouldersToImport: Boulder[], action: 'Add' | 'Replace') => {
+		const updateStore = (
+			bouldersToImport: Boulder[],
+			shouldReplace: boolean,
+			errorCallback: (message: string) => void
+		) => {
 			update((currentBoulders: Boulder[]) => {
 				const duplicateBoulder = bouldersToImport.find((importedBoulder) =>
 					currentBoulders.some((existingBoulder) => existingBoulder.id === importedBoulder.id)
 				);
 
-				if (duplicateBoulder && action === 'Add') {
-					addToast(`Boulder s ID ${duplicateBoulder.id} již existuje. Import byl zrušen.`, 'error');
-					return currentBoulders;
+				if (duplicateBoulder && !shouldReplace) {
+					errorCallback(`Boulder s ID ${duplicateBoulder.id} již existuje. Import byl zrušen.`);
+					throw new Error(`Boulder s ID ${duplicateBoulder.id} již existuje. Import byl zrušen.`);
 				}
 
-				const newBoulders =
-					action === 'Add' ? [...currentBoulders, ...bouldersToImport] : [...bouldersToImport];
-
+				const newBoulders = shouldReplace
+					? [...bouldersToImport]
+					: [...currentBoulders, ...bouldersToImport];
 				localStorage.setItem('boulders', JSON.stringify(newBoulders));
-				addToast(`Boldery byly ${action === 'Add' ? 'přidáný' : 'nahrazený'}`, 'success');
+				addToast(`Boldery byly ${shouldReplace ? 'nahrazený' : 'přidáný'}`, 'success');
 				return newBoulders;
 			});
 		};
 
-		const importBoulder = (fileContent: string, action: 'Add' | 'Replace') => {
-			try {
-				const bouldersToImport = validateAndTransformData(fileContent);
-				updateStore(bouldersToImport, action);
-			} catch (error) {
-				log.error('Error importing boulders:', error);
-				addToast(
-					`Chyba při importu bolderů: ${error instanceof Error ? error.message : String(error)}`,
-					'error'
-				);
-			}
+		const importBoulder = (
+			fileContent: string,
+			shouldReplace: boolean,
+			errorCallback: (errorMessage: string) => void
+		): Promise<void> => {
+			return new Promise((resolve, reject) => {
+				try {
+					const bouldersToImport = validateAndTransformData(fileContent);
+					updateStore(bouldersToImport, shouldReplace, errorCallback);
+					resolve();
+				} catch (error) {
+					log.error('Error importing boulders:', error);
+					errorCallback(
+						`Chyba při importu bolderů: ${error instanceof Error ? error.message : String(error)}`
+					);
+					reject(error);
+				}
+			});
 		};
 
 		const getGripClass = (selectedBoulderId: string | undefined, gripId: string) => {

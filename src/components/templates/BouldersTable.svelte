@@ -6,12 +6,12 @@
 	import Icon from '../atoms/Icon.svelte';
 	import Dialog from '../molecules/Dialog.svelte';
 	import Toast from '../atoms/Toast.svelte';
-	import { mdiDelete, mdiFileImportOutline } from '@mdi/js';
+	import { mdiDelete, mdiFileExportOutline, mdiFileImportOutline } from '@mdi/js';
 	import type { Boulder } from '../utils/BoulderTypes.ts';
 	import log from 'loglevel';
 	import Import from '../atoms/Import.svelte';
-	import ExportButton from '../atoms/ExportButton.svelte';
-	import Export from '../atoms/Export.svelte';
+	import Button from '../atoms/Button.svelte';
+	import { exportAllToSingleJsonFile, exportToJsonFile } from '../utils/utils.ts';
 
 	let bouldersFromLS: Boulder[] = [];
 	let selectedBoulder: Boulder;
@@ -47,7 +47,7 @@
 <main class="container mx-auto px-4 py-12">
 	<h1 class="mb-4 text-2xl font-extrabold tracking-tight sm:text-3xl">Vytvořené bouldery</h1>
 	<div class="flex space-x-4">
-		<button
+		<Button
 			on:click={() => {
 				isOpenImport = true;
 			}}
@@ -58,9 +58,18 @@
 				class="text-white-100 hover:text-white-300 -ml-1 mr-2 h-4 w-4 transition-colors"
 			/>
 			Importovat
-		</button>
+		</Button>
 
-		<Export />
+		<Button
+			on:click={exportAllToSingleJsonFile}
+			class="focus:shadow-outline flex items-center justify-center rounded bg-sky-500 px-4 py-2 font-bold text-white transition duration-200 ease-in hover:bg-sky-600 focus:outline-none"
+		>
+			<Icon
+				path={mdiFileExportOutline}
+				class="text-white-100 hover:text-white-300 -ml-1 mr-2 h-4 w-4 transition-colors"
+			/>
+			Exportovat
+		</Button>
 	</div>
 
 	{#if bouldersFromLS.length === 0}
@@ -112,15 +121,20 @@
 								</div>
 							</td>
 							<td>
-								<ExportButton {boulder} />
+								<Button on:click={() => exportToJsonFile(boulder)} variant="">
+									<Icon
+										path={mdiFileExportOutline}
+										class="size-4 text-sky-500 transition-colors hover:text-sky-700"
+									/>
+								</Button>
 							</td>
 							<td>
-								<button on:click={() => handleRemoveBoulder(boulder.id)}>
+								<Button on:click={() => handleRemoveBoulder(boulder.id)} variant="">
 									<Icon
 										path={mdiDelete}
 										class="size-5 text-red-500 transition-colors hover:fill-red-600"
 									/>
-								</button>
+								</Button>
 							</td>
 						</tr>
 					{/each}

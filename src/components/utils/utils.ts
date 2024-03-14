@@ -1,6 +1,7 @@
 import log from 'loglevel';
 import type { ApiResponse, Boulder } from './BoulderTypes.ts';
 import { apiKey } from './services.ts';
+import { addToast } from './ToastService.ts';
 
 export const gripsToSkip: ReadonlySet<string> = new Set([
 	'B0',
@@ -243,5 +244,45 @@ export const validateAndTransformData = (fileContent: string): Boulder[] => {
 		} else {
 			throw new Error(`Unexpected error: ${String(error)}`);
 		}
+	}
+};
+
+// Define a helper function for creating and downloading the file
+const downloadJsonFile = (jsonContent: Boulder | Boulder[], fileName: string) => {
+	const jsonString = JSON.stringify(jsonContent);
+	const blob = new Blob([jsonString], { type: 'application/json' });
+	const url = URL.createObjectURL(blob);
+	const link = document.createElement('a');
+	link.download = fileName;
+	link.href = url;
+	document.body.appendChild(link);
+	link.click();
+	document.body.removeChild(link);
+	URL.revokeObjectURL(url);
+};
+
+export const exportToJsonFile = (boulderData: Boulder) => {
+	downloadJsonFile(boulderData, `boulder-${boulderData.id}.json`);
+};
+
+export const exportAllToSingleJsonFile = () => {
+	const allBoulders = fetchAllBoulders(); // Assume this function is defined elsewhere and fetches all boulder data
+	downloadJsonFile(allBoulders, 'all-boulders.json');
+};
+
+const fetchAllBoulders = (): Boulder[] => {
+	const bouldersJson = localStorage.getItem('boulders');
+	if (bouldersJson) {
+		const boulders = JSON.parse(bouldersJson);
+		if (boulders.length === 0) {
+			log.info('No boulders found');
+			addToast('Nejsou bouldery', 'error');
+			return [];
+		}
+		return boulders;
+	} else {
+		log.info('Boulders key not found in localStorage');
+		addToast('Nejsou bouldery', 'error');
+		return [];
 	}
 };

@@ -61,11 +61,13 @@
 	};
 </script>
 
+<div class="mt-5 flex-col">
+	<Boulder />
+
+	<BoulderButtons {handleSaveBoulder} {handleDisplayBoulder} />
+</div>
+
 <Toast />
-
-<Boulder />
-
-<BoulderButtons {handleSaveBoulder} {handleDisplayBoulder} />
 
 <Dialog {isOpen} on:close={() => (isOpen = false)} on:keydown={handleKeyDown}>
 	<svelte:fragment slot="DialogTitle">Název boulderu</svelte:fragment>

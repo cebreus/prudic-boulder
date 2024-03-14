@@ -3,6 +3,11 @@ import Layout from '../layouts/Layout.astro';
 import Boulder from '../components/templates/NewBoulder.svelte';
 ---
 
-<Layout title="Vytvoř si nový boulder">
-	<Boulder client:load />
+<Layout title="Vytvoř si vlasrní cesty a obrázky na boulderu">
+	<main class="container mx-auto px-4 py-12">
+		<h1 class="mb-4 text-2xl font-extrabold tracking-tight sm:text-3xl">
+			Vytvoř si vlasrní cesty a obrázky na boulderu
+		</h1>
+		<Boulder client:load />
+	</main>
 </Layout>
