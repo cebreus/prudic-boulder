@@ -258,24 +258,21 @@
 			});
 		};
 
-		const importBoulder = (
+		const importBoulder = async (
 			fileContent: string,
 			shouldReplace: boolean,
 			errorCallback: (errorMessage: string) => void
-		): Promise<void> => {
-			return new Promise((resolve, reject) => {
-				try {
-					const bouldersToImport = validateAndTransformData(fileContent);
-					updateStore(bouldersToImport, shouldReplace, errorCallback);
-					resolve();
-				} catch (error) {
-					log.error('Error importing boulders:', error);
-					errorCallback(
-						`Chyba při importu bolderů: ${error instanceof Error ? error.message : String(error)}`
-					);
-					reject(error);
-				}
-			});
+		) => {
+			try {
+				const bouldersToImport = validateAndTransformData(fileContent);
+				updateStore(bouldersToImport, shouldReplace, errorCallback);
+			} catch (error) {
+				log.error('Error importing boulders:', error);
+				errorCallback(
+					`Chyba při importu bolderů: ${error instanceof Error ? error.message : String(error)}`
+				);
+				throw error;
+			}
 		};
 
 		const getGripClass = (selectedBoulderId: string | undefined, gripId: string) => {

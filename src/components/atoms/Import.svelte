@@ -32,17 +32,15 @@
 			return;
 		}
 
-		boulders
-			.importBoulder(selectedFile, shouldReplace, (msg) => {
+		try {
+			await boulders.importBoulder(selectedFile, shouldReplace, (msg) => {
 				isError = true;
 				errorMessage = msg;
-			})
-			.then(() => {
-				handleCloseDialog();
-			})
-			.catch((error) => {
-				console.error('Import failed with an unexpected error:', error);
 			});
+			handleCloseDialog();
+		} catch (error) {
+			console.error('Import failed with an unexpected error:', error);
+		}
 	};
 </script>
 
