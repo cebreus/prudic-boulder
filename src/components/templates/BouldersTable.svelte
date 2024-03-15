@@ -1,17 +1,18 @@
 <script lang="ts">
 	import { boulders } from '../../stores/BoulderStore.svelte';
+	import { exportAllToSingleJsonFile, exportToJsonFile } from '../utils/utils.ts';
+	import { mdiDelete, mdiFileExportOutline, mdiFileImportOutline } from '@mdi/js';
 	import { onDestroy } from 'svelte';
 	import Alert from '../atoms/Alert.svelte';
 	import BoulderComponent from '../atoms/Boulder.svelte';
-	import Icon from '../atoms/Icon.svelte';
-	import Dialog from '../molecules/Dialog.svelte';
-	import Toast from '../atoms/Toast.svelte';
-	import { mdiDelete, mdiFileExportOutline, mdiFileImportOutline } from '@mdi/js';
-	import type { Boulder } from '../utils/BoulderTypes.ts';
-	import log from 'loglevel';
-	import Import from '../molecules/Import.svelte';
 	import Button from '../atoms/Button.svelte';
-	import { exportAllToSingleJsonFile, exportToJsonFile } from '../utils/utils.ts';
+	import Dialog from '../molecules/Dialog.svelte';
+	import Icon from '../atoms/Icon.svelte';
+	import Import from '../molecules/Import.svelte';
+	import log from 'loglevel';
+	import Toast from '../atoms/Toast.svelte';
+
+	import type { Boulder } from '../utils/BoulderTypes.ts';
 
 	let bouldersFromLS: Boulder[] = [];
 	let selectedBoulder: Boulder;
@@ -171,8 +172,8 @@
 	</svelte:fragment>
 	<svelte:fragment slot="DialogFooter">
 		<div class="flex gap-4">
-			<Button on:click={onAddBoulderClick} variant="link">Importovat</Button>
-			<Button on:click={() => handleCloseDialog()} variant="primary">Zrušit</Button>
+			<Button on:click={() => handleCloseDialog()} variant="link">Zrušit</Button>
+			<Button on:click={onAddBoulderClick} variant="primary">Importovat</Button>
 		</div>
 	</svelte:fragment>
 </Dialog>
