@@ -155,8 +155,6 @@
 				return;
 			}
 
-			console.log('Clicked grips ', clickedGripsMap);
-
 			const clickedGripKeys = Array.from(clickedGripsMap.keys());
 
 			const grips = clickedGripKeys.map((key) => {

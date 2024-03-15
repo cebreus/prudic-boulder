@@ -19,7 +19,6 @@
 		log.debug(`Toggling grip: ${gripId} with mode: ${$selector.selectedMode}`);
 		selector.updateSelector(gripId, selectedMode);
 
-		console.log('color here: ', color);
 		clickedGrips.toggle(gripId, selectedMode, color);
 	};
 </script>
@@ -36,7 +35,7 @@
 	<tbody>
 		{#each tableRows as row, rowIndex}
 			<tr>
-				<th>{String.fromCharCode(66 + rowIndex)}</th>
+				<th>{String.fromCharCode(65 + rowIndex)}</th>
 				{#each tableCols as col}
 					{@const gripId = `${row}${col}`}
 					<td
