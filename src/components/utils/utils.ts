@@ -264,6 +264,7 @@ const downloadJsonFile = (jsonContent: Boulder | Boulder[], fileName: string) =>
 
 export const exportToJsonFile = (boulderData: Boulder) => {
 	downloadJsonFile(boulderData, `boulder-${boulderData.id}.json`);
+	addToast('Boulder byl exportován', 'success');
 };
 
 export const exportAllToSingleJsonFile = () => {
@@ -274,6 +275,7 @@ export const exportAllToSingleJsonFile = () => {
 	}
 
 	downloadJsonFile(allBoulders, 'all-boulders.json');
+	addToast('Bouldery byly exportovány', 'success');
 };
 
 const fetchAllBoulders = (): Boulder[] => {
@@ -282,7 +284,7 @@ const fetchAllBoulders = (): Boulder[] => {
 		const boulders = JSON.parse(bouldersJson);
 		if (boulders.length === 0) {
 			log.info('No boulders found');
-			addToast('Nejsou bouldery', 'error');
+			addToast('Nejsou žádné bouldery', 'error');
 			return [];
 		}
 		return boulders;
