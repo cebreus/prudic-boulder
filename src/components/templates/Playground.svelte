@@ -63,19 +63,24 @@
 	};
 </script>
 
-<div class="mt-5 flex-col">
-	<Boulder color={displayColor} />
-	<BoulderButtons {handleSaveBoulder} />
+<main class="container mx-auto px-4 py-12">
+	<h1 class="mb-4 text-2xl font-extrabold tracking-tight sm:text-3xl">
+		Vytvoř si vlasrní cesty a obrázky na boulderu
+	</h1>
+	<div class="mt-5 flex-col">
+		<Boulder color={displayColor} />
+		<BoulderButtons {handleSaveBoulder} />
 
-	<div class="mt-5 grid w-[20.8em] justify-stretch gap-4 pl-9 pr-1 pt-4 sm:w-[23.5em]">
-		<div class="mb-4">
-			<ColorPicker color={displayColor} onColorChange={handleColorChange} {handleRefreshButton} />
-		</div>
-		<div class="mb-6">
-			<BrightnessSlider {brightness} onBrightnessChange={handleBrightnessChange} />
+		<div class="mt-5 grid w-[20.8em] justify-stretch gap-4 pl-9 pr-1 pt-4 sm:w-[23.5em]">
+			<div class="mb-4">
+				<ColorPicker color={displayColor} onColorChange={handleColorChange} {handleRefreshButton} />
+			</div>
+			<div class="mb-6">
+				<BrightnessSlider {brightness} onBrightnessChange={handleBrightnessChange} />
+			</div>
 		</div>
 	</div>
-</div>
+</main>
 
 <Toast />
 

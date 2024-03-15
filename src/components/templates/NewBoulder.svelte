@@ -61,11 +61,14 @@
 	};
 </script>
 
-<div class="mt-5 flex-col">
-	<Boulder />
+<main class="container mx-auto px-4 py-12">
+	<h1 class="mb-4 text-2xl font-extrabold tracking-tight sm:text-3xl">Vytvoř si nový boulder</h1>
+	<div class="mt-5 flex-col">
+		<Boulder />
 
-	<BoulderButtons {handleSaveBoulder} {handleDisplayBoulder} />
-</div>
+		<BoulderButtons {handleSaveBoulder} {handleDisplayBoulder} />
+	</div>
+</main>
 
 <Toast />
 
