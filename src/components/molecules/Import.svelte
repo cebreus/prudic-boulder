@@ -1,11 +1,11 @@
 <script lang="ts">
-	import Button from './Button.svelte';
 	import { boulders } from '../../stores/BoulderStore.svelte';
 	import { readFileContent } from '../utils/utils.ts';
 	import log from 'loglevel';
-	import Alert from './Alert.svelte';
+	import Alert from '../atoms/Alert.svelte';
 
-	export let handleCloseDialog: () => void;
+	export let registerAddBoulderFunction: (addBoulderFn: () => void) => void;
+
 	let selectedFile: string = '';
 	let shouldReplace: boolean = false;
 
@@ -14,14 +14,18 @@
 
 	const handleFileChange = async (event: Event) => {
 		const input = event.target as HTMLInputElement;
-		if (input.files && input?.files[0]) {
-			try {
-				selectedFile = await readFileContent(input?.files[0]);
-			} catch (error) {
-				log.error('Error processing file:', error);
-				isError = true;
-				errorMessage = `Chybné zpracování souboru: ${error instanceof Error ? error.message : String(error)}`;
-			}
+		isError = false;
+
+		if (!input.files || input.files.length === 0) {
+			return;
+		}
+
+		try {
+			selectedFile = await readFileContent(input?.files[0]);
+		} catch (error) {
+			log.error('Error processing file:', error);
+			isError = true;
+			errorMessage = `Chybné zpracování souboru: ${error instanceof Error ? error.message : String(error)}`;
 		}
 	};
 
@@ -37,28 +41,29 @@
 				isError = true;
 				errorMessage = msg;
 			});
-			handleCloseDialog();
 		} catch (error) {
 			console.error('Import failed with an unexpected error:', error);
 		}
 	};
+
+	registerAddBoulderFunction(handleAddButton);
 </script>
 
-<input type="file" accept=".json" on:change={handleFileChange} />
-
-{#if isError}
-	<Alert variant="error">
-		{errorMessage}
-	</Alert>
-{/if}
-
-<label for="addOption">
+<div class="flex space-x-2">
 	<input
 		type="checkbox"
 		bind:checked={shouldReplace}
 		on:click={() => (shouldReplace = !shouldReplace)}
+		id="replaceOption"
 	/>
-	Nahradit celou tabulku novými daty
-</label>
+	<label for="replaceOption">Nahradit stávající data</label>
+</div>
 
-<Button on:click={handleAddButton} variant="outline">Přidat</Button>
+<label for="addFile">Nahrajte JSON soubor Input type file</label>
+<input type="file" accept=".json" on:change={handleFileChange} id="addFile" />
+
+{#if isError}
+	<Alert variant="error" showIcon>
+		{errorMessage}
+	</Alert>
+{/if}

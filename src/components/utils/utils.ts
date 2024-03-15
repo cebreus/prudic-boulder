@@ -1,5 +1,6 @@
 import log from 'loglevel';
-import type { ApiResponse, Boulder } from './BoulderTypes.ts';
+import type { ApiResponse } from './BoulderTypes.ts';
+import type { Boulder } from './BoulderTypes.ts';
 import { apiKey } from './services.ts';
 import { addToast } from './ToastService.ts';
 
@@ -266,7 +267,12 @@ export const exportToJsonFile = (boulderData: Boulder) => {
 };
 
 export const exportAllToSingleJsonFile = () => {
-	const allBoulders = fetchAllBoulders(); // Assume this function is defined elsewhere and fetches all boulder data
+	const allBoulders = fetchAllBoulders();
+
+	if (allBoulders.length === 0) {
+		return;
+	}
+
 	downloadJsonFile(allBoulders, 'all-boulders.json');
 };
 

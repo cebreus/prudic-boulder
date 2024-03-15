@@ -9,12 +9,13 @@
 	import { mdiDelete, mdiFileExportOutline, mdiFileImportOutline } from '@mdi/js';
 	import type { Boulder } from '../utils/BoulderTypes.ts';
 	import log from 'loglevel';
-	import Import from '../atoms/Import.svelte';
+	import Import from '../molecules/Import.svelte';
 	import Button from '../atoms/Button.svelte';
 	import { exportAllToSingleJsonFile, exportToJsonFile } from '../utils/utils.ts';
 
 	let bouldersFromLS: Boulder[] = [];
 	let selectedBoulder: Boulder;
+	let addBoulder: (() => void) | undefined;
 
 	export let isOpen = false;
 	export let isOpenImport = false;
@@ -42,6 +43,15 @@
 	const handleCloseDialog = () => {
 		isOpenImport = false;
 	};
+
+	const registerAddBoulderFunction = (addBoulderFn: () => void): void => {
+		addBoulder = addBoulderFn;
+	};
+	const onAddBoulderClick = (): void => {
+		if (addBoulder) {
+			addBoulder();
+		}
+	};
 </script>
 
 <main class="container mx-auto px-4 py-12">
@@ -51,7 +61,7 @@
 			on:click={() => {
 				isOpenImport = true;
 			}}
-			class="focus:shadow-outline flex items-center justify-center rounded bg-sky-500 px-4 py-2 font-bold text-white transition duration-200 ease-in hover:bg-sky-600 focus:outline-none"
+			class=" flex items-center justify-center"
 		>
 			<Icon
 				path={mdiFileImportOutline}
@@ -60,10 +70,7 @@
 			Importovat
 		</Button>
 
-		<Button
-			on:click={exportAllToSingleJsonFile}
-			class="focus:shadow-outline flex items-center justify-center rounded bg-sky-500 px-4 py-2 font-bold text-white transition duration-200 ease-in hover:bg-sky-600 focus:outline-none"
-		>
+		<Button on:click={exportAllToSingleJsonFile} class=" flex items-center justify-center">
 			<Icon
 				path={mdiFileExportOutline}
 				class="text-white-100 hover:text-white-300 -ml-1 mr-2 h-4 w-4 transition-colors"
@@ -127,8 +134,6 @@
 										class="size-4 text-sky-500 transition-colors hover:text-sky-700"
 									/>
 								</Button>
-							</td>
-							<td>
 								<Button on:click={() => handleRemoveBoulder(boulder.id)} variant="">
 									<Icon
 										path={mdiDelete}
@@ -159,10 +164,16 @@
 
 <Dialog isOpen={isOpenImport} on:close={() => (isOpenImport = false)}>
 	<svelte:fragment slot="DialogTitle">
-		<div class="max-w-xs truncate">Vložte soubor ve formátu JSON</div>
+		<div class="max-w-xs">Import</div>
 	</svelte:fragment>
 	<svelte:fragment slot="DialogContent">
-		<Import {handleCloseDialog} />
+		<Import {registerAddBoulderFunction} />
+	</svelte:fragment>
+	<svelte:fragment slot="DialogFooter">
+		<div class="flex gap-4">
+			<Button on:click={onAddBoulderClick} variant="link">Importovat</Button>
+			<Button on:click={() => handleCloseDialog()} variant="primary">Zrušit</Button>
+		</div>
 	</svelte:fragment>
 </Dialog>
 

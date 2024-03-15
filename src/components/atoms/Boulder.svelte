@@ -36,7 +36,7 @@
 	<tbody>
 		{#each tableRows as row, rowIndex}
 			<tr>
-				<th>{String.fromCharCode(65 + rowIndex)}</th>
+				<th>{String.fromCharCode(66 + rowIndex)}</th>
 				{#each tableCols as col}
 					{@const gripId = `${row}${col}`}
 					<td

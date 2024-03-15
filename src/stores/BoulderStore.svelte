@@ -240,6 +240,10 @@
 			errorCallback: (message: string) => void
 		) => {
 			update((currentBoulders: Boulder[]) => {
+				if (bouldersToImport.length === 0) {
+					throw new Error(`žádná data`);
+				}
+
 				const duplicateBoulder = bouldersToImport.find((importedBoulder) =>
 					currentBoulders.some((existingBoulder) => existingBoulder.id === importedBoulder.id)
 				);
