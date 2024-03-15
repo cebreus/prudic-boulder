@@ -171,8 +171,8 @@
 	</svelte:fragment>
 	<svelte:fragment slot="DialogFooter">
 		<div class="flex gap-4">
-			<Button on:click={onAddBoulderClick} variant="link">Importovat</Button>
-			<Button on:click={() => handleCloseDialog()} variant="primary">Zrušit</Button>
+			<Button on:click={() => handleCloseDialog()} variant="link">Zrušit</Button>
+			<Button on:click={onAddBoulderClick} variant="primary">Importovat</Button>
 		</div>
 	</svelte:fragment>
 </Dialog>

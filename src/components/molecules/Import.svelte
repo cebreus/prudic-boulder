@@ -49,18 +49,22 @@
 	registerAddBoulderFunction(handleAddButton);
 </script>
 
-<div class="flex space-x-2">
-	<input
-		type="checkbox"
-		bind:checked={shouldReplace}
-		on:click={() => (shouldReplace = !shouldReplace)}
-		id="replaceOption"
-	/>
-	<label for="replaceOption">Nahradit stávající data</label>
-</div>
+<div class="-mx-2 grid gap-4 pt-3">
+	<div class="grid gap-2">
+		<label for="addFile">Nahrajte JSON soubor</label>
+		<input type="file" accept=".json" on:change={handleFileChange} id="addFile" />
+	</div>
 
-<label for="addFile">Nahrajte JSON soubor Input type file</label>
-<input type="file" accept=".json" on:change={handleFileChange} id="addFile" />
+	<div class="flex space-x-2">
+		<input
+			type="checkbox"
+			bind:checked={shouldReplace}
+			on:click={() => (shouldReplace = !shouldReplace)}
+			id="replaceOption"
+		/>
+		<label for="replaceOption">Nahradit stávající data</label>
+	</div>
+</div>
 
 {#if isError}
 	<Alert variant="error" showIcon>
