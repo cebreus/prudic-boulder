@@ -282,6 +282,11 @@ const fetchAllBoulders = (): Boulder[] => {
 	const bouldersJson = localStorage.getItem('boulders');
 	if (bouldersJson) {
 		const boulders = JSON.parse(bouldersJson);
+		if (!Array.isArray(boulders) || !boulders.every(boulder => typeof boulder === 'object' && boulder.id && Array.isArray(boulder.path))) {
+		  log.error('Invalid boulders data structure');
+		  addToast('Chybná struktura dat boulderů', 'error');
+		  return [];
+		}
 		if (boulders.length === 0) {
 			log.info('No boulders found');
 			addToast('Nejsou žádné bouldery', 'error');
