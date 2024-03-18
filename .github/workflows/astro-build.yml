@@ -42,6 +42,4 @@ jobs:
 
       - name: Build with Astro
         run: |
-          pnpm exec astro build \
-            --site "${{ steps.pages.outputs.origin }}" \
-            --base "${{ steps.pages.outputs.base_path }}"
+          pnpm exec astro build
