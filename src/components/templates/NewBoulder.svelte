@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { addToast } from '../../utils/ToastService.ts';
+	import { addToast } from '../../utils/ToastService';
 	import { clickedGrips, selector, boulders } from '../../stores/BoulderStore.svelte';
 	import Boulder from '../atoms/Boulder.svelte';
 	import BoulderButtons from '../molecules/BoulderButtons.svelte';

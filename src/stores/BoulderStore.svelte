@@ -12,7 +12,7 @@
 
 	// Define TypeScript types
 	import type { Boulder, Grip, Mode, Selector } from '../utils/BoulderTypes';
-	import { services } from '../utils/services.ts';
+	import { services } from '../utils/services';
 
 	// check for browser environment
 	const isBrowser = typeof window !== 'undefined';

@@ -2,8 +2,8 @@ import { addToast } from './ToastService';
 import { apiKey } from './services';
 import log from 'loglevel';
 
-import type { ApiResponse } from './BoulderTypes.ts';
-import type { Boulder } from './BoulderTypes.ts';
+import type { ApiResponse } from './BoulderTypes';
+import type { Boulder } from './BoulderTypes';
 
 export const gripsToSkip: ReadonlySet<string> = new Set([
 	'B0',
