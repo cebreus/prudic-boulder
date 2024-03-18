@@ -1,8 +1,9 @@
+import { addToast } from './ToastService';
+import { apiKey } from './services';
 import log from 'loglevel';
+
 import type { ApiResponse } from './BoulderTypes.ts';
 import type { Boulder } from './BoulderTypes.ts';
-import { apiKey } from './services.ts';
-import { addToast } from './ToastService.ts';
 
 export const gripsToSkip: ReadonlySet<string> = new Set([
 	'B0',
@@ -277,15 +278,23 @@ export const exportAllToSingleJsonFile = () => {
 	downloadJsonFile(allBoulders, 'all-boulders.json');
 	addToast('Bouldery byly exportovány', 'success');
 };
-
 const fetchAllBoulders = (): Boulder[] => {
 	const bouldersJson = localStorage.getItem('boulders');
-	if (bouldersJson) {
-		const boulders = JSON.parse(bouldersJson);
-		if (!Array.isArray(boulders) || !boulders.every(boulder => typeof boulder === 'object' && boulder.id && Array.isArray(boulder.path))) {
-		  log.error('Invalid boulders data structure');
-		  addToast('Chybná struktura dat boulderů', 'error');
-		  return [];
+	if (!bouldersJson) {
+		log.info('Boulders key not found in localStorage');
+		addToast('Nejsou bouldery', 'error');
+		return [];
+	}
+
+	try {
+		const boulders: Boulder[] = JSON.parse(bouldersJson);
+		if (
+			!Array.isArray(boulders) ||
+			boulders.some(
+				(boulder) => typeof boulder !== 'object' || !boulder.id || !Array.isArray(boulder.path)
+			)
+		) {
+			throw new Error('Invalid boulders data structure');
 		}
 		if (boulders.length === 0) {
 			log.info('No boulders found');
@@ -293,9 +302,9 @@ const fetchAllBoulders = (): Boulder[] => {
 			return [];
 		}
 		return boulders;
-	} else {
-		log.info('Boulders key not found in localStorage');
-		addToast('Nejsou bouldery', 'error');
+	} catch (error) {
+		log.error(error.message);
+		addToast('Chybná struktura dat boulderů', 'error');
 		return [];
 	}
 };
