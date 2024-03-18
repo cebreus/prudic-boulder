@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { mdiRefresh } from '@mdi/js';
-	import { rgbaToHex } from '../utils/utils.ts';
+	import { rgbaToHex } from '../../utils/utils';
 	import Button from '../atoms/Button.svelte';
 	import Icon from '../atoms/Icon.svelte';
 

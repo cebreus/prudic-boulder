@@ -1,18 +1,18 @@
 <script lang="ts">
+	import {
+		mdiAlert,
+		mdiCheckCircleOutline,
+		mdiClose,
+		mdiCloseOctagon,
+		mdiInformationSlabCircle
+	} from '@mdi/js';
 	import { onMount, onDestroy } from 'svelte';
-	import { toasts, dismissToast } from '../utils/ToastService';
+	import { toasts, dismissToast } from '../../utils/ToastService';
 	import { twMerge } from 'tailwind-merge';
 	import Icon from '../../components/atoms/Icon.svelte';
-	import {
-		mdiClose,
-		mdiInformationSlabCircle,
-		mdiCheckCircleOutline,
-		mdiCloseOctagon,
-		mdiAlert
-	} from '@mdi/js';
 
 	// Define TypeScript types for variants and configuration
-	import type { ToastVariant, Toast, ToastConfig } from '../utils/ToastTypes';
+	import type { ToastVariant, Toast, ToastConfig } from '../../utils/ToastTypes';
 
 	// Exported props for external configuration
 	export let variant: ToastVariant = 'info';

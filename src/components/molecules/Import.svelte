@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { boulders } from '../../stores/BoulderStore.svelte';
-	import { readFileContent } from '../utils/utils.ts';
-	import log from 'loglevel';
+	import { readFileContent } from '../../utils/utils';
 	import Alert from '../atoms/Alert.svelte';
+	import log from 'loglevel';
 
 	export let registerAddBoulderFunction: (addBoulderFn: () => void) => void;
 

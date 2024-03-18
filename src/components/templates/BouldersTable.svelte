@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { boulders } from '../../stores/BoulderStore.svelte';
-	import { exportAllToSingleJsonFile, exportToJsonFile } from '../utils/utils.ts';
+	import { exportAllToSingleJsonFile, exportToJsonFile } from '../../utils/utils';
 	import { mdiDelete, mdiFileExportOutline, mdiFileImportOutline } from '@mdi/js';
 	import { onDestroy } from 'svelte';
 	import Alert from '../atoms/Alert.svelte';
@@ -12,7 +12,7 @@
 	import log from 'loglevel';
 	import Toast from '../atoms/Toast.svelte';
 
-	import type { Boulder } from '../utils/BoulderTypes.ts';
+	import type { Boulder } from '../../utils/BoulderTypes';
 
 	let bouldersFromLS: Boulder[] = [];
 	let selectedBoulder: Boulder;
