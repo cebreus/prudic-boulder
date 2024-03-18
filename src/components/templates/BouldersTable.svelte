@@ -1,18 +1,25 @@
 <script lang="ts">
 	import { boulders } from '../../stores/BoulderStore.svelte';
+	import { exportAllToSingleJsonFile, exportToJsonFile } from '../utils/utils.ts';
+	import { mdiDelete, mdiFileExportOutline, mdiFileImportOutline } from '@mdi/js';
 	import { onDestroy } from 'svelte';
 	import Alert from '../atoms/Alert.svelte';
 	import BoulderComponent from '../atoms/Boulder.svelte';
-	import Icon from '../atoms/Icon.svelte';
+	import Button from '../atoms/Button.svelte';
 	import Dialog from '../molecules/Dialog.svelte';
-	import Toast from '../atoms/Toast.svelte';
-	import { mdiDelete } from '@mdi/js';
-	import type { Boulder } from '../utils/BoulderTypes.ts';
+	import Icon from '../atoms/Icon.svelte';
+	import Import from '../molecules/Import.svelte';
 	import log from 'loglevel';
+	import Toast from '../atoms/Toast.svelte';
+
+	import type { Boulder } from '../utils/BoulderTypes.ts';
 
 	let bouldersFromLS: Boulder[] = [];
 	let selectedBoulder: Boulder;
+	let addBoulder: (() => void) | undefined;
+
 	export let isOpen = false;
+	export let isOpenImport = false;
 
 	const unsubscribe = boulders.subscribe((value) => {
 		bouldersFromLS = value.map((boulder: Boulder) => ({
@@ -33,10 +40,46 @@
 	const handleRemoveBoulder = (boulderId: string) => {
 		boulders.removeBoulder(boulderId);
 	};
+
+	const handleCloseDialog = () => {
+		isOpenImport = false;
+	};
+
+	const registerAddBoulderFunction = (addBoulderFn: () => void): void => {
+		addBoulder = addBoulderFn;
+	};
+	const onAddBoulderClick = (): void => {
+		if (addBoulder) {
+			addBoulder();
+		}
+	};
 </script>
 
 <main class="container mx-auto px-4 py-12">
 	<h1 class="mb-4 text-2xl font-extrabold tracking-tight sm:text-3xl">Vytvořené bouldery</h1>
+	<div class="flex space-x-4">
+		<Button
+			on:click={() => {
+				isOpenImport = true;
+			}}
+			class=" flex items-center justify-center"
+		>
+			<Icon
+				path={mdiFileImportOutline}
+				class="text-white-100 hover:text-white-300 -ml-1 mr-2 h-4 w-4 transition-colors"
+			/>
+			Importovat
+		</Button>
+
+		<Button on:click={exportAllToSingleJsonFile} class=" flex items-center justify-center">
+			<Icon
+				path={mdiFileExportOutline}
+				class="text-white-100 hover:text-white-300 -ml-1 mr-2 h-4 w-4 transition-colors"
+			/>
+			Exportovat
+		</Button>
+	</div>
+
 	{#if bouldersFromLS.length === 0}
 		<Alert showIcon>
 			Vytvořte si
@@ -52,7 +95,7 @@
 					<tr>
 						<th>Name/ID</th>
 						<th>Grips</th>
-						<th colspan="3"></th>
+						<th><span class="sr-only">Akce</span></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -86,12 +129,18 @@
 								</div>
 							</td>
 							<td>
-								<button on:click={() => handleRemoveBoulder(boulder.id)}>
+								<Button on:click={() => exportToJsonFile(boulder)} variant="">
+									<Icon
+										path={mdiFileExportOutline}
+										class="size-4 text-sky-500 transition-colors hover:text-sky-700"
+									/>
+								</Button>
+								<Button on:click={() => handleRemoveBoulder(boulder.id)} variant="">
 									<Icon
 										path={mdiDelete}
 										class="size-5 text-red-500 transition-colors hover:fill-red-600"
 									/>
-								</button>
+								</Button>
 							</td>
 						</tr>
 					{/each}
@@ -111,6 +160,21 @@
 	</svelte:fragment>
 	<svelte:fragment slot="DialogContent">
 		<BoulderComponent selectedBoulderID={selectedBoulder.id} />
+	</svelte:fragment>
+</Dialog>
+
+<Dialog isOpen={isOpenImport} on:close={() => (isOpenImport = false)}>
+	<svelte:fragment slot="DialogTitle">
+		<div class="max-w-xs">Import</div>
+	</svelte:fragment>
+	<svelte:fragment slot="DialogContent">
+		<Import {registerAddBoulderFunction} />
+	</svelte:fragment>
+	<svelte:fragment slot="DialogFooter">
+		<div class="flex gap-4">
+			<Button on:click={() => handleCloseDialog()} variant="link">Zrušit</Button>
+			<Button on:click={onAddBoulderClick} variant="primary">Importovat</Button>
+		</div>
 	</svelte:fragment>
 </Dialog>
 

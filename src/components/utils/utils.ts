@@ -1,6 +1,9 @@
+import { addToast } from './ToastService';
+import { apiKey } from './services';
 import log from 'loglevel';
+
 import type { ApiResponse } from './BoulderTypes.ts';
-import { apiKey } from './services.ts';
+import type { Boulder } from './BoulderTypes.ts';
 
 export const gripsToSkip: ReadonlySet<string> = new Set([
 	'B0',
@@ -209,4 +212,99 @@ export const rgbaToHex = (color: string | undefined): string => {
 	const blueHex = convertAndClamp(b);
 
 	return `#${redHex}${greenHex}${blueHex}`;
+};
+
+export const readFileContent = async (file: File): Promise<string> => {
+	return new Promise((resolve, reject) => {
+		const reader = new FileReader();
+		reader.onload = () => resolve(reader.result as string);
+		reader.onerror = (error) => reject(error);
+		reader.readAsText(file);
+	});
+};
+
+export const validateAndTransformData = (fileContent: string): Boulder[] => {
+	try {
+		const data = JSON.parse(fileContent);
+
+		const boulders = Array.isArray(data) ? data : [data];
+
+		return boulders.map((boulder, index) => {
+			if (typeof boulder.id !== 'string') {
+				throw new Error(`Boulder at index ${index} has an invalid or missing "id" property.`);
+			}
+			if (!Array.isArray(boulder.path)) {
+				throw new Error(`Boulder at index ${index} has an invalid or missing "path" property.`);
+			}
+			return boulder;
+		});
+	} catch (error) {
+		if (error instanceof SyntaxError) {
+			throw new Error(`JSON parsing error: ${error.message}`);
+		} else if (error instanceof Error) {
+			throw new Error(`Validation error: ${error.message}`);
+		} else {
+			throw new Error(`Unexpected error: ${String(error)}`);
+		}
+	}
+};
+
+// Define a helper function for creating and downloading the file
+const downloadJsonFile = (jsonContent: Boulder | Boulder[], fileName: string) => {
+	const jsonString = JSON.stringify(jsonContent);
+	const blob = new Blob([jsonString], { type: 'application/json' });
+	const url = URL.createObjectURL(blob);
+	const link = document.createElement('a');
+	link.download = fileName;
+	link.href = url;
+	document.body.appendChild(link);
+	link.click();
+	document.body.removeChild(link);
+	URL.revokeObjectURL(url);
+};
+
+export const exportToJsonFile = (boulderData: Boulder) => {
+	downloadJsonFile(boulderData, `boulder-${boulderData.id}.json`);
+	addToast('Boulder byl exportován', 'success');
+};
+
+export const exportAllToSingleJsonFile = () => {
+	const allBoulders = fetchAllBoulders();
+
+	if (allBoulders.length === 0) {
+		return;
+	}
+
+	downloadJsonFile(allBoulders, 'all-boulders.json');
+	addToast('Bouldery byly exportovány', 'success');
+};
+const fetchAllBoulders = (): Boulder[] => {
+	const bouldersJson = localStorage.getItem('boulders');
+	if (!bouldersJson) {
+		log.info('Boulders key not found in localStorage');
+		addToast('Nejsou bouldery', 'error');
+		return [];
+	}
+
+	try {
+		const boulders: Boulder[] = JSON.parse(bouldersJson);
+		if (
+			!Array.isArray(boulders) ||
+			boulders.some(
+				(boulder) => typeof boulder !== 'object' || !boulder.id || !Array.isArray(boulder.path)
+			)
+		) {
+			throw new Error('Invalid boulders data structure');
+		}
+		if (boulders.length === 0) {
+			log.info('No boulders found');
+			addToast('Nejsou žádné bouldery', 'error');
+			return [];
+		}
+		return boulders;
+	} catch (error) {
+		log.error(error.message);
+		addToast('Chybná struktura dat boulderů', 'error');
+		return [];
+	}
 };

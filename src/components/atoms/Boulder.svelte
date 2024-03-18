@@ -19,7 +19,6 @@
 		log.debug(`Toggling grip: ${gripId} with mode: ${$selector.selectedMode}`);
 		selector.updateSelector(gripId, selectedMode);
 
-		console.log('color here: ', color);
 		clickedGrips.toggle(gripId, selectedMode, color);
 	};
 </script>

@@ -23,12 +23,6 @@
 			}}
 		></Button>
 
-		<Button
-			emoji="▶"
-			variant="outline"
-			on:click={() => {
-				handleDisplayBoulder();
-			}}
-		></Button>
+		<Button emoji="▶" variant="outline" on:click={handleDisplayBoulder}></Button>
 	</div>
 {/if}

@@ -1,6 +1,12 @@
 <script context="module" lang="ts">
 	import { addToast } from '../components/utils/ToastService';
-	import { generateId, clickedClass, startClass, finishClass } from '../components/utils/utils';
+	import {
+		generateId,
+		clickedClass,
+		startClass,
+		finishClass,
+		validateAndTransformData
+	} from '../components/utils/utils';
 	import { writable } from 'svelte/store';
 	import log from '../components/utils/logger.ts';
 
@@ -149,8 +155,6 @@
 				return;
 			}
 
-			console.log('Clicked grips ', clickedGripsMap);
-
 			const clickedGripKeys = Array.from(clickedGripsMap.keys());
 
 			const grips = clickedGripKeys.map((key) => {
@@ -197,12 +201,18 @@
 			const existingBoulders = JSON.parse(localStorage.getItem('boulders') || '[]');
 			localStorage.setItem('boulders', JSON.stringify([...existingBoulders, newBoulder]));
 
+			addToast(
+				`Prudič byl uložen`,
+				'success',
+				'Přejděte na <a href="/">hlavní stránku</a> pro zobrazení'
+			);
+
 			try {
 				const response = await services.boulder[action](newBoulder);
 
 				log.info('Boulder saved successfully on server', response);
 				addToast(
-					`Prudič byl  ${action === 'save' ? 'uložen' : 'zobrazen a uložen'}`,
+					`Prudič byl  ${action === 'save' ? 'uložen' : 'zobrazen a uložen na server'}`,
 					'success',
 					`${action === 'save' ? 'Přejděte na <a href="/">hlavní stránku</a> pro zobrazení' : ''}`
 				);
@@ -220,6 +230,51 @@
 				addToast('Prudič byl odstraněn');
 				return newBoulders;
 			});
+		};
+
+		const updateStore = (
+			bouldersToImport: Boulder[],
+			shouldReplace: boolean,
+			errorCallback: (message: string) => void
+		) => {
+			update((currentBoulders: Boulder[]) => {
+				if (bouldersToImport.length === 0) {
+					throw new Error(`žádná data`);
+				}
+
+				const duplicateBoulder = bouldersToImport.find((importedBoulder) =>
+					currentBoulders.some((existingBoulder) => existingBoulder.id === importedBoulder.id)
+				);
+
+				if (duplicateBoulder && !shouldReplace) {
+					errorCallback(`Boulder s ID ${duplicateBoulder.id} již existuje. Import byl zrušen.`);
+					throw new Error(`Boulder s ID ${duplicateBoulder.id} již existuje. Import byl zrušen.`);
+				}
+
+				const newBoulders = shouldReplace
+					? [...bouldersToImport]
+					: [...currentBoulders, ...bouldersToImport];
+				localStorage.setItem('boulders', JSON.stringify(newBoulders));
+				addToast(`Boldery byly ${shouldReplace ? 'nahrazený' : 'přidáný'}`, 'success');
+				return newBoulders;
+			});
+		};
+
+		const importBoulder = async (
+			fileContent: string,
+			shouldReplace: boolean,
+			errorCallback: (errorMessage: string) => void
+		) => {
+			try {
+				const bouldersToImport = validateAndTransformData(fileContent);
+				updateStore(bouldersToImport, shouldReplace, errorCallback);
+			} catch (error) {
+				log.error('Error importing boulders:', error);
+				errorCallback(
+					`Chyba při importu bolderů: ${error instanceof Error ? error.message : String(error)}`
+				);
+				throw error;
+			}
 		};
 
 		const getGripClass = (selectedBoulderId: string | undefined, gripId: string) => {
@@ -244,7 +299,7 @@
 			return { class: gripClass, color: grip.colorBrightness || '' };
 		};
 
-		return { subscribe, addBoulder, removeBoulder, getGripClass: getGripClass };
+		return { subscribe, addBoulder, removeBoulder, getGripClass: getGripClass, importBoulder };
 	};
 
 	export const clickedGrips = createClickedGripsStore();
