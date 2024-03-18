@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { boulders } from '../../stores/BoulderStore.svelte';
-	import { readFileContent } from '../utils/utils.ts';
+	import { readFileContent } from '../../utils/utils';
 	import log from 'loglevel';
 	import Alert from '../atoms/Alert.svelte';
 

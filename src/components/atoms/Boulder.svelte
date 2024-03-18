@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { clickedGrips, selector, boulders } from '../../stores/BoulderStore.svelte';
-	import { rows, cols, isSkippedGrip } from '../utils/utils.ts';
-	import log from '../utils/logger.ts';
+	import { rows, cols, isSkippedGrip } from '../../utils/utils';
+	import log from '../../utils/logger.ts';
 
 	export let selectedBoulderID: string | undefined = undefined;
 	export let color: string | undefined = undefined;

@@ -1,18 +1,18 @@
 <script context="module" lang="ts">
-	import { addToast } from '../components/utils/ToastService';
+	import { addToast } from '../utils/ToastService';
 	import {
 		generateId,
 		clickedClass,
 		startClass,
 		finishClass,
 		validateAndTransformData
-	} from '../components/utils/utils';
+	} from '../utils/utils';
 	import { writable } from 'svelte/store';
-	import log from '../components/utils/logger.ts';
+	import log from '../utils/logger.ts';
 
 	// Define TypeScript types
-	import type { Boulder, Grip, Mode, Selector } from '../components/utils/BoulderTypes';
-	import { services } from '../components/utils/services.ts';
+	import type { Boulder, Grip, Mode, Selector } from '../utils/BoulderTypes';
+	import { services } from '../utils/services.ts';
 
 	// check for browser environment
 	const isBrowser = typeof window !== 'undefined';

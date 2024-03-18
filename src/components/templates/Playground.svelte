@@ -3,12 +3,12 @@
 	import Toast from '../atoms/Toast.svelte';
 	import Dialog from '../molecules/Dialog.svelte';
 	import Button from '../atoms/Button.svelte';
-	import log from '../utils/logger.ts';
+	import log from '../../utils/logger';
 	import { clickedGrips, selector, boulders } from '../../stores/BoulderStore.svelte';
-	import { hexToRgba } from '../utils/utils.ts';
+	import { hexToRgba } from '../../utils/utils';
 	import ColorPicker from '../molecules/ColorPicker.svelte';
 	import BrightnessSlider from '../molecules/BrightnessSlider.svelte';
-	import { addToast } from '../utils/ToastService.ts';
+	import { addToast } from '../../utils/ToastService';
 	import BoulderButtons from '../molecules/BoulderButtons.svelte';
 
 	let isOpen: boolean = false;

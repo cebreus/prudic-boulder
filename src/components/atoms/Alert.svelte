@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { generateId } from '../utils/utils';
+	import { generateId } from '../../utils/utils';
 	import { twMerge } from 'tailwind-merge';
 	import Icon from '../../components/atoms/Icon.svelte';
-	import log from '../utils/logger';
+	import log from '../../utils/logger';
 	import {
 		mdiInformationSlabCircle,
 		mdiCheckCircleOutline,
@@ -11,7 +11,7 @@
 	} from '@mdi/js';
 
 	// Define TypeScript types for variants and configuration
-	import type { AlertVariant, AlertConfig } from '../utils/AlertTypes';
+	import type { AlertVariant, AlertConfig } from '../../utils/AlertTypes';
 
 	// Exported props for external configuration
 	export let classNames: string = '';
