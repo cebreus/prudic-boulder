@@ -95,7 +95,7 @@
 					<tr>
 						<th>Name/ID</th>
 						<th>Grips</th>
-						<th colspan="4"></th>
+						<th><span class="sr-only">Akce</span></th>
 					</tr>
 				</thead>
 				<tbody>
