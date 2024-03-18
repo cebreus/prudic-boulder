@@ -1,5 +1,5 @@
 import { sendPostRequest } from './utils.ts';
-import log from './logger.ts';
+import log from './logger';
 
 import type { ApiResponse, Boulder } from './BoulderTypes.ts';
 

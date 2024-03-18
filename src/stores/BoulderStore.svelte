@@ -8,7 +8,7 @@
 		validateAndTransformData
 	} from '../utils/utils';
 	import { writable } from 'svelte/store';
-	import log from '../utils/logger.ts';
+	import log from '../utils/logger';
 
 	// Define TypeScript types
 	import type { Boulder, Grip, Mode, Selector } from '../utils/BoulderTypes';
