@@ -41,6 +41,4 @@ jobs:
 
       - name: Check Astro
         run: |
-          pnpm exec astro check \
-            --site "${{ steps.pages.outputs.origin }}" \
-            --base "${{ steps.pages.outputs.base_path }}"
+          pnpm exec astro check

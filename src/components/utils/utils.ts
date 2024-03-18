@@ -303,7 +303,7 @@ const fetchAllBoulders = (): Boulder[] => {
 		}
 		return boulders;
 	} catch (error) {
-		log.error(error.message);
+		log.error(error);
 		addToast('Chybná struktura dat boulderů', 'error');
 		return [];
 	}
