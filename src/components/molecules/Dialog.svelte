@@ -27,7 +27,7 @@
 		};
 	});
 
-	$: onlyTitle = !$$slots.DialogDescription && !$$slots.DialogContent;
+	let onlyTitle: boolean = !$$slots.DialogDescription && !$$slots.DialogContent;
 </script>
 
 {#if isOpen}
