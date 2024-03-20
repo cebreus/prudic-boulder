@@ -7,17 +7,17 @@
 	export let isOpen: boolean = false;
 	const dispatch = createEventDispatcher();
 
-	function closeDialog() {
+	const closeDialog = () => {
 		isOpen = false;
 		dispatch('close');
-	}
+	};
 
-	function handleKeydown(event: KeyboardEvent) {
+	const handleKeydown = (event: KeyboardEvent) => {
 		if (event.key === 'Escape') {
 			closeDialog();
 		}
 		dispatch('keydown', event);
-	}
+	};
 
 	onMount(() => {
 		window.addEventListener('keydown', handleKeydown);
