@@ -37,6 +37,7 @@
 			on:click={closeDialog}
 			tabindex="0"
 			role="button"
+			on:keydown={handleKeydown}
 		></div>
 		<div class="flex min-h-full items-end justify-center p-4 py-8 sm:items-center">
 			<div
