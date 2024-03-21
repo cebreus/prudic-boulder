@@ -11,17 +11,13 @@
 	import log from '../../utils/logger';
 	import Toast from '../atoms/Toast.svelte';
 
-	let isOpen: boolean = false;
-	let inputBoulderName: string;
+	let inputBoulderName: string = '';
 
 	let currentColor: string | undefined;
 	let displayColor: string | undefined;
 	let brightness: number;
 
 	$: displayColor = hexToRgba(currentColor, brightness);
-	$: if (!isOpen) {
-		inputBoulderName = '';
-	}
 
 	const handleColorChange = (newColor: string) => {
 		currentColor = newColor;
@@ -34,24 +30,15 @@
 			addToast('Vyberte alespoň jednu buňku!');
 			return;
 		}
-		isOpen = true;
+		window.dispatchEvent(new CustomEvent('dialog-opened', { detail: { dialogId: 'dialog' } }));
 		log.info('Dialog opened');
 	};
 
-	const handleDialogResponse = () => {
+	const handleDialogResponse = async () => {
 		log.debug('handleDialogResponse()');
-		isOpen = false;
 		const trimmedInputBoulderName = inputBoulderName.trim();
-		boulders.addBoulder($clickedGrips, $selector, trimmedInputBoulderName, 'save');
-	};
-
-	const handleKeyDown = (event: CustomEvent) => {
-		const keyboardEvent = event.detail as KeyboardEvent;
-		if (keyboardEvent.key === 'Enter') {
-			handleDialogResponse();
-			keyboardEvent.preventDefault();
-			keyboardEvent.stopPropagation();
-		}
+		await boulders.addBoulder($clickedGrips, $selector, trimmedInputBoulderName, 'save');
+		window.dispatchEvent(new CustomEvent('dialog-closed', { detail: { dialogId: 'dialog' } }));
 	};
 
 	const handleBrightnessChange = (newBrightness: number) => {
@@ -84,7 +71,7 @@
 
 <Toast />
 
-<Dialog {isOpen} on:close={() => (isOpen = false)} on:keydown={handleKeyDown}>
+<Dialog {handleDialogResponse} dialogId="dialog">
 	<svelte:fragment slot="DialogTitle">Název boulderu</svelte:fragment>
 	<svelte:fragment slot="DialogContent">
 		<input

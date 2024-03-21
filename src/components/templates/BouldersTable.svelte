@@ -18,7 +18,7 @@
 	let selectedBoulder: Boulder;
 	let addBoulder: (() => void) | undefined;
 
-	export let isOpen = false;
+	// export let isOpen = false;
 	export let isOpenImport = false;
 
 	const unsubscribe = boulders.subscribe((value) => {
@@ -34,7 +34,11 @@
 	const openDialog = (boulder: Boulder) => {
 		selectedBoulder = boulder;
 		log.info('selectedBoulder', selectedBoulder);
-		isOpen = true;
+		window.dispatchEvent(
+			new CustomEvent('dialog-opened', {
+				detail: { dialogId: 'dialog-boulder' }
+			})
+		);
 	};
 
 	const handleRemoveBoulder = (boulderId: string) => {
@@ -53,17 +57,18 @@
 			addBoulder();
 		}
 	};
+
+	const openImportDialog = () => {
+		window.dispatchEvent(
+			new CustomEvent('dialog-opened', { detail: { dialogId: 'dialog-import' } })
+		);
+	};
 </script>
 
 <main class="container mx-auto px-4 py-12">
 	<h1 class="mb-4 text-2xl font-extrabold tracking-tight sm:text-3xl">Vytvořené bouldery</h1>
 	<div class="flex space-x-4">
-		<Button
-			on:click={() => {
-				isOpenImport = true;
-			}}
-			class=" flex items-center justify-center"
-		>
+		<Button on:click={openImportDialog} class=" flex items-center justify-center">
 			<Icon
 				path={mdiFileImportOutline}
 				class="text-white-100 hover:text-white-300 -ml-1 mr-2 h-4 w-4 transition-colors"
@@ -152,7 +157,7 @@
 
 <Toast />
 
-<Dialog {isOpen} on:close={() => (isOpen = false)}>
+<Dialog dialogId="dialog-boulder">
 	<svelte:fragment slot="DialogTitle">
 		<div class="max-w-xs truncate">
 			{selectedBoulder.name || selectedBoulder.id}
@@ -163,7 +168,7 @@
 	</svelte:fragment>
 </Dialog>
 
-<Dialog isOpen={isOpenImport} on:close={() => (isOpenImport = false)}>
+<Dialog dialogId="dialog-import">
 	<svelte:fragment slot="DialogTitle">
 		<div class="max-w-xs">Import</div>
 	</svelte:fragment>

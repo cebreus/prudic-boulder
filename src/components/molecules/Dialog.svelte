@@ -1,22 +1,33 @@
 <script lang="ts">
-	import { createEventDispatcher, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 	import { mdiClose } from '@mdi/js';
 	import Icon from '../../components/atoms/Icon.svelte';
 	import { fade } from 'svelte/transition';
 
-	export let isOpen: boolean = false;
-	const dispatch = createEventDispatcher();
+	export let handleDialogResponse: () => void;
+	export let dialogId: string;
+	let isOpen: boolean = false;
 
-	const closeDialog = () => {
-		isOpen = false;
-		dispatch('close');
+	const handleCustomEvent = (event: CustomEvent<{ dialogId: string }>) => {
+		if (event.detail.dialogId === dialogId) {
+			isOpen = event.type === 'dialog-opened';
+		}
 	};
+	onMount(() => {
+		window.addEventListener('dialog-opened', handleCustomEvent as EventListener);
+		window.addEventListener('dialog-closed', handleCustomEvent as EventListener);
 
+		return () => {
+			window.removeEventListener('dialog-opened', handleCustomEvent as EventListener);
+			window.removeEventListener('dialog-closed', handleCustomEvent as EventListener);
+		};
+	});
 	const handleKeydown = (event: KeyboardEvent) => {
 		if (event.key === 'Escape') {
-			closeDialog();
+			window.dispatchEvent(new CustomEvent('dialog-closed', { detail: { dialogId } }));
+		} else if (event.key === 'Enter' && handleDialogResponse) {
+			handleDialogResponse();
 		}
-		dispatch('keydown', event);
 	};
 
 	onMount(() => {
@@ -34,7 +45,8 @@
 	<div class="fixed inset-0 z-10 overflow-y-auto" in:fade out:fade>
 		<div
 			class="fixed inset-0 bg-black bg-opacity-50"
-			on:click={closeDialog}
+			on:click={() =>
+				window.dispatchEvent(new CustomEvent('dialog-closed', { detail: { dialogId } }))}
 			tabindex="0"
 			role="button"
 			on:keydown={handleKeydown}
@@ -50,7 +62,11 @@
 						<h6 class="text-xl font-semibold">
 							<slot name="DialogTitle" />
 						</h6>
-						<button on:click={closeDialog} class="text-gray-400 hover:text-red-600">
+						<button
+							on:click={() =>
+								window.dispatchEvent(new CustomEvent('dialog-closed', { detail: { dialogId } }))}
+							class="text-gray-400 hover:text-red-600"
+						>
 							<Icon path={mdiClose} class="mt-0.5 size-6 transition-colors ease-in-out" />
 						</button>
 					</div>
