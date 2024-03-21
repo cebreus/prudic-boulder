@@ -3,13 +3,12 @@
 	import { mdiClose } from '@mdi/js';
 	import Icon from '../../components/atoms/Icon.svelte';
 	import { fade } from 'svelte/transition';
-	import type { DialogEventDetail } from '../../utils/DialogTypes.ts';
 
 	export let handleDialogResponse: () => void;
 	export let dialogId: string;
 	let isOpen: boolean = false;
 
-	const handleCustomEvent = (event: CustomEvent<DialogEventDetail>) => {
+	const handleCustomEvent = (event: CustomEvent<{ dialogId: string }>) => {
 		if (event.detail.dialogId === dialogId) {
 			isOpen = event.type === 'dialog-opened';
 		}

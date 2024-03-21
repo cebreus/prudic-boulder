@@ -13,7 +13,6 @@
 	import Toast from '../atoms/Toast.svelte';
 
 	import type { Boulder } from '../../utils/BoulderTypes';
-	import type { DialogEventDetail } from '../../utils/DialogTypes.ts';
 
 	let bouldersFromLS: Boulder[] = [];
 	let selectedBoulder: Boulder;
@@ -36,7 +35,7 @@
 		selectedBoulder = boulder;
 		log.info('selectedBoulder', selectedBoulder);
 		window.dispatchEvent(
-			new CustomEvent<DialogEventDetail>('dialog-opened', {
+			new CustomEvent('dialog-opened', {
 				detail: { dialogId: 'dialog-boulder' }
 			})
 		);
@@ -61,7 +60,7 @@
 
 	const openImportDialog = () => {
 		window.dispatchEvent(
-			new CustomEvent<DialogEventDetail>('dialog-opened', { detail: { dialogId: 'dialog-import' } })
+			new CustomEvent('dialog-opened', { detail: { dialogId: 'dialog-import' } })
 		);
 	};
 </script>

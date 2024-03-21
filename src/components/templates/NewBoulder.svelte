@@ -7,7 +7,6 @@
 	import Dialog from '../molecules/Dialog.svelte';
 	import log from '../../utils/logger';
 	import Toast from '../atoms/Toast.svelte';
-	import type { DialogEventDetail } from '../../utils/DialogTypes.ts';
 
 	let inputBoulderName: string = '';
 
@@ -20,9 +19,7 @@
 			return;
 		}
 		currentAction = 'save';
-		window.dispatchEvent(
-			new CustomEvent<DialogEventDetail>('dialog-opened', { detail: { dialogId: 'dialog' } })
-		);
+		window.dispatchEvent(new CustomEvent('dialog-opened', { detail: { dialogId: 'dialog' } }));
 
 		log.info('isOpen = true, action = save');
 	};
@@ -32,9 +29,7 @@
 			addToast('Vyberte alespoň jednu buňku!');
 			return;
 		}
-		window.dispatchEvent(
-			new CustomEvent<DialogEventDetail>('dialog-opened', { detail: { dialogId: 'dialog' } })
-		);
+		window.dispatchEvent(new CustomEvent('dialog-opened', { detail: { dialogId: 'dialog' } }));
 		currentAction = 'display';
 		log.debug('isOpen = true, action = display');
 	};
@@ -46,14 +41,10 @@
 
 		if (currentAction === 'save') {
 			await boulders.addBoulder($clickedGrips, $selector, trimmedInputBoulderName, 'save');
-			window.dispatchEvent(
-				new CustomEvent<DialogEventDetail>('dialog-closed', { detail: { dialogId: 'dialog' } })
-			);
+			window.dispatchEvent(new CustomEvent('dialog-closed', { detail: { dialogId: 'dialog' } }));
 		} else if (currentAction === 'display') {
 			await boulders.addBoulder($clickedGrips, $selector, trimmedInputBoulderName, 'display');
-			window.dispatchEvent(
-				new CustomEvent<DialogEventDetail>('dialog-closed', { detail: { dialogId: 'dialog' } })
-			);
+			window.dispatchEvent(new CustomEvent('dialog-closed', { detail: { dialogId: 'dialog' } }));
 		}
 		currentAction = undefined;
 	};

@@ -10,7 +10,6 @@
 	import Dialog from '../molecules/Dialog.svelte';
 	import log from '../../utils/logger';
 	import Toast from '../atoms/Toast.svelte';
-	import type { DialogEventDetail } from '../../utils/DialogTypes.ts';
 
 	let inputBoulderName: string = '';
 
@@ -31,9 +30,7 @@
 			addToast('Vyberte alespoň jednu buňku!');
 			return;
 		}
-		window.dispatchEvent(
-			new CustomEvent<DialogEventDetail>('dialog-opened', { detail: { dialogId: 'dialog' } })
-		);
+		window.dispatchEvent(new CustomEvent('dialog-opened', { detail: { dialogId: 'dialog' } }));
 		log.info('Dialog opened');
 	};
 
@@ -41,9 +38,7 @@
 		log.debug('handleDialogResponse()');
 		const trimmedInputBoulderName = inputBoulderName.trim();
 		await boulders.addBoulder($clickedGrips, $selector, trimmedInputBoulderName, 'save');
-		window.dispatchEvent(
-			new CustomEvent<DialogEventDetail>('dialog-closed', { detail: { dialogId: 'dialog' } })
-		);
+		window.dispatchEvent(new CustomEvent('dialog-closed', { detail: { dialogId: 'dialog' } }));
 	};
 
 	const handleBrightnessChange = (newBrightness: number) => {
