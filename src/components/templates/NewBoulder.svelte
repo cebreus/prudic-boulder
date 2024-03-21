@@ -7,15 +7,11 @@
 	import Dialog from '../molecules/Dialog.svelte';
 	import log from '../../utils/logger';
 	import Toast from '../atoms/Toast.svelte';
+	import type { DialogEventDetail } from '../../utils/DialogTypes.ts';
 
-	let isOpen: boolean = false;
-	let inputBoulderName: string;
+	let inputBoulderName: string = '';
 
 	let currentAction: 'save' | 'display' | undefined;
-
-	$: if (!isOpen) {
-		inputBoulderName = '';
-	}
 
 	const handleSaveBoulder = () => {
 		log.debug('handleSaveBoulder()');
@@ -23,8 +19,11 @@
 			addToast('Vyberte alespoň jednu buňku!');
 			return;
 		}
-		isOpen = true;
 		currentAction = 'save';
+		window.dispatchEvent(
+			new CustomEvent<DialogEventDetail>('dialog-opened', { detail: { dialogId: 'dialog' } })
+		);
+
 		log.info('isOpen = true, action = save');
 	};
 
@@ -33,31 +32,30 @@
 			addToast('Vyberte alespoň jednu buňku!');
 			return;
 		}
-		isOpen = true;
+		window.dispatchEvent(
+			new CustomEvent<DialogEventDetail>('dialog-opened', { detail: { dialogId: 'dialog' } })
+		);
 		currentAction = 'display';
 		log.debug('isOpen = true, action = display');
 	};
 
-	const handleDialogResponse = () => {
+	const handleDialogResponse = async () => {
 		log.debug('handleDialogResponse()');
-		isOpen = false;
+
 		const trimmedInputBoulderName = inputBoulderName.trim();
 
 		if (currentAction === 'save') {
-			boulders.addBoulder($clickedGrips, $selector, trimmedInputBoulderName, 'save');
+			await boulders.addBoulder($clickedGrips, $selector, trimmedInputBoulderName, 'save');
+			window.dispatchEvent(
+				new CustomEvent<DialogEventDetail>('dialog-closed', { detail: { dialogId: 'dialog' } })
+			);
 		} else if (currentAction === 'display') {
-			boulders.addBoulder($clickedGrips, $selector, trimmedInputBoulderName, 'display');
+			await boulders.addBoulder($clickedGrips, $selector, trimmedInputBoulderName, 'display');
+			window.dispatchEvent(
+				new CustomEvent<DialogEventDetail>('dialog-closed', { detail: { dialogId: 'dialog' } })
+			);
 		}
 		currentAction = undefined;
-	};
-
-	const handleKeyDown = (event: CustomEvent) => {
-		const keyboardEvent = event.detail as KeyboardEvent;
-		if (keyboardEvent.key === 'Enter') {
-			handleDialogResponse();
-			keyboardEvent.preventDefault();
-			keyboardEvent.stopPropagation();
-		}
 	};
 </script>
 
@@ -72,7 +70,7 @@
 
 <Toast />
 
-<Dialog {isOpen} on:close={() => (isOpen = false)} on:keydown={handleKeyDown}>
+<Dialog {handleDialogResponse} dialogId="dialog">
 	<svelte:fragment slot="DialogTitle">Název boulderu</svelte:fragment>
 	<svelte:fragment slot="DialogContent">
 		<input
