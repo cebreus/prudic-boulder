@@ -19,7 +19,6 @@
 		"@commitlint/cli": "^19.2.0",
 		"@commitlint/config-conventional": "^19.1.0",
 		"@mdi/js": "^7.4.47",
-		"@rgossiaux/svelte-headlessui": "^2.0.0",
 		"@tailwindcss/typography": "^0.5.10",
 		"@typescript-eslint/eslint-plugin": "^7.2.0",
 		"@typescript-eslint/parser": "^7.2.0",
